@@ -33,11 +33,18 @@ class Module implements AutoloaderProviderInterface /*, ConfigProviderInterface 
         );
     }
 
-    /*
-    public function getConfig()
+    /**
+     * Bootstrap time
+     *
+     * @param MvcEvent $e
+     */
+    public function onBootstrap($e)
     {
-        return include __DIR__ . '/../../config/module.config.php';
+        $app = $e->getApplication();
+        $em = $app->getEventManager();
+
+        // setup route listeners
+        $em->attach(MvcEvent::EVENT_ROUTE, new ContentNegotiationListener(), -99);
     }
-    */
 
 }
