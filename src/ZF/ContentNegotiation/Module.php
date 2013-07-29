@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFContentNegotiation;
+namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;

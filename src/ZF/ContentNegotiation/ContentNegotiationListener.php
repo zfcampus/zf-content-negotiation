@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFContentNegotiation;
+namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Request;
@@ -18,7 +18,6 @@ class ContentNegotiationListener
 
         // route parameters:
         $routeParams = $routeMatch->getParams();
-        unset($routeParams['_gateway']);
         $parameterData->setRouteParams($routeParams);
 
         // query parameters:

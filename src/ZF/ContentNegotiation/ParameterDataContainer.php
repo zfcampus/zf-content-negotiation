@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFContentNegotiation;
+namespace ZF\ContentNegotiation;
 
 class ParameterDataContainer
 {
