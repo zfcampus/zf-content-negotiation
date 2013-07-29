@@ -6,7 +6,9 @@
             "email": "ralph@ralphschindler.com"
         }
     ],
-    "require": {
-
+    "autoload": {
+        "psr-0": {
+            "ZFContentNegotiation\\": "src/"
+        }
     }
 }
