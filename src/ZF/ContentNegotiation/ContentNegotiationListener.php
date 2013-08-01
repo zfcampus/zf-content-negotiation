@@ -26,21 +26,24 @@ class ContentNegotiationListener
         // body parameters:
         $bodyParams = array();
 
-        // json & urlencoded content negotiation
-        if ($request->isPost() || $request->isPut() || $request->isPatch()) {
-            $contentType = $request->getHeader('Content-type');
-            if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
-                $bodyParams = json_decode($request->getContent(), true);
-            } else {
-                if ($request->isPost()) {
-                    $bodyParams = $_POST;
-                } elseif (strtolower($contentType->getFieldValue()) == 'application/x-www-form-urlencoded') {
-                    parse_str($request->getContent(), $bodyParams);
-                }
+        /** @var \Zend\Http\Header\ContentType $contentType */
+        $contentType = $request->getHeader('Content-type');
+
+        if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
+            $bodyParams = json_decode($request->getContent(), true);
+        } else {
+            if ($request->isPost()) {
+                $bodyParams = $_POST;
+            } elseif ($contentType && strtolower($contentType->getFieldValue()) == 'application/x-www-form-urlencoded') {
+                parse_str($request->getContent(), $bodyParams);
             }
         }
 
         $parameterData->setBodyParams($bodyParams);
+
+        /** @var \Zend\Http\Header\Accept $accept */
+//        $accept = $request->getHeader('Accept');
+
 
         $e->setParam('ZFContentNegotiationParameterData', $parameterData);
     }
