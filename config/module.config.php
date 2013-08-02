@@ -1,10 +1,16 @@
 <?php
 return array(
+    'zf-content-negotiation' => array(
+        'controllers' => array(),
+        'selectors' => array(),
+    ),
+    /*
     'controllers' => array(
         'initializers' => array(
             'ZF\ContentNegotiation\ControllerInitializer'
         )
     ),
+    */
     'controller_plugins' => array(
         'invokables' => array(
             'routeParam' => 'ZF\ContentNegotiation\ControllerPlugin\RouteParam',
@@ -13,6 +19,7 @@ return array(
             'routeParams' => 'ZF\ContentNegotiation\ControllerPlugin\RouteParams',
             'queryParams' => 'ZF\ContentNegotiation\ControllerPlugin\QueryParams',
             'bodyParams' => 'ZF\ContentNegotiation\ControllerPlugin\BodyParams',
+            'contentNegotiatedViewModel' => 'ZF\ContentNegotiation\ControllerPlugin\ContentNegotiatedViewModel'
         )
     )
 );

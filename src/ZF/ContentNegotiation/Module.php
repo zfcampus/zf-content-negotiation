@@ -48,8 +48,10 @@ class Module implements AutoloaderProviderInterface /*, ConfigProviderInterface 
         $app = $e->getApplication();
         $em = $app->getEventManager();
 
-        // setup route listeners
-        $em->attach(MvcEvent::EVENT_ROUTE, new ContentNegotiationListener(), -99);
+        $em->attach(MvcEvent::EVENT_ROUTE, new ContentTypeListener(), -99);
+
+        $sem = $em->getSharedManager();
+        $sem->attach('Zend\Stdlib\DispatchableInterface', MvcEvent::EVENT_DISPATCH, new AcceptListener(), -10);
     }
 
 }

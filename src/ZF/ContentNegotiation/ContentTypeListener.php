@@ -5,7 +5,7 @@ namespace ZF\ContentNegotiation;
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Request;
 
-class ContentNegotiationListener
+class ContentTypeListener
 {
 
     public function __invoke(MvcEvent $e)
