@@ -90,7 +90,7 @@ class AcceptListener
         $criteria = null;
 
         if (empty($this->controllerConfig)) {
-            return $fallbackConfig;
+            return $this->getCriteria($fallbackConfig);
         }
 
         // get the controllers from the content-neg configuration
@@ -98,28 +98,14 @@ class AcceptListener
 
         // if there is no config for this controller, move on
         if (!$controllerName || !isset($controllers[$controllerName])) {
-            return $fallbackConfig;
+            return $this->getCriteria($fallbackConfig);
         }
 
+        // Retrieve the criteria; if none found, or invalid, use the fallback.
         $criteria = $controllers[$controllerName];
+        $criteria = $this->getCriteria($criteria) ?: $this->getCriteria($fallbackConfig);
 
-        // if it's an array, that means we have direct configuration
-        if (is_array($criteria)) {
-            return $criteria;
-        }
-
-        // if it's a string, we should try to resolve that key to a reusable selector set
-        if (is_string($criteria)) {
-            if (isset($this->selectorsConfig[$criteria])) {
-                $criteria = $this->selectorsConfig[$criteria];
-                if (!empty($criteria)) {
-                    return $criteria;
-                }
-                return $fallbackConfig;
-            }
-        }
-
-        return $fallbackConfig;
+        return $criteria;
     }
 
     /**
@@ -159,5 +145,36 @@ class AcceptListener
         // model variables
         $viewModel->setVariables($result);
         $e->setResult($viewModel);
+    }
+
+    /**
+     * Return criteria
+     *
+     * If the criteria is an array, return it directly.
+     *
+     * If the criteria is a string, attempt to look it up in the registered selectors; 
+     * if found, return that criteria.
+     *
+     * Otherwise, return nothing.
+     *
+     * @param  string|array $criteria 
+     * @return array|null
+     */
+    protected function getCriteria($criteria)
+    {
+        // if it's an array, that means we have direct configuration
+        if (is_array($criteria)) {
+            return $criteria;
+        }
+
+        // if it's a string, we should try to resolve that key to a reusable selector set
+        if (is_string($criteria)) {
+            if (isset($this->selectorsConfig[$criteria])) {
+                $criteria = $this->selectorsConfig[$criteria];
+                if (!empty($criteria)) {
+                    return $criteria;
+                }
+            }
+        }
     }
 }
