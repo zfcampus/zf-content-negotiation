@@ -6,9 +6,18 @@
             "email": "ralph@ralphschindler.com"
         }
     ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": ">=2.3.0dev"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "3.7.*"
+    },
     "autoload": {
         "psr-0": {
-            "ZF\\ContentNegotiation\\": "src/"
+            "ZF\\ContentNegotiation\\": "src/",
+            "ZFTest\\": "test/"
         }
     },
     "minimum-stability": "dev",
