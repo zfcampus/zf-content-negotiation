@@ -12,7 +12,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": ">=2.3.0dev",
+        "zendframework/zendframework": "dev-develop",
         "zfcampus/zf-api-problem": "dev-master"
     },
     "require-dev": {
