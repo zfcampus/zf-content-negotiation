@@ -3,6 +3,7 @@
 namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\Controller\Plugin\AcceptableViewModelSelector;
+use Zend\Mvc\InjectApplicationEventInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ModelInterface as ViewModelInterface;
 
@@ -54,6 +55,14 @@ class AcceptListener
             // We will only attempt to re-cast ContentNegotiation\ViewModel 
             // results or arrays to what the AcceptableViewModelSelector gives 
             // us. Anything else, we cannot handle.
+            return;
+        }
+
+        $controller = $e->getTarget();
+        if (!$controller instanceof InjectApplicationEventInterface) {
+            // The AcceptableViewModelSelector needs a controller that is 
+            // event-aware in order to work; if it's not, we cannot do
+            // anything more.
             return;
         }
 
