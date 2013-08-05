@@ -65,6 +65,7 @@ class AcceptListener
             // anything more.
             return;
         }
+        $this->selector->setController($controller);
 
         $criteria = $e->getParam('ZFContentNegotiation');
 
