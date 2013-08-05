@@ -84,6 +84,7 @@ class AcceptListener
 
         // Retrieve a view model based on the criteria
         $selector  = $this->selector;
+        $selector->setController($controller);
         $viewModel = $selector($criteria);
 
         // Populate the view model with the result...
