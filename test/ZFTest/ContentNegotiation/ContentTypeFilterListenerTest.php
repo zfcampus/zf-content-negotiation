@@ -3,6 +3,7 @@
 namespace ZFTest\ContentNegotiation;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\EventManager\SharedEventManager;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
@@ -50,5 +51,16 @@ class ContentTypeFilterListenerTest extends TestCase
 
         $this->setExpectedException('ZF\ApiProblem\Exception\DomainException', 'Invalid content-type');
         $this->listener->onDispatch($this->event);
+    }
+
+    public function testAttachSharedAttachesToDispatchEventAtHighPriority()
+    {
+        $events = new SharedEventManager();
+        $this->listener->attachShared($events);
+        $listeners = $events->getListeners('Zend\Stdlib\DispatchableInterface', 'dispatch');
+        $this->assertEquals(1, count($listeners));
+        $this->assertTrue($listeners->hasPriority(100));
+        $callback = $listeners->getIterator()->current()->getCallback();
+        $this->assertEquals(array($this->listener, 'onDispatch'), $callback);
     }
 }
