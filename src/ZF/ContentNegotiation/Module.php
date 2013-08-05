@@ -3,6 +3,7 @@
 namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\Controller\Plugin\AcceptableViewModelSelector;
+use Zend\Mvc\MvcEvent;
 
 class Module
 {
