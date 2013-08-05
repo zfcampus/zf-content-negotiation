@@ -6,6 +6,7 @@ return array(
             'Json' => array(
                 'ZF\ContentNegotiation\JsonModel' => array(
                     'application/json',
+                    'application/*+json',
                 ),
             ),
         ),
