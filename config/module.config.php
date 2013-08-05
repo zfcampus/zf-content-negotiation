@@ -18,7 +18,6 @@ return array(
             'routeParams'                => 'ZF\ContentNegotiation\ControllerPlugin\RouteParams',
             'queryParams'                => 'ZF\ContentNegotiation\ControllerPlugin\QueryParams',
             'bodyParams'                 => 'ZF\ContentNegotiation\ControllerPlugin\BodyParams',
-            'contentNegotiatedViewModel' => 'ZF\ContentNegotiation\ControllerPlugin\ContentNegotiatedViewModel'
         )
     )
 );
