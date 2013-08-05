@@ -9,6 +9,10 @@ return array(
                 ),
             ),
         ),
+        'content-type-whitelist' => array(
+            // Array of controller service name => allowed content type pairs.
+            // The allowed content type may be a string, or an array of strings.
+        ),
     ),
     'controller_plugins' => array(
         'invokables' => array(

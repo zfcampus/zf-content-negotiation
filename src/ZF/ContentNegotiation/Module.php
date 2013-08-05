@@ -49,6 +49,33 @@ class Module
                 }
                 return new AcceptListener($selector, $config);
             },
+            'ZF\ContentNegotiation\ContentTypeFilterListener' => function ($services) {
+                $listener = new ContentTypeFilterListener();
+
+                $config   = array();
+                if ($services->has('Config')) {
+                    $moduleConfig = false;
+                    $appConfig    = $services->get('Config');
+                    if (isset($appConfig['zf-content-negotiation'])
+                        && is_array($appConfig['zf-content-negotiation'])
+                    ) {
+                        $moduleConfig = $appConfig['zf-content-negotiation'];
+                    }
+
+                    if ($moduleConfig
+                        && isset($moduleConfig['content-type-whitelist'])
+                        && is_array($moduleConfig['content-type-whitelist'])
+                    ) {
+                        $config = $moduleConfig['content-type-whitelist'];
+                    }
+                }
+
+                if (!empty($config)) {
+                    $listener->setConfig($config);
+                }
+
+                return $listener;
+            },
         ));
     }
 
@@ -67,5 +94,6 @@ class Module
             $services->get('ZF\ContentNegotiation\AcceptListener'),
             -10
         );
+        $sem->attachAggregate($services->get('ZF\ContentNegotiation\ContentTypeFilterListener'));
     }
 }

@@ -10,10 +10,8 @@ class ContentTypeListener
 
     public function __invoke(MvcEvent $e)
     {
-        /* @var $request \Zend\Http\Request */
-        $request = $e->getRequest();
-        $routeMatch = $e->getRouteMatch();
-
+        $request       = $e->getRequest();
+        $routeMatch    = $e->getRouteMatch();
         $parameterData = new ParameterDataContainer();
 
         // route parameters:
@@ -21,30 +19,41 @@ class ContentTypeListener
         $parameterData->setRouteParams($routeParams);
 
         // query parameters:
-        $parameterData->setQueryParams($_GET);
+        $parameterData->setQueryParams($request->getQuery()->toArray());
 
         // body parameters:
-        $bodyParams = array();
-
-        /** @var \Zend\Http\Header\ContentType $contentType */
+        $bodyParams  = array();
         $contentType = $request->getHeader('Content-type');
+        switch ($request->getMethod()) {
+            case $request::METHOD_POST:
+                if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
+                    $bodyParams = json_decode($request->getContent(), true);
+                    break;
+                }
 
-        if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
-            $bodyParams = json_decode($request->getContent(), true);
-        } else {
-            if ($request->isPost()) {
-                $bodyParams = $_POST;
-            } elseif ($contentType && strtolower($contentType->getFieldValue()) == 'application/x-www-form-urlencoded') {
-                parse_str($request->getContent(), $bodyParams);
-            }
+                $bodyParams = $request->getPost()->toArray();
+                break;
+            case $request::METHOD_PATCH:
+            case $request::METHOD_PUT:
+                $content = $request->getContent();
+                if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
+                    $bodyParams = json_decode($content, true);
+                    break;
+                }
+
+                // Stolen from AbstractRestfulController
+                parse_str($content, $bodyParams);
+                if (!is_array($bodyParams)
+                    || (1 == count($bodyParams) && isset($bodyParams[0]))
+                ) {
+                    $bodyParams = $content;
+                }
+                break;
+            default:
+                break;
         }
 
         $parameterData->setBodyParams($bodyParams);
-
-        /** @var \Zend\Http\Header\Accept $accept */
-//        $accept = $request->getHeader('Accept');
-
-
         $e->setParam('ZFContentNegotiationParameterData', $parameterData);
     }
 }

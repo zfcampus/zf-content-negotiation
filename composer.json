@@ -6,14 +6,22 @@
             "email": "ralph@ralphschindler.com"
         }
     ],
-    "autoload": {
-        "psr-0": {
-            "ZF\\ContentNegotiation\\": "src/"
-        }
-    },
+    "repositories": [
+        { "type": "vcs", "url": "git@bitbucket.org:zendframework/zfapiproblem.git" }
+    ],
     "minimum-stability": "dev",
     "require": {
-    	"php": ">=5.3.3",
-    	"zendframework/zendframework": "dev-master"
+        "php": ">=5.3.3",
+        "zendframework/zendframework": ">=2.3.0dev",
+        "zfcampus/zf-api-problem": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "3.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZF\\ContentNegotiation\\": "src/",
+            "ZFTest\\": "test/"
+        }
     }
 }
