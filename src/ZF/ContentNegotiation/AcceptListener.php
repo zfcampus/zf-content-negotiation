@@ -59,6 +59,12 @@ class AcceptListener
 
         $criteria = $e->getParam('ZFContentNegotiation');
 
+        // If the criteria from the ZFContentNegotiation parameter is a string,
+        // attempt to get it via a selector.
+        if (is_string($criteria)) {
+            $criteria = $this->getCriteria($criteria);
+        }
+
         // If we have no criteria, derive it from configuration and/or any set fallbacks
         if (!$criteria) {
             $fallbackConfig = $e->getParam('ZFContentNegotiationFallback');
