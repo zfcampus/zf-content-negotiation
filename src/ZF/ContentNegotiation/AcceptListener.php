@@ -49,6 +49,14 @@ class AcceptListener
      */
     public function __invoke(MvcEvent $e)
     {
+        $result = $e->getResult();
+        if (!is_array($result) && (!$result instanceof ViewModel)) {
+            // We will only attempt to re-cast ContentNegotiation\ViewModel 
+            // results or arrays to what the AcceptableViewModelSelector gives 
+            // us. Anything else, we cannot handle.
+            return;
+        }
+
         $criteria = $e->getParam('ZFContentNegotiation');
 
         // If we have no criteria, derive it from configuration and/or any set fallbacks
@@ -114,30 +122,42 @@ class AcceptListener
         return $fallbackConfig;
     }
 
+    /**
+     * Populate the view model returned by the AcceptableViewModelSelector from the result
+     *
+     * If the result is a ViewModel, we "re-cast" it by copying over all
+     * values/settings/etc from the original.
+     *
+     * If the result is an array, we pass those values as the view model variables.
+     * 
+     * @param  array|ViewModel $result 
+     * @param  ViewModelInterface $viewModel 
+     */
     protected function populateViewModel($result, ViewModelInterface $viewModel)
     {
-        if ($result instanceof ViewModelInterface) {
-            // If the result is of the same type as the selected view model, do nothing
-            if (get_class($result) == get_class($viewModel)) {
-                return;
-            }
-
-            // Otherwise, "re-cast" the view model
+        if ($result instanceof ViewModel) {
+            // "Re-cast" content-negotiation view models to the view model type
+            // selected by the AcceptableViewModelSelector
+            
             $viewModel->setVariables($result->getVariables());
             $viewModel->setTemplate($result->getTemplate());
+            $viewModel->setOptions($result->getOptions());
+            $viewModel->setCaptureTo($result->captureTo());
+            $viewModel->setTerminal($result->terminate());
+            $viewModel->setAppend($result->isAppend());
+            if ($result->hasChildren()) {
+                foreach ($result->getChildren() as $child) {
+                    $viewModel->addChild($child);
+                }
+            }
+
             $e->setResult($viewModel);
             return;
         }
 
-        // If result is an array, use it to populate the view model variables
-        if (is_array($result)) {
-            $viewModel->setVariables($result);
-            $e->setResult($viewModel);
-            return;
-        }
-
-        // For all other result types, set the "result" variable to the result value
-        $viewModel->setVariable('result', $result);
+        // At this point, the result is an array; use it to populate the view 
+        // model variables
+        $viewModel->setVariables($result);
         $e->setResult($viewModel);
     }
 }
