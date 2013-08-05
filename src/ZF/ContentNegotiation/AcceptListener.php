@@ -72,7 +72,7 @@ class AcceptListener
         $viewModel = $selector($criteria);
 
         // Populate the view model with the result...
-        $this->populateViewModel($result, $viewModel);
+        $this->populateViewModel($result, $viewModel, $e);
     }
 
     /**
@@ -119,7 +119,7 @@ class AcceptListener
      * @param  array|ViewModel $result 
      * @param  ViewModelInterface $viewModel 
      */
-    protected function populateViewModel($result, ViewModelInterface $viewModel)
+    protected function populateViewModel($result, ViewModelInterface $viewModel, MvcEvent $e)
     {
         if ($result instanceof ViewModel) {
             // "Re-cast" content-negotiation view models to the view model type
