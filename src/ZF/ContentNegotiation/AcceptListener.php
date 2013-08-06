@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\Plugin\AcceptableViewModelSelector;
 use Zend\Mvc\InjectApplicationEventInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ModelInterface as ViewModelInterface;
+use ZF\ApiProblem\Exception\DomainException;
 
 class AcceptListener
 {
@@ -84,9 +85,17 @@ class AcceptListener
         }
 
         // Retrieve a view model based on the criteria
+        $useDefault = false;
+        if (!$criteria || empty($criteria)) {
+            $useDefault = true;
+        }
         $selector  = $this->selector;
         $selector->setController($controller);
-        $viewModel = $selector($criteria);
+        $viewModel = $selector($criteria, $useDefault);
+
+        if (!$viewModel instanceof ViewModelInterface) {
+            throw new DomainException('Unable to resolve Accept header to a representation', 406);
+        }
 
         // Populate the view model with the result...
         $this->populateViewModel($result, $viewModel, $e);
