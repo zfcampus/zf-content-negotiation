@@ -29,28 +29,34 @@ class AcceptFilterListener extends ContentTypeFilterListener
         $request = $e->getRequest();
         $headers = $request->getHeaders();
 
+        $matched = false;
         if (is_string($this->config[$controllerName])) {
-            $this->validateContentType($this->config[$controllerName], $headers);
-            return;
+            $matched = $this->validateContentType($this->config[$controllerName], $headers);
+        } elseif (is_array($this->config[$controllerName])) {
+            foreach ($this->config[$controllerName] as $whitelistType) {
+                $matched = $this->validateContentType($whitelistType, $headers);
+                if ($matched) {
+                    break;
+                }
+            }
         }
 
-        if (is_array($this->config[$controllerName])) {
-            foreach ($this->config[$controllerName] as $whitelistType) {
-                $this->validateContentType($whitelistType, $headers);
-            }
-            return;
+        if (!$matched) {
+            throw new DomainException('Cannot honor Accept type specified', 406);
         }
     }
 
     protected function validateContentType($match, $headers)
     {
         if (!$headers->has('accept')) {
-            throw new DomainException('Cannot honor Accept type specified', 406);
+            return false;
         }
 
         $accept = $headers->get('accept');
-        if (!$accept->match($match)) {
-            throw new DomainException('Cannot honor Accept type specified', 406);
+        if ($accept->match($match)) {
+            return true;
         }
+
+        return false;
     }
 }

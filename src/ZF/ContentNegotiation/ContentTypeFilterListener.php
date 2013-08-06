@@ -84,16 +84,20 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
             $contentTypeHeader = strtolower($contentTypeHeader);
         }
             
+        $matched = false;
         if (is_string($this->config[$controllerName])) {
-            $this->validateContentType($contentTypeHeader, $this->config[$controllerName]);
-            return;
+            $matched = $this->validateContentType($contentTypeHeader, $this->config[$controllerName]);
+        } elseif (is_array($this->config[$controllerName])) {
+            foreach ($this->config[$controllerName] as $whitelistType) {
+                $matched = $this->validateContentType($contentTypeHeader, $whitelistType);
+                if ($matched) {
+                    break;
+                }
+            }
         }
 
-        if (is_array($this->config[$controllerName])) {
-            foreach ($this->config[$controllerName] as $whitelistType) {
-                $this->validateContentType($contentTypeHeader, $whitelistType);
-            }
-            return;
+        if (!$matched) {
+            throw new DomainException('Invalid content-type specified', 415);
         }
     }
 
@@ -106,10 +110,13 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
     protected function validateContentType($received, $allowed)
     {
         if (!$received) {
-            throw new DomainException('Invalid content-type specified', 415);
+            return false;
         }
-        if (strtolower($allowed) !== $received) {
-            throw new DomainException('Invalid content-type specified', 415);
+
+        if (strtolower($allowed) === $received) {
+            return true;
         }
+
+        return false;
     }
 }
