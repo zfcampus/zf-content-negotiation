@@ -7,7 +7,6 @@ use Zend\Http\Request;
 
 class ContentTypeListener
 {
-
     public function __invoke(MvcEvent $e)
     {
         $request       = $e->getRequest();
@@ -26,7 +25,7 @@ class ContentTypeListener
         $contentType = $request->getHeader('Content-type');
         switch ($request->getMethod()) {
             case $request::METHOD_POST:
-                if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
+                if ($contentType && $contentType->match('application/json')) {
                     $bodyParams = json_decode($request->getContent(), true);
                     break;
                 }
@@ -36,7 +35,7 @@ class ContentTypeListener
             case $request::METHOD_PATCH:
             case $request::METHOD_PUT:
                 $content = $request->getContent();
-                if ($contentType && strtolower($contentType->getFieldValue()) == 'application/json') {
+                if ($contentType && $contentType->match('application/json')) {
                     $bodyParams = json_decode($content, true);
                     break;
                 }
