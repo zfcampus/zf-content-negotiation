@@ -13,14 +13,10 @@ class ContentTypeFilterListenerTest extends TestCase
 {
     public function setUp()
     {
-        $request = new Request();
-        $headers = $request->getHeaders();
-        $headers->getPluginClassLoader()->registerPlugin('contenttype', 'ZF\ContentNegotiation\Header\ContentType');
-
         $this->listener   = new ContentTypeFilterListener();
         $this->event      = new MvcEvent();
         $this->event->setTarget(new TestAsset\ContentTypeController());
-        $this->event->setRequest($request);
+        $this->event->setRequest(new Request());
         $this->event->setRouteMatch(new RouteMatch(array(
             'controller' => __NAMESPACE__ . '\TestAsset\ContentTypeController',
         )));
