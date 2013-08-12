@@ -83,47 +83,16 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
 
         $headers           = $request->getHeaders();
         $contentTypeHeader = false;
-        if ($headers->has('content-type')) {
-            $contentTypeHeader = $headers->get('content-type');
-            $value             = $contentTypeHeader->getFieldValue();
-            $value             = explode(';', $value, 2);
-            $contentTypeHeader = array_shift($value);
-            $contentTypeHeader = strtolower($contentTypeHeader);
-        }
-            
-        $matched = false;
-        if (is_string($this->config[$controllerName])) {
-            $matched = $this->validateContentType($contentTypeHeader, $this->config[$controllerName]);
-        } elseif (is_array($this->config[$controllerName])) {
-            foreach ($this->config[$controllerName] as $whitelistType) {
-                $matched = $this->validateContentType($contentTypeHeader, $whitelistType);
-                if ($matched) {
-                    break;
-                }
-            }
-        }
-
-        if (!$matched) {
+        if (!$headers->has('content-type')) {
             throw new DomainException('Invalid content-type specified', 415);
         }
-    }
 
-    /**
-     * Validate that the content type received matches that in the whitelist
-     * 
-     * @param  string $received 
-     * @param  string $allowed 
-     */
-    protected function validateContentType($received, $allowed)
-    {
-        if (!$received) {
-            return false;
+        $contentTypeHeader = $headers->get('content-type');
+            
+        $matched = $contentTypeHeader->match($this->config[$controllerName]);
+
+        if (false === $matched) {
+            throw new DomainException('Invalid content-type specified', 415);
         }
-
-        if (strtolower($allowed) === $received) {
-            return true;
-        }
-
-        return false;
     }
 }

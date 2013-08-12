@@ -13,10 +13,14 @@ class ContentTypeFilterListenerTest extends TestCase
 {
     public function setUp()
     {
+        $request = new Request();
+        $headers = $request->getHeaders();
+        $headers->getPluginClassLoader()->registerPlugin('contenttype', 'ZF\ContentNegotiation\Header\ContentType');
+
         $this->listener   = new ContentTypeFilterListener();
         $this->event      = new MvcEvent();
         $this->event->setTarget(new TestAsset\ContentTypeController());
-        $this->event->setRequest(new Request);
+        $this->event->setRequest($request);
         $this->event->setRouteMatch(new RouteMatch(array(
             'controller' => __NAMESPACE__ . '\TestAsset\ContentTypeController',
         )));
@@ -44,10 +48,12 @@ class ContentTypeFilterListenerTest extends TestCase
         $contentType = 'application/vnd.zf.v1.foo+json';
         $this->listener->setConfig(array(
             'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => array(
-                'application/json',
+                'application/xml',
             ),
         ));
-        $this->event->getRequest()->getHeaders()->addHeaderLine('content-type', $contentType);
+        $request = $this->event->getRequest();
+        $request->getHeaders()->addHeaderLine('content-type', $contentType);
+        $request->setContent('<?xml version="1.0"?><foo><bar>baz</bar></foo>');
 
         $this->setExpectedException('ZF\ApiProblem\Exception\DomainException', 'Invalid content-type');
         $this->listener->onDispatch($this->event);

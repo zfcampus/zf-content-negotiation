@@ -77,6 +77,8 @@ class ContentType implements HeaderInterface
         $left      = $this->getMediaTypeObjectFromString($mediaType);
 
         foreach ($matchAgainst as $matchType) {
+            $matchType = strtolower($matchType);
+
             if ($mediaType == $matchType) {
                 return $matchType;
             }
@@ -142,7 +144,7 @@ class ContentType implements HeaderInterface
      */
     public function setMediaType($mediaType)
     {
-        $this->mediaType = $mediaType;
+        $this->mediaType = strtolower($mediaType);
         $this->value     = null;
         return $this;
     }
