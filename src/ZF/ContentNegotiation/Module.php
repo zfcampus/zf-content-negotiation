@@ -108,7 +108,10 @@ class Module
 
     public function onBootstrap($e)
     {
-        $app      = $e->getApplication();
+        $app = $e->getApplication();
+        $this->injectContentTypeHeader($e->getRequest());
+        $this->injectContentTypeHeader($e->getResponse());
+
         $services = $app->getServiceManager();
         $em       = $app->getEventManager();
 
@@ -123,5 +126,32 @@ class Module
         );
         $sem->attachAggregate($services->get('ZF\ContentNegotiation\AcceptFilterListener'));
         $sem->attachAggregate($services->get('ZF\ContentNegotiation\ContentTypeFilterListener'));
+    }
+
+    /**
+     * Tell a request or response to use our own Content-Type object by default
+     * 
+     * @param  \Zend\Stdlib\MessageInterface $message 
+     */
+    protected function injectContentTypeHeader($message)
+    {
+        if (!method_exists($message, 'getHeaders')) {
+            return;
+        }
+
+        $headers = $message->getHeaders();
+
+        // If we already have one, replace it with our own
+        if ($headers->has('Content-Type')) {
+            $oldHeader = $headers->get('Content-Type');
+            $newHeader = Header\ContentType::fromString($oldHeader->toString());
+            $headers->removeHeader($oldHeader);
+            $headers->addHeader($newHeader);
+            return;
+        }
+
+        // Otherwise, just tell the Headers object to use our version if requested.
+        $plugins = $headers->getPluginClassLoader();
+        $plugins->registerPlugin('contenttype', __NAMESPACE__ . '\Header\ContentType');
     }
 }
