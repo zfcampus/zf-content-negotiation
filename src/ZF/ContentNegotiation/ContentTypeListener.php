@@ -10,6 +10,11 @@ class ContentTypeListener
     public function __invoke(MvcEvent $e)
     {
         $request       = $e->getRequest();
+        if (!method_exists($request, 'getHeaders')) {
+            // Not an HTTP request; nothing to do
+            return;
+        }
+
         $routeMatch    = $e->getRouteMatch();
         $parameterData = new ParameterDataContainer();
 

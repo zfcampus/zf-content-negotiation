@@ -76,6 +76,11 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
         // Only worry about content types on HTTP methods that submit content
         // via the request body.
         $request           = $e->getRequest();
+        if (!method_exists($request, 'getHeaders')) {
+            // Not an HTTP request; nothing to do
+            return;
+        }
+
         $requestBody = $request->getContent();
         if (empty($requestBody)) {
             return;

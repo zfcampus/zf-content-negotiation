@@ -27,6 +27,11 @@ class AcceptFilterListener extends ContentTypeFilterListener
         }
 
         $request = $e->getRequest();
+        if (!method_exists($request, 'getHeaders')) {
+            // Not an HTTP request; nothing to do
+            return;
+        }
+
         $headers = $request->getHeaders();
 
         $matched = false;
