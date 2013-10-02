@@ -58,11 +58,9 @@ class AcceptFilterListener extends ContentTypeFilterListener
         }
 
         $accept = $headers->get('accept');
-        if ($accept->match($match)) {
-            $value = $accept->getFieldValue();
-            if (!strstr($value, $match)) {
-                return false;
-            }
+        if ($accept->match($match)
+            && !strstr($accept->getFieldValue(), '*/*')
+        ) {
             return true;
         }
 
