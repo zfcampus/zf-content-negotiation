@@ -1,14 +1,23 @@
 {
     "name": "zfcampus/zf-content-negotiation",
-    "authors": [
-        {
-            "name": "Ralph Schindler",
-            "email": "ralph@ralphschindler.com"
-        }
+    "description": "ZF2 Module providing content-negotiation features",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "zend",
+        "module",
+        "content-negotiation"
     ],
+    "homepage": "http://apigility.org/",
+    "support": {
+        "email": "apigility-users@zend.com",
+        "irc": "irc://irc.freenode.net/apigility",
+        "source": "https://github.com/zfcampus/zf-content-negotiation",
+        "issues": "https://github.com/zfcampus/zf-content-negotiation/issues"
+    },
     "repositories": [
-        { "type": "composer", "url": "https://packages.zendframework.com" },
-        { "type": "composer", "url": "http://packages-zfcampus.rhcloud.com" }
+        { "type": "composer", "url": "https://packages.zendframework.com" }
     ],
     "minimum-stability": "dev",
     "require": {
