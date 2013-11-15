@@ -14,10 +14,17 @@ return array(
     ),
 
     'zf-content-negotiation' => array(
-        // ???? Comment about it ?
+        // This is an array of controller service names pointing to one of:
+        // - a named selector (see below)
+        // - an array of specific selectors, in the same format as for the
+        //   selectors key
         'controllers' => array(),
 
-        // ???? Comment about it ?
+        // This is an array of named selectors. Each selector consists of a
+        // view model type pointing to the Accept mediatypes that will trigger
+        // selection of that view model; see the documentation on the
+        // AcceptableViewModelSelector plugin for details on the format:
+        // http://zf2.readthedocs.org/en/latest/modules/zend.mvc.plugins.html?highlight=acceptableviewmodelselector#acceptableviewmodelselector-plugin
         'selectors'   => array(
             'Json' => array(
                 'ZF\ContentNegotiation\JsonModel' => array(
