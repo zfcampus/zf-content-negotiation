@@ -10,7 +10,8 @@ use Zend\EventManager\SharedListenerAggregateInterface;
 use Zend\EventManager\SharedEventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
-use ZF\ApiProblem\Exception\DomainException;
+use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 
 class AcceptFilterListener extends ContentTypeFilterListener
 {
@@ -51,7 +52,7 @@ class AcceptFilterListener extends ContentTypeFilterListener
         }
 
         if (!$matched) {
-            throw new DomainException('Cannot honor Accept type specified', 406);
+            return new ApiProblemResponse(new ApiProblem(406, 'Cannot honor Accept type specified'));
         }
     }
 

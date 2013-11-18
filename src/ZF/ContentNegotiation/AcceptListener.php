@@ -10,7 +10,8 @@ use Zend\Mvc\Controller\Plugin\AcceptableViewModelSelector;
 use Zend\Mvc\InjectApplicationEventInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ModelInterface as ViewModelInterface;
-use ZF\ApiProblem\Exception\DomainException;
+use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 
 class AcceptListener
 {
@@ -98,7 +99,7 @@ class AcceptListener
         $viewModel = $selector($criteria, $useDefault);
 
         if (!$viewModel instanceof ViewModelInterface) {
-            throw new DomainException('Unable to resolve Accept header to a representation', 406);
+            return new ApiProblemResponse(new ApiProblem(406, 'Unable to resolve Accept header to a representation'));
         }
 
         // Populate the view model with the result...

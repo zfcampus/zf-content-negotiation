@@ -10,7 +10,8 @@ use Zend\EventManager\SharedListenerAggregateInterface;
 use Zend\EventManager\SharedEventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
-use ZF\ApiProblem\Exception\DomainException;
+use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 
 class ContentTypeFilterListener implements SharedListenerAggregateInterface
 {
@@ -93,7 +94,7 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
         $headers           = $request->getHeaders();
         $contentTypeHeader = false;
         if (!$headers->has('content-type')) {
-            throw new DomainException('Invalid content-type specified', 415);
+            return new ApiProblemResponse(new ApiProblem(415, 'Invalid content-type specified'));
         }
 
         $contentTypeHeader = $headers->get('content-type');
@@ -101,7 +102,7 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
         $matched = $contentTypeHeader->match($this->config[$controllerName]);
 
         if (false === $matched) {
-            throw new DomainException('Invalid content-type specified', 415);
+            return new ApiProblemResponse(new ApiProblem(415, 'Invalid content-type specified'));
         }
     }
 }
