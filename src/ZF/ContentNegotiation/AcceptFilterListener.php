@@ -17,8 +17,8 @@ class AcceptFilterListener extends ContentTypeFilterListener
 {
     /**
      * Test if the accept content-type received is allowable.
-     * 
-     * @param  MvcEvent $e 
+     *
+     * @param  MvcEvent $e
      */
     public function onDispatch(MvcEvent $e)
     {

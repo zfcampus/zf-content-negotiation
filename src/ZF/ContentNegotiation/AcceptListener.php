@@ -31,8 +31,8 @@ class AcceptListener
     protected $selectorsConfig = array();
 
     /**
-     * @param AcceptableViewModelSelector $selector 
-     * @param array $config 
+     * @param AcceptableViewModelSelector $selector
+     * @param array $config
      */
     public function __construct(AcceptableViewModelSelector $selector, array $config)
     {
@@ -52,21 +52,21 @@ class AcceptListener
     }
 
     /**
-     * @param  MvcEvent $e 
+     * @param  MvcEvent $e
      */
     public function __invoke(MvcEvent $e)
     {
         $result = $e->getResult();
         if (!is_array($result) && (!$result instanceof ViewModel)) {
-            // We will only attempt to re-cast ContentNegotiation\ViewModel 
-            // results or arrays to what the AcceptableViewModelSelector gives 
+            // We will only attempt to re-cast ContentNegotiation\ViewModel
+            // results or arrays to what the AcceptableViewModelSelector gives
             // us. Anything else, we cannot handle.
             return;
         }
 
         $controller = $e->getTarget();
         if (!$controller instanceof InjectApplicationEventInterface) {
-            // The AcceptableViewModelSelector needs a controller that is 
+            // The AcceptableViewModelSelector needs a controller that is
             // event-aware in order to work; if it's not, we cannot do
             // anything more.
             return;
@@ -111,9 +111,9 @@ class AcceptListener
      *
      * Try and determine the view model selection criteria based on the configuration
      * for the current controller service name, using a fallback if it exists.
-     * 
-     * @param  null|array $fallbackConfig 
-     * @param  string $controllerName 
+     *
+     * @param  null|array $fallbackConfig
+     * @param  string $controllerName
      * @return null|array
      */
     protected function getSelectorCriteria($fallbackConfig, $controllerName)
@@ -146,16 +146,16 @@ class AcceptListener
      * values/settings/etc from the original.
      *
      * If the result is an array, we pass those values as the view model variables.
-     * 
-     * @param  array|ViewModel $result 
-     * @param  ViewModelInterface $viewModel 
+     *
+     * @param  array|ViewModel $result
+     * @param  ViewModelInterface $viewModel
      */
     protected function populateViewModel($result, ViewModelInterface $viewModel, MvcEvent $e)
     {
         if ($result instanceof ViewModel) {
             // "Re-cast" content-negotiation view models to the view model type
             // selected by the AcceptableViewModelSelector
-            
+
             $viewModel->setVariables($result->getVariables());
             $viewModel->setTemplate($result->getTemplate());
             $viewModel->setOptions($result->getOptions());
@@ -172,7 +172,7 @@ class AcceptListener
             return;
         }
 
-        // At this point, the result is an array; use it to populate the view 
+        // At this point, the result is an array; use it to populate the view
         // model variables
         $viewModel->setVariables($result);
         $e->setResult($viewModel);
@@ -183,12 +183,12 @@ class AcceptListener
      *
      * If the criteria is an array, return it directly.
      *
-     * If the criteria is a string, attempt to look it up in the registered selectors; 
+     * If the criteria is a string, attempt to look it up in the registered selectors;
      * if found, return that criteria.
      *
      * Otherwise, return nothing.
      *
-     * @param  string|array $criteria 
+     * @param  string|array $criteria
      * @return array|null
      */
     protected function getCriteria($criteria)

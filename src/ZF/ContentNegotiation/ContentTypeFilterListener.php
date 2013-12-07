@@ -28,8 +28,8 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
 
     /**
      * Attach to dispatch event at high priority
-     * 
-     * @param  SharedEventManagerInterface $events 
+     *
+     * @param  SharedEventManagerInterface $events
      */
     public function attachShared(SharedEventManagerInterface $events)
     {
@@ -38,8 +38,8 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
 
     /**
      * Detach listeners
-     * 
-     * @param  SharedEventManagerInterface $events 
+     *
+     * @param  SharedEventManagerInterface $events
      */
     public function detachShared(SharedEventManagerInterface $events)
     {
@@ -52,8 +52,8 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
 
     /**
      * Set whitelist configuration
-     * 
-     * @param  array $config 
+     *
+     * @param  array $config
      * @return self
      */
     public function setConfig(array $config)
@@ -64,8 +64,8 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
 
     /**
      * Test if the content-type received is allowable.
-     * 
-     * @param  MvcEvent $e 
+     *
+     * @param  MvcEvent $e
      */
     public function onDispatch(MvcEvent $e)
     {
@@ -98,7 +98,7 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
         }
 
         $contentTypeHeader = $headers->get('content-type');
-            
+
         $matched = $contentTypeHeader->match($this->config[$controllerName]);
 
         if (false === $matched) {

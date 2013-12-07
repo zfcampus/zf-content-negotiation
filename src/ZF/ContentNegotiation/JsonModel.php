@@ -12,7 +12,7 @@ class JsonModel extends BaseJsonModel
 {
     /**
      * Mark view model as terminal by default (intended for use with APIs)
-     * 
+     *
      * @var bool
      */
     protected $terminate = true;
