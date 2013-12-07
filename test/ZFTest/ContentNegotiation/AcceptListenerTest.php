@@ -47,13 +47,15 @@ class AcceptListenerTest extends TestCase
         $this->controller->setPluginManager($plugins);
     }
 
-    public function testInablityToResolveViewModelRaisesApiProblemDomainException()
+    public function testInabilityToResolveViewModelReturnsApiProblemResponse()
     {
         $listener = $this->listener;
         $this->event->setResult(array('foo' => 'bar'));
 
-        $this->setExpectedException('ZF\ApiProblem\Exception\DomainException', 'Unable to resolve', 406);
-        $listener($this->event);
+        $response = $listener($this->event);
+        $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $response);
+        $this->assertEquals(406, $response->getApiProblem()->httpStatus);
+        $this->assertContains('Unable to resolve', $response->getApiProblem()->detail);
     }
 
     public function testReturnADefaultViewModelIfNoCriteriaSpecifiedForAController()

@@ -43,7 +43,7 @@ class ContentTypeFilterListenerTest extends TestCase
         $this->assertNull($this->listener->onDispatch($this->event));
     }
 
-    public function testListenerRaisesExceptionIfRequestContentTypeIsNotInControllerWhitelist()
+    public function testListenerReturnsApiProblemResponseIfRequestContentTypeIsNotInControllerWhitelist()
     {
         $contentType = 'application/vnd.zf.v1.foo+json';
         $this->listener->setConfig(array(
@@ -55,8 +55,9 @@ class ContentTypeFilterListenerTest extends TestCase
         $request->getHeaders()->addHeaderLine('content-type', $contentType);
         $request->setContent('<?xml version="1.0"?><foo><bar>baz</bar></foo>');
 
-        $this->setExpectedException('ZF\ApiProblem\Exception\DomainException', 'Invalid content-type');
-        $this->listener->onDispatch($this->event);
+        $response = $this->listener->onDispatch($this->event);
+        $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $response);
+        $this->assertContains('Invalid content-type', $response->getApiProblem()->detail);
     }
 
     public function testAttachSharedAttachesToDispatchEventAtHighPriority()
