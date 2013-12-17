@@ -76,11 +76,11 @@ class ContentTypeListener
 
     /**
      * Attempt to decode a JSON string
-     * 
+     *
      * Decodes a JSON string and returns it; if invalid, raises an
      * exception.
      *
-     * @param string $json 
+     * @param string $json
      * @return mixed
      * @throws DomainException on error parsing JSON
      */
