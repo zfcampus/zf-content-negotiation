@@ -6,11 +6,20 @@
 
 namespace ZF\ContentNegotiation;
 
+use DomainException;
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Request;
 
 class ContentTypeListener
 {
+    protected $jsonErrors = [
+        JSON_ERROR_DEPTH          => 'Maximum stack depth exceeded',
+        JSON_ERROR_STATE_MISMATCH => 'Underflow or the modes mismatch',
+        JSON_ERROR_CTRL_CHAR      => 'Unexpected control character found',
+        JSON_ERROR_SYNTAX         => 'Syntax error, malformed JSON',
+        JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded',
+    ];
+
     public function __invoke(MvcEvent $e)
     {
         $request       = $e->getRequest();
@@ -35,7 +44,7 @@ class ContentTypeListener
         switch ($request->getMethod()) {
             case $request::METHOD_POST:
                 if ($contentType && $contentType->match('application/json')) {
-                    $bodyParams = json_decode($request->getContent(), true);
+                    $bodyParams = $this->decodeJson($request->getContent());
                     break;
                 }
 
@@ -45,7 +54,7 @@ class ContentTypeListener
             case $request::METHOD_PUT:
                 $content = $request->getContent();
                 if ($contentType && $contentType->match('application/json')) {
-                    $bodyParams = json_decode($content, true);
+                    $bodyParams = $this->decodeJson($content);
                     break;
                 }
 
@@ -63,5 +72,30 @@ class ContentTypeListener
 
         $parameterData->setBodyParams($bodyParams);
         $e->setParam('ZFContentNegotiationParameterData', $parameterData);
+    }
+
+    /**
+     * Attempt to decode a JSON string
+     * 
+     * Decodes a JSON string and returns it; if invalid, raises an
+     * exception.
+     *
+     * @param string $json 
+     * @return mixed
+     * @throws DomainException on error parsing JSON
+     */
+    public function decodeJson($json)
+    {
+        $data = json_decode($json, true);
+        if (null !== $data) {
+            return $data;
+        }
+        $error = json_last_error();
+        if ($error === JSON_ERROR_NONE) {
+            return $data;
+        }
+
+        $message = array_key_exists($error, $this->jsonErrors) ? $this->jsonErrors[$error] : 'Unknown error';
+        throw new DomainException(sprintf('JSON decoding error: %s', $message), 400);
     }
 }
