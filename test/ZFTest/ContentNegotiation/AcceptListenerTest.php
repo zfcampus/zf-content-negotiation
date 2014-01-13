@@ -54,7 +54,7 @@ class AcceptListenerTest extends TestCase
 
         $response = $listener($this->event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $response);
-        $this->assertEquals(406, $response->getApiProblem()->httpStatus);
+        $this->assertEquals(406, $response->getApiProblem()->status);
         $this->assertContains('Unable to resolve', $response->getApiProblem()->detail);
     }
 
