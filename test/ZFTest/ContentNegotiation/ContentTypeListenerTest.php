@@ -32,7 +32,7 @@ class ContentTypeListenerTest extends TestCase
      * @group 3
      * @dataProvider methodsWithBodies
      */
-    public function testJsonDecodeErrorsRaiseExceptions($method)
+    public function testJsonDecodeErrorsReturnsProblemResponse($method)
     {
         $listener = $this->listener;
 
@@ -45,7 +45,10 @@ class ContentTypeListenerTest extends TestCase
         $event->setRequest($request);
         $event->setRouteMatch(new RouteMatch([]));
 
-        $this->setExpectedException('DomainException', 'JSON decoding error', 400);
-        $listener($event);
+        $result = $listener($event);
+        $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
+        $problem = $result->getApiProblem();
+        $this->assertEquals(400, $problem->status);
+        $this->assertContains('JSON decoding', $problem->detail);
     }
 }
