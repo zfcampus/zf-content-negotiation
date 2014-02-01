@@ -6,10 +6,7 @@
 
 namespace ZF\ContentNegotiation;
 
-use Zend\EventManager\SharedListenerAggregateInterface;
-use Zend\EventManager\SharedEventManagerInterface;
 use Zend\Mvc\MvcEvent;
-use Zend\Stdlib\ArrayUtils;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
