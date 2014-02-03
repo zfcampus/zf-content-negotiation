@@ -7,7 +7,6 @@
 namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\MvcEvent;
-use Zend\Http\Request;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
@@ -28,10 +27,10 @@ class ContentTypeListener
      * content-type against the list of allowed content types, and then performs
      * appropriate content deserialization.
      *
-     * If an error occurs during deserialization, an ApiProblemResponse is 
+     * If an error occurs during deserialization, an ApiProblemResponse is
      * returned, indicating an issue with the submission.
-     * 
-     * @param MvcEvent $e 
+     *
+     * @param MvcEvent $e
      * @return null|ApiProblemResponse
      */
     public function __invoke(MvcEvent $e)
