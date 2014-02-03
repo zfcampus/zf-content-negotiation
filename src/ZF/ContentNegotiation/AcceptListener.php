@@ -71,7 +71,8 @@ class AcceptListener
             // anything more.
             return;
         }
-        $this->selector->setController($controller);
+        $selector  = $this->selector;
+        $selector->setController($controller);
 
         $criteria = $e->getParam('ZFContentNegotiation');
 
@@ -94,8 +95,6 @@ class AcceptListener
         if (!$criteria || empty($criteria)) {
             $useDefault = true;
         }
-        $selector  = $this->selector;
-        $selector->setController($controller);
         $viewModel = $selector($criteria, $useDefault);
 
         if (!$viewModel instanceof ViewModelInterface) {
