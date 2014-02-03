@@ -7,7 +7,6 @@
 namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\MvcEvent;
-use Zend\Http\Request;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
