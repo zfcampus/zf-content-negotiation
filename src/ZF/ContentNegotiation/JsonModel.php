@@ -16,4 +16,12 @@ class JsonModel extends BaseJsonModel
      * @var bool
      */
     protected $terminate = true;
+
+    public function setVariables($variables, $overwrite = false)
+    {
+        if ($variables instanceof \JsonSerializable) {
+            $variables = $variables->jsonSerialize();
+        }
+        return parent::setVariables($variables, $overwrite);
+    }
 }
