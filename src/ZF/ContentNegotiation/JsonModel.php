@@ -19,6 +19,15 @@ class JsonModel extends BaseJsonModel
      */
     protected $terminate = true;
 
+    /**
+     * Set variables
+     *
+     * Overrides parent to extract variables from JsonSerializable objects.
+     * 
+     * @param  array|Traversable|JsonSerializable|StdlibJsonSerializable $variables 
+     * @param  bool $overwrite 
+     * @return self
+     */
     public function setVariables($variables, $overwrite = false)
     {
         if ($variables instanceof JsonSerializable
