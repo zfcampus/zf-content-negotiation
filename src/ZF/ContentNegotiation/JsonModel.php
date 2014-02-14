@@ -6,6 +6,8 @@
 
 namespace ZF\ContentNegotiation;
 
+use JsonSerializable;
+use Zend\Stdlib\JsonSerializable as StdlibJsonSerializable;
 use Zend\View\Model\JsonModel as BaseJsonModel;
 
 class JsonModel extends BaseJsonModel
@@ -19,7 +21,9 @@ class JsonModel extends BaseJsonModel
 
     public function setVariables($variables, $overwrite = false)
     {
-        if ($variables instanceof \JsonSerializable) {
+        if ($variables instanceof JsonSerializable
+            || $variables instanceof StdlibJsonSerializable
+        ) {
             $variables = $variables->jsonSerialize();
         }
         return parent::setVariables($variables, $overwrite);
