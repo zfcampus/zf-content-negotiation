@@ -12,4 +12,3 @@ class JsonModelTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $jsonModel->getVariable('foo'));
     }
 }
- 
