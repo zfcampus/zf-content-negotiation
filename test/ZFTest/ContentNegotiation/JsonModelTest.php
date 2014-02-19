@@ -16,4 +16,11 @@ class JsonModelTest extends TestCase
         $jsonModel = new JsonModel(new TestAsset\ModelWithJson());
         $this->assertEquals('bar', $jsonModel->getVariable('foo'));
     }
+
+    public function testJsonModelIsAlwaysTerminal()
+    {
+        $jsonModel = new JsonModel(array());
+        $jsonModel->setTerminal(false);
+        $this->assertTrue($jsonModel->terminate());
+    }
 }
