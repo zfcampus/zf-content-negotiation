@@ -23,9 +23,9 @@ class JsonModel extends BaseJsonModel
      * Set variables
      *
      * Overrides parent to extract variables from JsonSerializable objects.
-     * 
-     * @param  array|Traversable|JsonSerializable|StdlibJsonSerializable $variables 
-     * @param  bool $overwrite 
+     *
+     * @param  array|Traversable|JsonSerializable|StdlibJsonSerializable $variables
+     * @param  bool $overwrite
      * @return self
      */
     public function setVariables($variables, $overwrite = false)
@@ -36,5 +36,19 @@ class JsonModel extends BaseJsonModel
             $variables = $variables->jsonSerialize();
         }
         return parent::setVariables($variables, $overwrite);
+    }
+
+    /**
+     * Override setTerminal()
+     *
+     * Becomes a no-op; this model should always be terminal.
+     *
+     * @param  bool $flag
+     * @return self
+     */
+    public function setTerminal($flag)
+    {
+        // Do nothing; should always terminate
+        return $this;
     }
 }
