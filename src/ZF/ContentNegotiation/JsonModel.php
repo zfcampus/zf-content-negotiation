@@ -58,34 +58,33 @@ class JsonModel extends BaseJsonModel
     /**
      * Override serialize()
      *
-     * Tests for two special top-level variables:
+     * Tests for the special top-level variable "payload", set by ZF\Rest\RestController.
      *
-     * - "payload", set by ZF\Rest\RestController
-     * - "documenation", set by ZF\Apigility\Documentation
+     * If discovered, the value is pulled and used as the variables to serialize.
      *
-     * If either is discovered, the value is pulled and used as the variables to serialize.
+     * A further check is done to see if we have a ZF\Hal\Entity or
+     * ZF\Hal\Collection, and, if so, we pull the top-level entity or
+     * collection and serialize that.
      *
-     * For REST payloads, a further check is done to see if we have a 
-     * ZF\Hal\Entity or ZF\Hal\Collection, and, if so, we pull the top-level 
-     * entity or collection and serialize that.
-     * 
      * @return string
      */
     public function serialize()
     {
         $variables = $this->getVariables();
+
+        // 'payload' == ZF\Rest\RestController payload
         if (isset($variables['payload'])) {
             $variables = $variables['payload'];
-            if ($variables instanceof HalEntity) {
-                $variables = $variables->entity;
-            }
-            if ($variables instanceof HalCollection) {
-                $variables = $variables->collection;
-            }
         }
 
-        if (isset($variables['documentation'])) {
-            $variables = $variables['documentation'];
+        // Use ZF\Hal\Entity's composed entity
+        if ($variables instanceof HalEntity) {
+            $variables = $variables->entity;
+        }
+
+        // Use ZF\Hal\Collection's composed collection
+        if ($variables instanceof HalCollection) {
+            $variables = $variables->getCollection();
         }
 
         if ($variables instanceof Traversable) {
