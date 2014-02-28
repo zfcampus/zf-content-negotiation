@@ -21,11 +21,11 @@ class ContentTypeListenerTest extends TestCase
 
     public function methodsWithBodies()
     {
-        return [
+        return array(
             'post' => array('POST'),
             'patch' => array('PATCH'),
             'put' => array('PUT'),
-        ];
+        );
     }
 
     /**
@@ -43,7 +43,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch(new RouteMatch(array()));
 
         $result = $listener($event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);

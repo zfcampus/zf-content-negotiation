@@ -6,7 +6,7 @@
 
 namespace ZFTest\ContentNegotiation\TestAsset;
 
-use JsonSerializable;
+use Zend\Stdlib\JsonSerializable;
 
 class ModelWithJson implements JsonSerializable
 {
