@@ -49,8 +49,8 @@ class Bootstrap
                 'Zend\Loader\StandardAutoloader' => array(
                     'autoregister_zf' => true,
                     'namespaces' => array(
-                        'ZF\ContentNegotiation' => __DIR__ . '/../src/ZF/ContentNegotiation/',
-                        __NAMESPACE__ => __DIR__ . '/ZFTest/ContentNegotiation/',
+                        'ZF\ContentNegotiation' => __DIR__ . '/../src/',
+                        __NAMESPACE__ => __DIR__,
                     ),
                 ),
             ));
