@@ -1,6 +1,9 @@
 ZF Content Negotiation
 ======================
 
+[![Build Status](https://travis-ci.org/zfcampus/zf-content-negotation.png)](https://travis-ci.org/zfcampus/zf-content-negotation)
+[![Coverage Status](https://coveralls.io/repos/zfcampus/zf-content-negotation/badge.png?branch=master)](https://coveralls.io/r/zfcampus/zf-content-negotation)
+
 Module for automating content negotiation tasks within a Zend Framework 2
 application.
 
