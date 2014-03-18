@@ -42,6 +42,8 @@ class Module
         $em       = $app->getEventManager();
 
         $em->attach(MvcEvent::EVENT_ROUTE, new ContentTypeListener(), -625);
+        $em->attachAggregate($services->get('ZF\ContentNegotiation\AcceptFilterListener'));
+        $em->attachAggregate($services->get('ZF\ContentNegotiation\ContentTypeFilterListener'));
 
         $sem = $em->getSharedManager();
         $sem->attach(
@@ -50,7 +52,5 @@ class Module
             $services->get('ZF\ContentNegotiation\AcceptListener'),
             -10
         );
-        $sem->attachAggregate($services->get('ZF\ContentNegotiation\AcceptFilterListener'));
-        $sem->attachAggregate($services->get('ZF\ContentNegotiation\ContentTypeFilterListener'));
     }
 }

@@ -6,14 +6,14 @@
 
 namespace ZF\ContentNegotiation;
 
-use Zend\EventManager\SharedListenerAggregateInterface;
-use Zend\EventManager\SharedEventManagerInterface;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
-class ContentTypeFilterListener implements SharedListenerAggregateInterface
+class ContentTypeFilterListener implements ListenerAggregateInterface
 {
     /**
      * Whitelist configuration
@@ -27,24 +27,22 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
     protected $listeners = array();
 
     /**
-     * Attach to dispatch event at high priority
-     *
-     * @param  SharedEventManagerInterface $events
+     * @param  EventManagerInterface $events
      */
-    public function attachShared(SharedEventManagerInterface $events)
+    public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('Zend\Stdlib\DispatchableInterface', MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -625);
     }
 
     /**
      * Detach listeners
      *
-     * @param  SharedEventManagerInterface $events
+     * @param  EventManagerInterface $events
      */
-    public function detachShared(SharedEventManagerInterface $events)
+    public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $index => $listener) {
-            if ($events->detach('Zend\Stdlib\DispatchableInterface', $listener)) {
+            if ($events->detach($listener)) {
                 unset($this->listeners[$index]);
             }
         }
@@ -66,8 +64,9 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
      * Test if the content-type received is allowable.
      *
      * @param  MvcEvent $e
+     * @return null|ApiProblemResponse
      */
-    public function onDispatch(MvcEvent $e)
+    public function onRoute(MvcEvent $e)
     {
         if (empty($this->config)) {
             return;
@@ -80,7 +79,7 @@ class ContentTypeFilterListener implements SharedListenerAggregateInterface
 
         // Only worry about content types on HTTP methods that submit content
         // via the request body.
-        $request           = $e->getRequest();
+        $request = $e->getRequest();
         if (!method_exists($request, 'getHeaders')) {
             // Not an HTTP request; nothing to do
             return;

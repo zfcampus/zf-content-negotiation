@@ -16,8 +16,9 @@ class AcceptFilterListener extends ContentTypeFilterListener
      * Test if the accept content-type received is allowable.
      *
      * @param  MvcEvent $e
+     * @return null|ApiProblemResponse
      */
-    public function onDispatch(MvcEvent $e)
+    public function onRoute(MvcEvent $e)
     {
         if (empty($this->config)) {
             return;
@@ -38,10 +39,10 @@ class AcceptFilterListener extends ContentTypeFilterListener
 
         $matched = false;
         if (is_string($this->config[$controllerName])) {
-            $matched = $this->validateContentType($this->config[$controllerName], $headers);
+            $matched = $this->validateMediaType($this->config[$controllerName], $headers);
         } elseif (is_array($this->config[$controllerName])) {
             foreach ($this->config[$controllerName] as $whitelistType) {
-                $matched = $this->validateContentType($whitelistType, $headers);
+                $matched = $this->validateMediaType($whitelistType, $headers);
                 if ($matched) {
                     break;
                 }
@@ -53,7 +54,14 @@ class AcceptFilterListener extends ContentTypeFilterListener
         }
     }
 
-    protected function validateContentType($match, $headers)
+    /**
+     * Validate the passed mediatype against the appropriate header
+     * 
+     * @param  string $match 
+     * @param  \Zend\Http\Headers $headers 
+     * @return bool
+     */
+    protected function validateMediaType($match, $headers)
     {
         if (!$headers->has('accept')) {
             return false;

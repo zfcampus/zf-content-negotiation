@@ -7,7 +7,7 @@
 namespace ZFTest\ContentNegotiation;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\EventManager\SharedEventManager;
+use Zend\EventManager\EventManager;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
@@ -28,7 +28,7 @@ class ContentTypeFilterListenerTest extends TestCase
 
     public function testListenerDoesNothingIfNoConfigurationExistsForController()
     {
-        $this->assertNull($this->listener->onDispatch($this->event));
+        $this->assertNull($this->listener->onRoute($this->event));
     }
 
     public function testListenerDoesNothingIfRequestContentTypeIsInControllerWhitelist()
@@ -40,7 +40,7 @@ class ContentTypeFilterListenerTest extends TestCase
             ),
         ));
         $this->event->getRequest()->getHeaders()->addHeaderLine('content-type', $contentType);
-        $this->assertNull($this->listener->onDispatch($this->event));
+        $this->assertNull($this->listener->onRoute($this->event));
     }
 
     public function testListenerReturnsApiProblemResponseIfRequestContentTypeIsNotInControllerWhitelist()
@@ -55,19 +55,19 @@ class ContentTypeFilterListenerTest extends TestCase
         $request->getHeaders()->addHeaderLine('content-type', $contentType);
         $request->setContent('<?xml version="1.0"?><foo><bar>baz</bar></foo>');
 
-        $response = $this->listener->onDispatch($this->event);
+        $response = $this->listener->onRoute($this->event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $response);
         $this->assertContains('Invalid content-type', $response->getApiProblem()->detail);
     }
 
-    public function testAttachSharedAttachesToDispatchEventAtHighPriority()
+    public function testAttachesToDispatchEventAtHighPriority()
     {
-        $events = new SharedEventManager();
-        $this->listener->attachShared($events);
-        $listeners = $events->getListeners('Zend\Stdlib\DispatchableInterface', 'dispatch');
+        $events = new EventManager();
+        $this->listener->attach($events);
+        $listeners = $events->getListeners('route');
         $this->assertEquals(1, count($listeners));
-        $this->assertTrue($listeners->hasPriority(100));
+        $this->assertTrue($listeners->hasPriority(-625));
         $callback = $listeners->getIterator()->current()->getCallback();
-        $this->assertEquals(array($this->listener, 'onDispatch'), $callback);
+        $this->assertEquals(array($this->listener, 'onRoute'), $callback);
     }
 }
