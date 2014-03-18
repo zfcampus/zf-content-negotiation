@@ -41,7 +41,7 @@ class Module
         $services = $app->getServiceManager();
         $em       = $app->getEventManager();
 
-        $em->attach(MvcEvent::EVENT_ROUTE, new ContentTypeListener(), -99);
+        $em->attach(MvcEvent::EVENT_ROUTE, new ContentTypeListener(), -625);
 
         $sem = $em->getSharedManager();
         $sem->attach(
