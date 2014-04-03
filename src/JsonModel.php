@@ -94,6 +94,44 @@ class JsonModel extends BaseJsonModel
         if (null !== $this->jsonpCallback) {
             return $this->jsonpCallback.'('.Json::encode($variables).');';
         }
-        return Json::encode($variables);
+
+        $serialized = Json::encode($variables);
+
+        if (false === $serialized) {
+            $this->raiseError(json_last_error());
+        }
+
+        return $serialized;
+    }
+
+    /**
+     * Determine if an error needs to be raised; if so, throw an exception
+     *
+     * @param int $error One of the JSON_ERROR_* constants
+     * @throws Exception\InvalidJsonException
+     */
+    protected function raiseError($error)
+    {
+        $message = 'JSON encoding error occurred: ';
+        switch ($error) {
+            case JSON_ERROR_NONE:
+                return;
+            case JSON_ERROR_DEPTH:
+                $message .= 'Maximum stack depth exceeded';
+                break;
+            case JSON_ERROR_STATE_MISMATCH:
+                $message .= 'Underflow or the modes mismatch';
+                break;
+            case JSON_ERROR_CTRL_CHAR:
+                $message .= 'Unexpected control character found';
+                break;
+            case JSON_ERROR_UTF8:
+                $message .= 'Malformed UTF-8 characters, possibly incorrectly encoded';
+                break;
+            default:
+                $message .= 'Unknown error';
+                break;
+        }
+        throw new Exception\InvalidJsonException($message);
     }
 }
