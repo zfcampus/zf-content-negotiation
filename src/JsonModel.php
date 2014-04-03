@@ -106,7 +106,7 @@ class JsonModel extends BaseJsonModel
 
     /**
      * Determine if an error needs to be raised; if so, throw an exception
-     * 
+     *
      * @param int $error One of the JSON_ERROR_* constants
      * @throws Exception\InvalidJsonException
      */
