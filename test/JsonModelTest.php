@@ -55,4 +55,13 @@ class JsonModelTest extends TestCase
         $data = json_decode($json, true);
         $this->assertEquals($collection, $data);
     }
+
+    public function testWillRaiseExceptionIfErrorOccursEncodingJson()
+    {
+        // Provide data that cannot be serialized to JSON
+        $data = array('foo' => pack('H*', 'c32e'));
+        $jsonModel = new JsonModel($data);
+        $this->setExpectedException('ZF\ContentNegotiation\Exception\InvalidJsonException');
+        $jsonModel->serialize();
+    }
 }
