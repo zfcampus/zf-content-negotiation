@@ -6,19 +6,19 @@ ZF Content Negotiation
 Introduction
 ------------
 
-`zf-content-negotiation` is a module for automating content negotiation tasks within a Zend Framework 2
-application.
+`zf-content-negotiation` is a module for automating content negotiation tasks within a Zend
+Framework 2 application.
 
 The following features are provided
 
-- Mapping Accept header media types to specific view model types, and
-  automatically casting controller results to view models.
-- Defining Accept header media type whitelists; requests with Accept media types
-  that fall outside the whitelist will be immediately rejected with a 406 "Not
-  Acceptable" response.
-- Defining Content-Type header media type whitelists; requests sending content
-  bodies with Content-Type media types that fall outside the whitelist will be
-  immediately rejected with a 415 "Unsupported Media Type" response.
+- Mapping `Accept` header media types to specific view model types, and
+  automatically casting controller results to those view model types.
+- Defining `Accept` header media type whitelists; requests with `Accept` media types
+  that fall outside the whitelist will be immediately rejected with a `406 Not
+  Acceptable` response.
+- Defining `Content-Type` header media type whitelists; requests sending content
+  bodies with `Content-Type` media types that fall outside the whitelist will be
+  immediately rejected with a `415 Unsupported Media Type` response.
 
 Installation
 ------------
@@ -62,35 +62,37 @@ The top-level configuration key for user configuration of this module is `zf-con
 
 #### Key: `controllers`
 
-`controllers` key is utilized for mapping a content negotiation strategy to a particular
+The `controllers` key is utilized for mapping a content negotiation strategy to a particular
 controller service name (from the top-level `controllers` section).  The value portion
 of the controller array can either be a _named selector_ (see `selectors` below), or a
 selector definition.
 
-A selector definition consists of an array with the key of the array being the name of
-a view model and the value of it being an indexed array of media types that when matched
-will select the keyed view model.
+A selector definition consists of an array with the key of the array being the name of a view model,
+and the value of it being an indexed array of media types that, when matched, will select that view
+model.
 
 Example:
 
 ```php
 'controllers' => array(
-    'Application\Controller\HelloWorld1' => 'Json', // named selector
+    // Named selector:
+    'Application\Controller\HelloWorld1' => 'Json',
+
+    // Selector definition:
     'Application\Controller\HelloWorld2' => array(
-        // named selector format
         'ZF\ContentNegotiation\JsonModel' => array(
             'application/json',
             'application/*+json',
         ),
-    )
-)
+    ),
+),
 ```
 
 #### Key: `selectors`
 
-`selectors` key is utilized to build up named selector definitions for reuse between many different
+The `selectors` key is utilized to create named selector definitions for reuse between many different
 controllers.  The key part of the selectors array will be a name used to correlate the selector
-definition (which uses the format described in the `controllers` key).
+definition (which uses the format described in the [controllers](#controllers) key).
 
 Example:
 
@@ -107,11 +109,11 @@ Example:
 
 #### Key: `accept_whitelist`
 
-`accept_whitelist` key is utilized to instruct the content-negotiation module which media types
-are acceptable for a given controller service name.  When a controller service name is configured
+The `accept_whitelist` key is utilized to instruct the content negotiation module which media types
+are acceptable for a given controller service name. When a controller service name is configured
 in this key, along with an indexed array of matching media types, only media types that match
-the Accept header of a given request will be allowed to be dispatched.  Unmatched media types
-will receive a 406 _Cannot honor Accept type specified_ error.
+the `Accept` header of a given request will be allowed to be dispatched.  Unmatched media types
+will receive a `406 Cannot honor Accept type specified` response.
 
 The value of each controller service name key can either be a string or an array of strings.
 
@@ -120,20 +122,20 @@ Example:
 ```php
 'accept_whitelist' => array(
     'Application\\Controller\\HelloApiController' => array(
-        0 => 'application/vnd.application-hello+json',
-        1 => 'application/hal+json',
-        2 => 'application/json',
+        'application/vnd.application-hello+json',
+        'application/hal+json',
+        'application/json',
     ),
 ),
 ```
 
 #### Key: `content_type_whitelist`
 
-`content_type_whitelist` key is utilized to instruct the content-negotiation module which media
-types are valid for the Content-Type portion of a request.  When a controller service name is
+The `content_type_whitelist` key is utilized to instruct the content negotiation module which media
+types are valid for the `Content-Type` of a request.  When a controller service name is
 configured in this key, along with an indexed array of matching media types, only media types
-that match the Content-Type header of a given request will be allowed to be dispatched.  Unmatched
-media types will receive a 415 _Invalid content-type specified_ error.
+that match the `Content-Type` header of a given request will be allowed to be dispatched. Unmatched
+media types will receive a `415 Invalid content-type specified` response.
 
 The value of each controller service name key can either be a string or an array of strings.
 
@@ -142,11 +144,12 @@ Example:
 ```php
 'content_type_whitelist' => array(
     'Application\\Controller\\HelloWorldController' => array(
-        0 => 'application/vnd.application-hello-world+json',
-        1 => 'application/json',
+        'application/vnd.application-hello-world+json',
+        'application/json',
     ),
 ),
 ```
+
 ### System Configuration
 
 The following configuration is provided in `config/module.config.php` to enable the module to
@@ -180,32 +183,29 @@ ZF2 Events
 #### `ZF\ContentNegotiation\AcceptListener`
 
 This listener is attached to the `MvcEvent::EVENT_DISPATCH` event with priority `-10`.  It is
-primarily responsible for preforming the actual selection and casting of a controllers response/
-view model based on the content-negotiation configuration.
+responsible for performing the actual selection and casting of a controller's view model based on
+the content negotiation configuration.
 
 #### `ZF\ContentNegotiation\ContentTypeListener`
 
-This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority of `-625`. It
-is primarily responsible for using the Content-Type header in order to determine how the
-content body should be deserialized.  Values are then persisted inside of a
-ParameterDataContainer which is stored in the `ZFContentNegotiationParameterData` key of
-the `MvcEvent` object.
+This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority of `-625`. It is
+responsible for examining the `Content-Type` header in order to determine how the content body
+should be deserialized. Values are then persisted inside of a `ParameterDataContainer` which is
+stored in the `ZFContentNegotiationParameterData` key of the `MvcEvent` object.
 
 #### `ZF\ContentNegotiation\AcceptFilterListener`
 
-This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority of `-625`. It
-is primarily responsible for ensuring the route matched controller is configured to respond
-to the specific media type in the current request's `Accept` header.  If it cannot, it will
-short-circuit the MVC dispatch process by returning a 406 _Cannot honor Accept type specified_
-error.
+This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority of `-625`. It is
+responsible for ensuring the controller selected by routing is configured to respond to the specific
+media type in the current request's `Accept` header.  If it cannot, it will short-circuit the MVC
+dispatch process by returning a `406 Cannot honor Accept type specified` response.
 
 #### `ZF\ContentNegotiation\ContentTypeFilterListener`
 
-This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority of `-625`. It
-is primarily responsible for ensuring the route matched controller can accept content in the
-request body specified by the media type in the current request's `Content-Type` header.  If
-it cannot, it will short-circuit the MVC dispatch process by returning a 415
-_Invalid content-type specified_ error.
+This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority of `-625`. It is
+responsible for ensuring the route matched controller can accept content in the request body
+specified by the media type in the current request's `Content-Type` header. If it cannot, it will
+short-circuit the MVC dispatch process by returning a `415 Invalid content-type specified` response.
 
 
 ZF2 Services
@@ -315,3 +315,4 @@ class IndexController extends AbstractActionController
     }
 }
 ```
+
