@@ -106,9 +106,11 @@ Example:
     ),
 ),
 ```
-A selector can contain multiple view models. To switch between output types.
 
-Example:
+A selector can contain multiple view models, each associated with different media types, allowing
+you to provide multiple representations. As an example, the following selector would allow a given
+controller to return either JSON or HTML output:
+
 ```php
 'selectors'   => array(
     'HTML-Json' => array(
