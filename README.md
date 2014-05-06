@@ -107,6 +107,24 @@ Example:
 ),
 ```
 
+A selector can contain multiple view models, each associated with different media types, allowing
+you to provide multiple representations. As an example, the following selector would allow a given
+controller to return either JSON or HTML output:
+
+```php
+'selectors'   => array(
+    'HTML-Json' => array(
+        'ZF\ContentNegotiation\JsonModel' => array(
+            'application/json',
+            'application/*+json',
+        ),
+        'ZF\ContentNegotiation\ViewModel' => array(
+            'text/html',            
+        ),
+    ),
+),
+```
+
 #### Key: `accept_whitelist`
 
 The `accept_whitelist` key is utilized to instruct the content negotiation module which media types
