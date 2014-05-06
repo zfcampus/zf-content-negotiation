@@ -106,6 +106,22 @@ Example:
     ),
 ),
 ```
+A selector can contain multiple view models. To switch between output types.
+
+Example:
+```php
+'selectors'   => array(
+    'HTML-Json' => array(
+        'ZF\ContentNegotiation\JsonModel' => array(
+            'application/json',
+            'application/*+json',
+        ),
+        'ZF\ContentNegotiation\ViewModel' => array(
+            'text/html',            
+        ),
+    ),
+),
+```
 
 #### Key: `accept_whitelist`
 
