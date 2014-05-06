@@ -7,7 +7,6 @@
 namespace ZFTest\ContentNegotiation;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\EventManager\SharedEventManager;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\PluginManager as ControllerPluginManager;
 use Zend\Mvc\MvcEvent;

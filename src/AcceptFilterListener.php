@@ -56,9 +56,9 @@ class AcceptFilterListener extends ContentTypeFilterListener
 
     /**
      * Validate the passed mediatype against the appropriate header
-     * 
-     * @param  string $match 
-     * @param  \Zend\Http\Headers $headers 
+     *
+     * @param  string $match
+     * @param  \Zend\Http\Headers $headers
      * @return bool
      */
     protected function validateMediaType($match, $headers)
