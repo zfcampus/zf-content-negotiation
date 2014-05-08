@@ -72,7 +72,7 @@ class JsonModel extends BaseJsonModel
     {
         $variables = $this->getVariables();
 
-        // 'payload' == ZF\Rest\RestController payload
+        // 'payload' == payload for HAL representations
         if (isset($variables['payload'])) {
             $variables = $variables['payload'];
         }
@@ -85,10 +85,6 @@ class JsonModel extends BaseJsonModel
         // Use ZF\Hal\Collection's composed collection
         if ($variables instanceof HalCollection) {
             $variables = $variables->getCollection();
-        }
-
-        if ($variables instanceof Traversable) {
-            $variables = ArrayUtils::iteratorToArray($variables);
         }
 
         if (null !== $this->jsonpCallback) {
