@@ -6,7 +6,10 @@
 
 namespace ZFTest\ContentNegotiation;
 
+use ArrayIterator;
+use ArrayObject;
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Stdlib\ArrayUtils;
 use ZF\ContentNegotiation\JsonModel;
 use ZF\Hal\Entity as HalEntity;
 use ZF\Hal\Collection as HalCollection;
@@ -67,5 +70,26 @@ class JsonModelTest extends TestCase
         $jsonModel = new JsonModel($data);
         $this->setExpectedException('ZF\ContentNegotiation\Exception\InvalidJsonException');
         $jsonModel->serialize();
+    }
+
+    /**
+     * @group 17
+     */
+    public function testCanSerializeTraversables()
+    {
+        $variables = array(
+            'some' => 'content',
+            'nested' => new ArrayObject(array(
+                'objects' => 'should also be serialized',
+                'arbitrarily' => new ArrayIterator(array(
+                    'as' => 'deep as you like',
+                )),
+            )),
+        );
+        $iterator  = new ArrayIterator($variables);
+        $jsonModel = new JsonModel($iterator);
+        $json = $jsonModel->serialize();
+        $data = json_decode($json, true);
+        $this->assertEquals(ArrayUtils::iteratorToArray($iterator), $data);
     }
 }
