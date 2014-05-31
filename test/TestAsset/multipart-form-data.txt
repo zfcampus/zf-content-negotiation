@@ -1,0 +1,15 @@
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="mime_type"
+Content-Type: text/plain
+
+md
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="text"; filename="README.md"
+Content-Type: application/octet-stream
+
+ZF Content Negotiation
+======================
+
+[![Build Status](https://travis-ci.org/zfcampus/zf-api-problem.png)](https://travis-ci.org/zfcampus/zf-api-problem)
+
+--6603ddd555b044dc9a022f3ad9281c20--
