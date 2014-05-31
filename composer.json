@@ -29,6 +29,8 @@
         "php": ">=5.3.23",
         "zendframework/zend-eventmanager": "~2.3",
         "zendframework/zend-json": "~2.3",
+        "zendframework/zend-mail": "~2.3",
+        "zendframework/zend-mime": "~2.3",
         "zendframework/zend-mvc": "~2.3",
         "zendframework/zend-servicemanager": "~2.3",
         "zendframework/zend-stdlib": "~2.3",
