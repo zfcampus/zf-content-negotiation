@@ -7,6 +7,7 @@
 return array(
     'service_manager' => array(
         'factories' => array(
+            'Request'                                         => 'ZF\ContentNegotiation\Factory\RequestFactory',
             'ZF\ContentNegotiation\AcceptListener'            => 'ZF\ContentNegotiation\Factory\AcceptListenerFactory',
             'ZF\ContentNegotiation\AcceptFilterListener'      => 'ZF\ContentNegotiation\Factory\AcceptFilterListenerFactory',
             'ZF\ContentNegotiation\ContentTypeFilterListener' => 'ZF\ContentNegotiation\Factory\ContentTypeFilterListenerFactory',

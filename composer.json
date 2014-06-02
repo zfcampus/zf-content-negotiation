@@ -44,6 +44,9 @@
         "zendframework/zend-loader": "~2.3",
         "zfcampus/zf-hal": "~1.0"
     },
+    "suggest": {
+        "zendframework/zend-console": "~2.3, if you intend to use the RequestFactory",
+    },
     "autoload": {
         "psr-4": {
             "ZF\\ContentNegotiation\\": "src/",
