@@ -20,6 +20,11 @@ The following features are provided
   bodies with `Content-Type` media types that fall outside the whitelist will be
   immediately rejected with a `415 Unsupported Media Type` response.
 
+Requirements
+------------
+  
+Please see the [composer.json](composer.json) file.
+ 
 Installation
 ------------
 
