@@ -7,11 +7,13 @@
 namespace ZFTest\ContentNegotiation;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use ReflectionObject;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Stdlib\Parameters;
 use ZF\ContentNegotiation\ContentTypeListener;
+use ZF\ContentNegotiation\MultipartContentParser;
 
 class ContentTypeListenerTest extends TestCase
 {
@@ -127,7 +129,7 @@ class ContentTypeListenerTest extends TestCase
 
     public function testOnFinishWillRemoveAnyUploadFilesUploadedByTheListener()
     {
-        $tmpDir  = $this->listener->getUploadTempDir();
+        $tmpDir  = MultipartContentParser::getUploadTempDir();
         $tmpFile = tempnam($tmpDir, 'zfc');
         file_put_contents($tmpFile, 'File created by ' . __CLASS__);
 
@@ -146,13 +148,18 @@ class ContentTypeListenerTest extends TestCase
         $event = new MvcEvent();
         $event->setRequest($request);
 
+        $r = new ReflectionObject($this->listener);
+        $p = $r->getProperty('uploadTmpDir');
+        $p->setAccessible(true);
+        $p->setValue($this->listener, $tmpDir);
+
         $this->listener->onFinish($event);
         $this->assertFalse(file_exists($tmpFile));
     }
 
     public function testOnFinishDoesNotRemoveUploadFilesTheListenerDidNotCreate()
     {
-        $tmpDir  = $this->listener->getUploadTempDir();
+        $tmpDir  = MultipartContentParser::getUploadTempDir();
         $tmpFile = tempnam($tmpDir, 'php');
         file_put_contents($tmpFile, 'File created by ' . __CLASS__);
 
