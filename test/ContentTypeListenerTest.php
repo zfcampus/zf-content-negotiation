@@ -7,11 +7,14 @@
 namespace ZFTest\ContentNegotiation;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use ReflectionObject;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Stdlib\Parameters;
 use ZF\ContentNegotiation\ContentTypeListener;
+use ZF\ContentNegotiation\MultipartContentParser;
+use ZF\ContentNegotiation\Request as ContentNegotiationRequest;
 
 class ContentTypeListenerTest extends TestCase
 {
@@ -98,6 +101,43 @@ class ContentTypeListenerTest extends TestCase
         $this->assertTrue(file_exists($file['tmp_name']));
     }
 
+    /**
+     * @dataProvider multipartFormDataMethods
+     */
+    public function testCanDecodeMultipartFormDataRequestsFromStreamsForPutAndPatchOperations($method)
+    {
+        $request = new ContentNegotiationRequest();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20');
+        $request->setContentStream('file://' . realpath(__DIR__ . '/TestAsset/multipart-form-data.txt'));
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $listener = $this->listener;
+        $result = $listener($event);
+
+        $parameterData = $event->getParam('ZFContentNegotiationParameterData');
+        $params = $parameterData->getBodyParams();
+        $this->assertEquals(array(
+            'mime_type' => 'md',
+        ), $params);
+
+        $files = $request->getFiles();
+        $this->assertEquals(1, $files->count());
+        $file = $files->get('text');
+        $this->assertInternalType('array', $file);
+        $this->assertArrayHasKey('error', $file);
+        $this->assertArrayHasKey('name', $file);
+        $this->assertArrayHasKey('tmp_name', $file);
+        $this->assertArrayHasKey('size', $file);
+        $this->assertArrayHasKey('type', $file);
+        $this->assertEquals('README.md', $file['name']);
+        $this->assertRegexp('/^zfc/', basename($file['tmp_name']));
+        $this->assertTrue(file_exists($file['tmp_name']));
+    }
+
     public function testDecodingMultipartFormDataWithFileRegistersFileCleanupEventListener()
     {
         $request = new Request();
@@ -127,7 +167,7 @@ class ContentTypeListenerTest extends TestCase
 
     public function testOnFinishWillRemoveAnyUploadFilesUploadedByTheListener()
     {
-        $tmpDir  = $this->listener->getUploadTempDir();
+        $tmpDir  = MultipartContentParser::getUploadTempDir();
         $tmpFile = tempnam($tmpDir, 'zfc');
         file_put_contents($tmpFile, 'File created by ' . __CLASS__);
 
@@ -146,13 +186,18 @@ class ContentTypeListenerTest extends TestCase
         $event = new MvcEvent();
         $event->setRequest($request);
 
+        $r = new ReflectionObject($this->listener);
+        $p = $r->getProperty('uploadTmpDir');
+        $p->setAccessible(true);
+        $p->setValue($this->listener, $tmpDir);
+
         $this->listener->onFinish($event);
         $this->assertFalse(file_exists($tmpFile));
     }
 
     public function testOnFinishDoesNotRemoveUploadFilesTheListenerDidNotCreate()
     {
-        $tmpDir  = $this->listener->getUploadTempDir();
+        $tmpDir  = MultipartContentParser::getUploadTempDir();
         $tmpFile = tempnam($tmpDir, 'php');
         file_put_contents($tmpFile, 'File created by ' . __CLASS__);
 

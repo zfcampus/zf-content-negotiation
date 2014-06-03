@@ -28,12 +28,12 @@
     "require": {
         "php": ">=5.3.23",
         "zendframework/zend-eventmanager": "~2.3",
+        "zendframework/zend-filter": "~2.3",
         "zendframework/zend-json": "~2.3",
-        "zendframework/zend-mail": "~2.3",
-        "zendframework/zend-mime": "~2.3",
         "zendframework/zend-mvc": "~2.3",
         "zendframework/zend-servicemanager": "~2.3",
         "zendframework/zend-stdlib": "~2.3",
+        "zendframework/zend-validator": "~2.3",
         "zendframework/zend-view": "~2.3",
         "zfcampus/zf-api-problem": "~1.0"
     },
@@ -43,6 +43,9 @@
         "zendframework/zend-http": "~2.3",
         "zendframework/zend-loader": "~2.3",
         "zfcampus/zf-hal": "~1.0"
+    },
+    "suggest": {
+        "zendframework/zend-console": "~2.3, if you intend to use the RequestFactory"
     },
     "autoload": {
         "psr-4": {
