@@ -6,12 +6,18 @@
 
 return array(
     'filters' => array(
+        'aliases'   => array(
+            'Zend\Filter\File\RenameUpload' => 'filerenameupload',
+        ),
         'factories' => array(
             'filerenameupload' => 'ZF\ContentNegotiation\Factory\RenameUploadFilterFactory',
         ),
     ),
 
     'validators' => array(
+        'aliases'   => array(
+            'Zend\Validator\File\UploadFile' => 'fileuploadfile',
+        ),
         'factories' => array(
             'fileuploadfile' => 'ZF\ContentNegotiation\Factory\UploadFileValidatorFactory',
         ),
