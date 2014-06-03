@@ -5,6 +5,12 @@
  */
 
 return array(
+    'validators' => array(
+        'factories' => array(
+            'fileuploadfile' => 'ZF\ContentNegotiation\Factory\UploadFileValidatorFactory',
+        ),
+    ),
+
     'service_manager' => array(
         'factories' => array(
             'Request'                                         => 'ZF\ContentNegotiation\Factory\RequestFactory',
