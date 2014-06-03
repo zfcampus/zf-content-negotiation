@@ -5,6 +5,12 @@
  */
 
 return array(
+    'filters' => array(
+        'factories' => array(
+            'filerenameupload' => 'ZF\ContentNegotiation\Factory\RenameUploadFilterFactory',
+        ),
+    ),
+
     'validators' => array(
         'factories' => array(
             'fileuploadfile' => 'ZF\ContentNegotiation\Factory\UploadFileValidatorFactory',
