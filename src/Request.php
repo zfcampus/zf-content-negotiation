@@ -10,15 +10,15 @@ use Zend\Http\PhpEnvironment\Request as BaseRequest;
 
 /**
  * Custom request object
- * 
+ *
  * Adds the ability to retrieve the request content as a stream, in order to
  * reduce memory usage.
  */
 class Request extends BaseRequest
 {
     /**
-     * Stream URI or stream resource for content 
-     * 
+     * Stream URI or stream resource for content
+     *
      * @var string
      */
     protected $contentStream = 'php://input';
@@ -30,7 +30,7 @@ class Request extends BaseRequest
      * This is particularly useful for PUT and PATCH requests that contain file
      * uploads, as you can pipe the content piecemeal to the final destination,
      * preventing situations of memory exhaustion.
-     * 
+     *
      * @return resource Stream
      */
     public function getContentAsStream()
@@ -52,7 +52,7 @@ class Request extends BaseRequest
 
     /**
      * Set the content stream to use with getContentAsStream()
-     * 
+     *
      * @param string|resource $stream Either the stream URI to use, or a stream resource
      * @return self
      * @throws Exception\InvalidContentStreamException

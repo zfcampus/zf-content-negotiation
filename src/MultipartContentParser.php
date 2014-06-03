@@ -8,15 +8,27 @@ namespace ZF\ContentNegotiation;
 
 use Zend\Http\Header\ContentType as ContentTypeHeader;
 use Zend\Http\Request as HttpRequest;
-use Zend\Mime\Decode;
 use Zend\Stdlib\Parameters;
 
 class MultipartContentParser
 {
+    /**
+     * MIME multipart boundary
+     *
+     * @var string
+     */
     protected $boundary;
 
+    /**
+     * @var HttpRequest
+     */
     protected $request;
 
+    /**
+     * @param ContentTypeHeader $contentType
+     * @param HttpRequest $request
+     * @throws Exception\InvalidMultipartContentException if unable to detect MIME boundary
+     */
     public function __construct(ContentTypeHeader $contentType, HttpRequest $request)
     {
         if (! preg_match('/boundary=(?P<boundary>[^\s]+)/', $contentType->getFieldValue(), $matches)) {
@@ -50,52 +62,50 @@ class MultipartContentParser
      * Parse the incoming request body
      *
      * Returns any discovered data parameters.
-     * 
+     *
      * @return array
      */
     public function parse()
     {
         if ($this->request instanceof Request) {
-            return $this->parseFromStream();
+            return $this->parseFromStream($this->request->getContentAsStream());
         }
 
-        return $this->parseContent();
+        $stream = fopen('php://temp', 'r+');
+        fwrite($stream, $this->request->getContent());
+        rewind($stream);
+        return $this->parseFromStream($stream);
     }
 
     /**
      * Parse upload content from a content stream
-     * 
+     *
+     * @param resource $stream
      * @return array
      */
-    protected function parseFromStream()
+    protected function parseFromStream($stream)
     {
-        $stream = $this->request->getContentAsStream();
-
         $data           = new Parameters();
         $files          = new Parameters();
         $partInProgress = false;
         $inHeader       = false;
-        $inBody         = false;
         $headers        = array();
-        $header         = '';
-        $headerValue    = '';
+        $header         = false;
         $name           = false;
         $content        = '';
+        $file           = array();
         $filename       = false;
         $mimeType       = false;
         $tmpFile        = false;
 
-        $partBoundaryPatternStart = '/^--' . $this->boundary . '$/';
+        $partBoundaryPatternStart = '/^--' . $this->boundary . '(--)?/';
         $partBoundaryPatternEnd   = '/^--' . $this->boundary . '--$/';
 
         while (false !== ($line = fgets($stream))) {
-            if (preg_match($partBoundaryPatternEnd, rtrim($line))) {
-                // Met the "end" boundary; time to stop!
-                break;
-            }
+            $trimmedLine = rtrim($line);
 
-            if (preg_match($partBoundaryPatternStart, rtrim($line))) {
-                if (! $partInProgress) {
+            if (preg_match($partBoundaryPatternStart, $trimmedLine)) {
+                if ($partInProgress) {
                     // Time to handle the data we've already parsed!
                     // Data
                     if (! $filename) {
@@ -132,13 +142,18 @@ class MultipartContentParser
                     }
                 }
 
+                // Is this a boundary end? If so, we're done
+                if (preg_match($partBoundaryPatternEnd, $trimmedLine)) {
+                    // Met the "end" boundary; time to stop!
+                    break;
+                }
+
                 // New part to parse!
                 $partInProgress = true;
                 $inHeader       = true;
-                $inBody         = false;
                 $headers        = array();
                 $header         = '';
-                $headerValue    = '';
+
                 continue;
             }
 
@@ -148,15 +163,14 @@ class MultipartContentParser
             }
 
             if ($inHeader) {
-                if (empty($line)) {
+                if (preg_match('/^\s*$/s', $line)) {
                     // Headers are done; cleanup
-                    $headers[$header] = $headerValue;
                     $inHeader = false;
-                    $inBody   = true;
                     $content  = '';
-                    $file     = array();
+                    $file     = array('error' => UPLOAD_ERR_OK);
                     $tmpFile  = false;
                     $lastline = null;
+
 
                     // Parse headers
                     $name = $this->getNameFromHeaders($headers);
@@ -170,12 +184,9 @@ class MultipartContentParser
                     continue;
                 }
 
-                if (preg_match('/^(?P<header>[a-z]+[a-z0-9_-]+):\s*(?P<value>.*)$/i', rtrim($line), $matches)) {
-                    if (! empty($header)) {
-                        $headers[strtoupper($header)] = $headerValue;
-                        $header = $matches['header'];
-                        $headerValue = $matches['value'];
-                    }
+                if (preg_match('/^(?P<header>[a-z]+[a-z0-9_-]+):\s*(?P<value>.*)$/i', $trimmedLine, $matches)) {
+                    $header = strtoupper($matches['header']);
+                    $headers[$header] = $matches['value'];
 
                     continue;
                 }
@@ -184,7 +195,7 @@ class MultipartContentParser
                     throw new Exception\InvalidMultipartContentException('Malformed or missing MIME part header for multipart content');
                 }
 
-                $headerValue .= rtrim($line);
+                $headers[$header] .= $trimmedLine;
                 continue;
             }
 
@@ -196,7 +207,7 @@ class MultipartContentParser
                 continue;
             }
 
-            // If we've had an error already with the upload, continue parsing 
+            // If we've had an error already with the upload, continue parsing
             // to the end of the MIME part
             if ($file['error'] !== UPLOAD_ERR_OK) {
                 continue;
@@ -249,116 +260,9 @@ class MultipartContentParser
     }
 
     /**
-     * Parse content already fetched (i.e., not a stream) for data/files
-     * 
-     * @return array
-     */
-    protected function parseContent()
-    {
-        $data     = new Parameters();
-        $files    = new Parameters();
-        foreach (Decode::splitMessageStruct($this->request->getContent(), $this->boundary) as $part) {
-            $this->parseMimePart($part, $data, $files);
-        }
-
-        if ($files->count()) {
-            $this->request->setFiles($files);
-        }
-
-        return $data->toArray();
-    }
-
-    /**
-     * Parse a single MIME part
-     *
-     * Extracts either form data or files, depending on the Content-Disposition
-     * of the MIME part, injecting the appropriate container ($data or $files).
-     *
-     * @param array $part
-     * @param Parameters $data
-     * @param Parameters $files
-     */
-    protected function parseMimePart(array $part, Parameters $data, Parameters $files)
-    {
-        $headers = $part['header'];
-        if (! $headers->has('Content-Disposition')) {
-            return;
-        }
-
-        $disposition = $headers->get('Content-Disposition')->getFieldValue();
-        if (! preg_match('/(?:;|\s)name="(?P<name>[^"]+)"/', $disposition, $matches)) {
-            // unnamed parameter; move along...
-            return;
-        }
-        $name = $matches['name'];
-
-        if (preg_match('/filename="(?P<filename>[^"]*)"/', $disposition, $matches)) {
-            $files->set($name, $this->uploadFile(
-                $matches['filename'],
-                $headers->has('Content-Type') ? $headers->get('Content-Type')->getFieldValue() : 'application/octet-stream',
-                $part['body']));
-            return;
-        }
-
-        $data->set($name, rtrim($part['body'], "\r\n"));
-    }
-
-    /**
-     * Mimic PHP's file upload functionality
-     *
-     * This mimics PHP's file upload functionality by taking the provided
-     * content and attempting to write it to a temporary file in either
-     * the upload_tmp_dir or * system tmp directory.
-     *
-     * Returns a struct in the same format as used for elements of the
-     * $_FILES array.
-     *
-     * @todo At some point, we likely need to support using a stream for file
-     *       uploads in order to prevent memory issues.
-     * @param string $filename
-     * @param string $contentType
-     * @param string $content
-     * @return array
-     */
-    protected function uploadFile($filename, $contentType, $content)
-    {
-        $tmpDir = $this->getUploadTempDir();
-        $file   = array(
-            'name' => $filename,
-            'type' => $contentType,
-        );
-
-        if (empty($tmpDir)) {
-            $file['error'] = UPLOAD_ERR_NO_TMP_DIR;
-            return $file;
-        }
-
-        $tmpFile = tempnam($tmpDir, 'zfc');
-        $file['tmp_name'] = $tmpFile;
-
-        if (false === file_put_contents($tmpFile, rtrim($content, "\r\n"))) {
-            $file['error'] = UPLOAD_ERR_CANT_WRITE;
-            return $file;
-        }
-
-        $file['error'] = UPLOAD_ERR_OK;
-        $file['size']  = filesize($tmpFile);
-
-        if (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $type  = finfo_file($finfo, $tmpFile);
-            if (false !== $type) {
-                $file['type'] = $type;
-            }
-        }
-
-        return $file;
-    }
-
-    /**
      * Retrieve the part name from the content disposition, if present
-     * 
-     * @param array $headers 
+     *
+     * @param array $headers
      * @return false|string
      */
     protected function getNameFromHeaders(array $headers)
@@ -375,8 +279,8 @@ class MultipartContentParser
 
     /**
      * Retrieve the filename from the content disposition, if present
-     * 
-     * @param array $headers 
+     *
+     * @param array $headers
      * @return false|string
      */
     protected function getFilenameFromHeaders(array $headers)
@@ -393,8 +297,8 @@ class MultipartContentParser
 
     /**
      * Retrieve the MIME type of the MIME part
-     * 
-     * @param array $headers 
+     *
+     * @param array $headers
      * @return array
      */
     protected function getMimeTypeFromHeaders(array $headers)

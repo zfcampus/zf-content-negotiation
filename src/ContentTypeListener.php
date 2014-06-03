@@ -24,7 +24,7 @@ class ContentTypeListener
 
     /**
      * Directory where upload files were written, if any
-     * 
+     *
      * @var string
      */
     protected $uploadTmpDir;
