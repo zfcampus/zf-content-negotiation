@@ -56,6 +56,12 @@ class AcceptListener
      */
     public function __invoke(MvcEvent $e)
     {
+        $request = $e->getRequest();
+        if (! method_exists($request, 'getHeaders')) {
+            // Should only trigger on HTTP requests
+            return;
+        }
+
         $result = $e->getResult();
         if (!is_array($result) && (!$result instanceof ViewModel)) {
             // We will only attempt to re-cast ContentNegotiation\ViewModel
