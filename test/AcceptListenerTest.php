@@ -67,4 +67,18 @@ class AcceptListenerTest extends TestCase
         $result = $this->event->getResult();
         $this->assertInstanceOf('Zend\View\Model\ModelInterface', $result);
     }
+
+    /**
+     * @group 22
+     */
+    public function testShouldExitEarlyIfNonHttpRequestPresentInEvent()
+    {
+        $request = $this->getMock('Zend\Stdlib\RequestInterface');
+        $this->event->setRequest($request);
+
+        $listener = $this->listener;
+        $this->event->setResult(array('foo' => 'bar'));
+
+        $this->assertNull($listener($this->event));
+    }
 }
