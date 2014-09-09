@@ -53,6 +53,7 @@ class AcceptListener
 
     /**
      * @param  MvcEvent $e
+     * @return null|ApiProblemResponse
      */
     public function __invoke(MvcEvent $e)
     {
@@ -123,8 +124,6 @@ class AcceptListener
      */
     protected function getSelectorCriteria($fallbackConfig, $controllerName)
     {
-        $criteria = null;
-
         if (empty($this->controllerConfig)) {
             return $this->getCriteria($fallbackConfig);
         }
@@ -139,9 +138,8 @@ class AcceptListener
 
         // Retrieve the criteria; if none found, or invalid, use the fallback.
         $criteria = $controllers[$controllerName];
-        $criteria = $this->getCriteria($criteria) ?: $this->getCriteria($fallbackConfig);
 
-        return $criteria;
+        return $this->getCriteria($criteria) ?: $this->getCriteria($fallbackConfig);
     }
 
     /**
@@ -154,6 +152,7 @@ class AcceptListener
      *
      * @param  array|ViewModel $result
      * @param  ViewModelInterface $viewModel
+     * @param  MvcEvent $e
      */
     protected function populateViewModel($result, ViewModelInterface $viewModel, MvcEvent $e)
     {
@@ -204,12 +203,10 @@ class AcceptListener
         }
 
         // if it's a string, we should try to resolve that key to a reusable selector set
-        if (is_string($criteria)) {
-            if (isset($this->selectorsConfig[$criteria])) {
-                $criteria = $this->selectorsConfig[$criteria];
-                if (!empty($criteria)) {
-                    return $criteria;
-                }
+        if (is_string($criteria) && isset($this->selectorsConfig[$criteria])) {
+            $criteria = $this->selectorsConfig[$criteria];
+            if (!empty($criteria)) {
+                return $criteria;
             }
         }
     }

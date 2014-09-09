@@ -25,8 +25,8 @@ class MultipartContentParser
     protected $request;
 
     /**
-     * @param ContentTypeHeader $contentType
-     * @param HttpRequest $request
+     * @param  ContentTypeHeader $contentType
+     * @param  HttpRequest $request
      * @throws Exception\InvalidMultipartContentException if unable to detect MIME boundary
      */
     public function __construct(ContentTypeHeader $contentType, HttpRequest $request)
@@ -74,14 +74,16 @@ class MultipartContentParser
         $stream = fopen('php://temp', 'r+');
         fwrite($stream, $this->request->getContent());
         rewind($stream);
+
         return $this->parseFromStream($stream);
     }
 
     /**
      * Parse upload content from a content stream
      *
-     * @param resource $stream
+     * @param  resource $stream
      * @return array
+     * @throws Exception\InvalidMultipartContentException
      */
     protected function parseFromStream($stream)
     {
@@ -262,7 +264,7 @@ class MultipartContentParser
     /**
      * Retrieve the part name from the content disposition, if present
      *
-     * @param array $headers
+     * @param  array $headers
      * @return false|string
      */
     protected function getNameFromHeaders(array $headers)
@@ -274,13 +276,14 @@ class MultipartContentParser
         if (! preg_match('/(?:;|\s)name="(?P<name>[^"]+)"/', $headers['CONTENT-DISPOSITION'], $matches)) {
             return false;
         }
+
         return $matches['name'];
     }
 
     /**
      * Retrieve the filename from the content disposition, if present
      *
-     * @param array $headers
+     * @param  array $headers
      * @return false|string
      */
     protected function getFilenameFromHeaders(array $headers)
@@ -292,14 +295,15 @@ class MultipartContentParser
         if (! preg_match('/filename="(?P<filename>[^"]*)"/', $headers['CONTENT-DISPOSITION'], $matches)) {
             return false;
         }
+
         return $matches['filename'];
     }
 
     /**
      * Retrieve the MIME type of the MIME part
      *
-     * @param array $headers
-     * @return array
+     * @param  array $headers
+     * @return string
      */
     protected function getMimeTypeFromHeaders(array $headers)
     {
