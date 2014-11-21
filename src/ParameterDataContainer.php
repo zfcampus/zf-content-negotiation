@@ -8,14 +8,19 @@ namespace ZF\ContentNegotiation;
 
 class ParameterDataContainer
 {
-
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $routeParams = array();
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $queryParams = array();
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $bodyParams = array();
 
     /**
@@ -27,25 +32,27 @@ class ParameterDataContainer
     }
 
     /**
-     * @param array $routeParams
+     * @param  array $routeParams
+     * @return self
      */
-    public function setRouteParams($routeParams)
+    public function setRouteParams(array $routeParams)
     {
         $this->routeParams = $routeParams;
+        return $this;
     }
 
     /**
-     * @param $name
+     * @param  string $name
      * @return bool
      */
     public function hasRouteParam($name)
     {
-        return (isset($this->routeParams[$name]));
+        return isset($this->routeParams[$name]);
     }
 
     /**
-     * @param $name
-     * @param null $default
+     * @param  string $name
+     * @param  null|mixed $default
      * @return mixed
      */
     public function getRouteParam($name, $default = null)
@@ -57,9 +64,9 @@ class ParameterDataContainer
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @return ParameterDataContainer
+     * @param  string $name
+     * @param  mixed $value
+     * @return self
      */
     public function setRouteParam($name, $value)
     {
@@ -68,11 +75,13 @@ class ParameterDataContainer
     }
 
     /**
-     * @param array $queryParams
+     * @param  array $queryParams
+     * @return self
      */
-    public function setQueryParams($queryParams)
+    public function setQueryParams(array $queryParams)
     {
         $this->queryParams = $queryParams;
+        return $this;
     }
 
     /**
@@ -84,18 +93,18 @@ class ParameterDataContainer
     }
 
     /**
-     * @param $name
+     * @param  string $name
      * @return bool
      */
     public function hasQueryParam($name)
     {
-        return (isset($this->queryParams[$name]));
+        return isset($this->queryParams[$name]);
     }
 
     /**
-     * @param $name
-     * @param null $default
-     * @return null
+     * @param  string $name
+     * @param  null|mixed $default
+     * @return mixed
      */
     public function getQueryParam($name, $default = null)
     {
@@ -106,9 +115,9 @@ class ParameterDataContainer
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
-     * @return ParameterDataContainer
+     * @param  string $name
+     * @param  mixed $value
+     * @return self
      */
     public function setQueryParam($name, $value)
     {
@@ -117,11 +126,13 @@ class ParameterDataContainer
     }
 
     /**
-     * @param array $bodyParams
+     * @param  array $bodyParams
+     * @return self
      */
-    public function setBodyParams($bodyParams)
+    public function setBodyParams(array $bodyParams)
     {
         $this->bodyParams = $bodyParams;
+        return $this;
     }
 
     /**
@@ -133,17 +144,18 @@ class ParameterDataContainer
     }
 
     /**
-     * @param $name
+     * @param  string $name
      * @return bool
      */
     public function hasBodyParam($name)
     {
-        return (isset($this->bodyParams[$name]));
+        return isset($this->bodyParams[$name]);
     }
 
     /**
-     * @param $name
-     * @param null $default
+     * @param  string $name
+     * @param  null|mixed $default
+     * @return mixed
      */
     public function getBodyParam($name, $default = null)
     {
@@ -154,14 +166,13 @@ class ParameterDataContainer
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @return ParameterDataContainer
+     * @param  string $name
+     * @param  mixed $value
+     * @return self
      */
     public function setBodyParam($name, $value)
     {
         $this->bodyParams[$name] = $value;
         return $this;
     }
-
 }

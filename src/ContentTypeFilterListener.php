@@ -17,12 +17,13 @@ class ContentTypeFilterListener implements ListenerAggregateInterface
 {
     /**
      * Whitelist configuration
+     *
      * @var array
      */
     protected $config = array();
 
     /**
-     * @var \Zend\Stdlib\CallbackHandler
+     * @var array
      */
     protected $listeners = array();
 
@@ -90,10 +91,11 @@ class ContentTypeFilterListener implements ListenerAggregateInterface
             return;
         }
 
-        $headers           = $request->getHeaders();
-        $contentTypeHeader = false;
+        $headers = $request->getHeaders();
         if (!$headers->has('content-type')) {
-            return new ApiProblemResponse(new ApiProblem(415, 'Invalid content-type specified'));
+            return new ApiProblemResponse(
+                new ApiProblem(415, 'Invalid content-type specified')
+            );
         }
 
         $contentTypeHeader = $headers->get('content-type');
@@ -101,7 +103,9 @@ class ContentTypeFilterListener implements ListenerAggregateInterface
         $matched = $contentTypeHeader->match($this->config[$controllerName]);
 
         if (false === $matched) {
-            return new ApiProblemResponse(new ApiProblem(415, 'Invalid content-type specified'));
+            return new ApiProblemResponse(
+                new ApiProblem(415, 'Invalid content-type specified')
+            );
         }
     }
 }
