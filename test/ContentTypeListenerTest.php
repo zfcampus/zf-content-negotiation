@@ -71,8 +71,11 @@ class ContentTypeListenerTest extends TestCase
     {
         $request = new Request();
         $request->setMethod($method);
-        $request->getHeaders()->addHeaderLine('Content-Type', 'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20');
-        $request->setContent(file_get_contents( __DIR__ . '/TestAsset/multipart-form-data.txt'));
+        $request->getHeaders()->addHeaderLine(
+            'Content-Type',
+            'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20'
+        );
+        $request->setContent(file_get_contents(__DIR__ . '/TestAsset/multipart-form-data.txt'));
 
         $event = new MvcEvent();
         $event->setRequest($request);
@@ -108,7 +111,10 @@ class ContentTypeListenerTest extends TestCase
     {
         $request = new ContentNegotiationRequest();
         $request->setMethod($method);
-        $request->getHeaders()->addHeaderLine('Content-Type', 'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20');
+        $request->getHeaders()->addHeaderLine(
+            'Content-Type',
+            'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20'
+        );
         $request->setContentStream('file://' . realpath(__DIR__ . '/TestAsset/multipart-form-data.txt'));
 
         $event = new MvcEvent();
@@ -142,8 +148,11 @@ class ContentTypeListenerTest extends TestCase
     {
         $request = new Request();
         $request->setMethod('PATCH');
-        $request->getHeaders()->addHeaderLine('Content-Type', 'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20');
-        $request->setContent(file_get_contents( __DIR__ . '/TestAsset/multipart-form-data.txt'));
+        $request->getHeaders()->addHeaderLine(
+            'Content-Type',
+            'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20'
+        );
+        $request->setContent(file_get_contents(__DIR__ . '/TestAsset/multipart-form-data.txt'));
 
         $target = new TestAsset\EventTarget();
         $events = $this->getMock('Zend\EventManager\EventManagerInterface');
