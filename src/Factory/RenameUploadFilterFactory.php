@@ -6,17 +6,19 @@
 
 namespace ZF\ContentNegotiation\Factory;
 
+use Traversable;
+use Zend\Filter\FilterPluginManager;
 use ZF\ContentNegotiation\Filter\RenameUpload;
 
 class RenameUploadFilterFactory
 {
     /**
-     * @var null|array|\Traversable
+     * @var null|array|Traversable
      */
     protected $creationOptions;
 
     /**
-     * @param null|array|\Traversable $options
+     * @param null|array|Traversable $options
      */
     public function __construct($options = null)
     {
@@ -26,10 +28,10 @@ class RenameUploadFilterFactory
     /**
      * Create a RenameUpload instance
      *
-     * @param \Zend\Filter\FilterPluginManager $filters
+     * @param  FilterPluginManager $filters
      * @return RenameUpload
      */
-    public function __invoke($filters)
+    public function __invoke(FilterPluginManager $filters)
     {
         $services = $filters->getServiceLocator();
         $filter   = new RenameUpload($this->creationOptions);

@@ -6,6 +6,7 @@
 
 namespace ZF\ContentNegotiation;
 
+use Zend\Http\Headers as HttpHeaders;
 use Zend\Mvc\MvcEvent;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
@@ -50,7 +51,9 @@ class AcceptFilterListener extends ContentTypeFilterListener
         }
 
         if (!$matched) {
-            return new ApiProblemResponse(new ApiProblem(406, 'Cannot honor Accept type specified'));
+            return new ApiProblemResponse(
+                new ApiProblem(406, 'Cannot honor Accept type specified')
+            );
         }
     }
 
@@ -58,10 +61,10 @@ class AcceptFilterListener extends ContentTypeFilterListener
      * Validate the passed mediatype against the appropriate header
      *
      * @param  string $match
-     * @param  \Zend\Http\Headers $headers
+     * @param  HttpHeaders $headers
      * @return bool
      */
-    protected function validateMediaType($match, $headers)
+    protected function validateMediaType($match, HttpHeaders $headers)
     {
         if (!$headers->has('accept')) {
             return false;

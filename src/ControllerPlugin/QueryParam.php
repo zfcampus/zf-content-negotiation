@@ -20,8 +20,8 @@ class QueryParam extends AbstractPlugin
     /**
      * Grabs a param from route match by default.
      *
-     * @param string $param
-     * @param mixed $default
+     * @param  null|string $param
+     * @param  null|mixed $default
      * @return mixed
      */
     public function __invoke($param = null, $default = null)
@@ -36,5 +36,4 @@ class QueryParam extends AbstractPlugin
 
         return $this->getController()->getRequest()->getQuery($param, $default);
     }
-
 }

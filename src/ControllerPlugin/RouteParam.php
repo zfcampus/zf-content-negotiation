@@ -14,6 +14,11 @@ use ZF\ContentNegotiation\ParameterDataContainer;
 
 class RouteParam extends AbstractPlugin
 {
+    /**
+     * @param  null|string $param
+     * @param  null|mixed $default
+     * @return mixed
+     */
     public function __invoke($param = null, $default = null)
     {
         $controller = $this->getController();
@@ -32,6 +37,5 @@ class RouteParam extends AbstractPlugin
         }
 
         return $controller->getEvent()->getRouteMatch()->getParam($param, $default);
-
     }
 }
