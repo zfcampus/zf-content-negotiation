@@ -35,7 +35,7 @@ class RenameUploadFilterFactory implements MutableCreationOptionsInterface
     /**
      * Create a RenameUpload instance
      *
-     * @param \Zend\Filter\FilterPluginManager $filters
+     * @param  \Zend\Filter\FilterPluginManager $filters
      * @return RenameUpload
      */
     public function __invoke($filters)
@@ -45,6 +45,7 @@ class RenameUploadFilterFactory implements MutableCreationOptionsInterface
         if ($services->has('Request')) {
             $filter->setRequest($services->get('Request'));
         }
+
         return $filter;
     }
 }

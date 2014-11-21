@@ -27,11 +27,11 @@ class RenameUploadFilterFactoryTest extends TestCase
     public function testMultipleFilters()
     {
         $optionsFilterOne = array(
-            'target' => 'SomeDir'
+            'target' => 'SomeDir',
         );
 
         $optionsFilterTwo = array(
-            'target' => 'OtherDir'
+            'target' => 'OtherDir',
         );
 
         $filter = $this->filters->get('filerenameupload', $optionsFilterOne);
