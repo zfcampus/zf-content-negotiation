@@ -178,7 +178,10 @@ class MultipartContentParser
                     $name = $this->getNameFromHeaders($headers);
 
                     if (! $name) {
-                        throw new Exception\InvalidMultipartContentException('Missing Content-Disposition header, or Content-Disposition header does not contain a "name" field');
+                        throw new Exception\InvalidMultipartContentException(
+                            'Missing Content-Disposition header, or Content-Disposition header does not '
+                            . 'contain a "name" field'
+                        );
                     }
 
                     $filename = $this->getFilenameFromHeaders($headers);
@@ -194,7 +197,9 @@ class MultipartContentParser
                 }
 
                 if (! $header) {
-                    throw new Exception\InvalidMultipartContentException('Malformed or missing MIME part header for multipart content');
+                    throw new Exception\InvalidMultipartContentException(
+                        'Malformed or missing MIME part header for multipart content'
+                    );
                 }
 
                 $headers[$header] .= $trimmedLine;
