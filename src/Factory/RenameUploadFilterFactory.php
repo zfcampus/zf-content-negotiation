@@ -9,8 +9,9 @@ namespace ZF\ContentNegotiation\Factory;
 use Traversable;
 use Zend\Filter\FilterPluginManager;
 use ZF\ContentNegotiation\Filter\RenameUpload;
+use Zend\ServiceManager\MutableCreationOptionsInterface;
 
-class RenameUploadFilterFactory
+class RenameUploadFilterFactory implements MutableCreationOptionsInterface
 {
     /**
      * @var null|array|Traversable
@@ -21,6 +22,14 @@ class RenameUploadFilterFactory
      * @param null|array|Traversable $options
      */
     public function __construct($options = null)
+    {
+        $this->creationOptions = $options;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setCreationOptions(array $options)
     {
         $this->creationOptions = $options;
     }
@@ -38,6 +47,7 @@ class RenameUploadFilterFactory
         if ($services->has('Request')) {
             $filter->setRequest($services->get('Request'));
         }
+
         return $filter;
     }
 }
