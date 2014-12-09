@@ -32,6 +32,13 @@ return array(
         )
     ),
 
+    'zf-content-negotiation-content-type' => array(
+        'invokables' => array(
+            'json' => 'ZF\ContentNegotiation\ContentType\Json',
+            'multipart-form' => 'ZF\ContentNegotiation\ContentType\MultipartForm',
+        ),
+    ),
+
     'zf-content-negotiation' => array(
         // This is an array of controller service names pointing to one of:
         // - a named selector (see below)

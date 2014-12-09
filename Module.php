@@ -7,6 +7,7 @@
 namespace ZF\ContentNegotiation;
 
 use Zend\Mvc\MvcEvent;
+use ZF\ContentNegotiation\ContentTypeListener;
 
 class Module
 {
@@ -32,6 +33,19 @@ class Module
         return include __DIR__ . '/config/module.config.php';
     }
 
+    public function init(ModuleManager $moduleManager)
+    {
+        $serviceManager = $moduleManager->getEvent()->getParam('ServiceManager');
+        $serviceListener = $serviceManager->get('ServiceListener');
+
+        $serviceListener->addServiceManager(
+            'ZFContentNegotiationContentTypeManager',
+            'zf-content-negotiation-content-type',
+            'ZF\ContentNegotiation\ContentType\ContentTypeInterface',
+            'getContentNegotiationContentTypeManager'
+        );
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -41,7 +55,7 @@ class Module
         $services = $app->getServiceManager();
         $em       = $app->getEventManager();
 
-        $em->attach(MvcEvent::EVENT_ROUTE, new ContentTypeListener(), -625);
+        $em->attach(MvcEvent::EVENT_ROUTE, $services->get('ZF\ContentNegotiation\ContentTypeListener'), -625);
         $em->attachAggregate($services->get('ZF\ContentNegotiation\AcceptFilterListener'));
         $em->attachAggregate($services->get('ZF\ContentNegotiation\ContentTypeFilterListener'));
 
@@ -52,5 +66,17 @@ class Module
             $services->get('ZF\ContentNegotiation\AcceptListener'),
             -10
         );
+    }
+
+    public function getServiceConfig()
+    {
+        return array('factories' => array(
+            'ZF\ContentNegotiation\ContentTypeListener' => function ($services) {
+                $listener = new ContentTypeListener;
+                $listener->setContentTypeManager($services->get('ZFContentNegotiationContentTypeManager'));
+
+                return $listener;
+            }
+        ));
     }
 }
