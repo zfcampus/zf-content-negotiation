@@ -9,9 +9,24 @@ namespace ZF\ContentNegotiation;
 use Zend\Mvc\MvcEvent;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
+use ZF\ContentNegotiation\Service\ContentTypeManager;
 
 class ContentTypeListener
 {
+    private $contentTypeManager;
+
+    public function setContentTypeManager(ContentTypeManager $manager)
+    {
+        $this->contentTypeManager = $manager;
+
+        return $this;
+    }
+    
+    public function getContentTypeManager()
+    {
+        return $this->contentTypeManager;
+    }
+
     /**
      * @var array
      */
@@ -63,6 +78,16 @@ class ContentTypeListener
 
         // body parameters:
         $bodyParams  = array();
+
+        $manager = $this->getContentTypeManager();
+
+        /**
+         * Development is stopped here until serviceManager config
+         * DI works for 
+         */
+        print_r($manager);
+        die('got manager');
+
         $contentType = $request->getHeader('Content-type');
         switch ($request->getMethod()) {
             case $request::METHOD_POST:
