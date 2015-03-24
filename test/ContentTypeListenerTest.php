@@ -29,7 +29,6 @@ class ContentTypeListenerTest extends TestCase
             'post' => array('POST'),
             'patch' => array('PATCH'),
             'put' => array('PUT'),
-            'delete' => array('DELETE'),
         );
     }
 
@@ -62,14 +61,13 @@ class ContentTypeListenerTest extends TestCase
         return array(
             'patch'  => array('patch'),
             'put'    => array('put'),
-            'delete' => array('delete'),
         );
     }
 
     /**
      * @dataProvider multipartFormDataMethods
      */
-    public function testCanDecodeMultipartFormDataRequestsForPutPatchAndDeleteOperations($method)
+    public function testCanDecodeMultipartFormDataRequestsForPutAndPatchOperations($method)
     {
         $request = new Request();
         $request->setMethod($method);
