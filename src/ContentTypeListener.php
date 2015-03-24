@@ -75,7 +75,6 @@ class ContentTypeListener
                 break;
             case $request::METHOD_PATCH:
             case $request::METHOD_PUT:
-            case $request::METHOD_DELETE:
                 $content = $request->getContent();
 
                 if ($contentType && $contentType->match('multipart/form-data')) {
