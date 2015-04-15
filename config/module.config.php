@@ -24,6 +24,9 @@ return array(
     ),
 
     'service_manager' => array(
+        'invokables' => array(
+            'ZF\ContentNegotiation\ContentTypeListener' => 'ZF\ContentNegotiation\ContentTypeListener',
+        ),
         'factories' => array(
             'Request'                                         => 'ZF\ContentNegotiation\Factory\RequestFactory',
             'ZF\ContentNegotiation\AcceptListener'            => 'ZF\ContentNegotiation\Factory\AcceptListenerFactory',
