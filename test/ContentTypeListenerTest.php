@@ -257,4 +257,27 @@ class ContentTypeListenerTest extends TestCase
         unlink($tmpFile);
         rmdir($tmpDir);
     }
+
+    /**
+     * @group 35
+     * @dataProvider methodsWithBodies
+     */
+    public function testWillNotAttemptToInjectNullValueForBodyParams($method)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent('');
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $this->assertEquals(array(), $params->getBodyParams());
+    }
 }

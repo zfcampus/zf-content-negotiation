@@ -108,6 +108,7 @@ class ContentTypeListener
             return $bodyParams;
         }
 
+        $bodyParams = $bodyParams ?: array();
         $parameterData->setBodyParams($bodyParams);
         $e->setParam('ZFContentNegotiationParameterData', $parameterData);
     }
