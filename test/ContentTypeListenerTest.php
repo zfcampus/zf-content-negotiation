@@ -280,4 +280,168 @@ class ContentTypeListenerTest extends TestCase
         $params = $event->getParam('ZFContentNegotiationParameterData');
         $this->assertEquals(array(), $params->getBodyParams());
     }
+
+    public function methodsWithBlankBodies()
+    {
+        return array(
+            'post-space'             => array('POST', ' '),
+            'post-lines'             => array('POST', "\n\n"),
+            'post-lines-and-space'   => array('POST', "  \n  \n"),
+            'patch-space'            => array('PATCH', ' '),
+            'patch-lines'            => array('PATCH', "\n\n"),
+            'patch-lines-and-space'  => array('PATCH', "  \n  \n"),
+            'put-space'              => array('PUT', ' '),
+            'put-lines'              => array('PUT', "\n\n"),
+            'put-lines-and-space'    => array('PUT', "  \n  \n"),
+            'delete-space'           => array('DELETE', ' '),
+            'delete-lines'           => array('DELETE', "\n\n"),
+            'delete-lines-and-space' => array('DELETE', "  \n  \n"),
+        );
+    }
+
+    /**
+     * @group 36
+     * @dataProvider methodsWithBlankBodies
+     */
+    public function testWillNotAttemptToInjectNullValueForBodyParamsWhenContentIsWhitespace($method, $content)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent($content);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $this->assertEquals(array(), $params->getBodyParams());
+    }
+
+    public function methodsWithLeadingWhitespace()
+    {
+        return array(
+            'post-space'             => array('POST', ' {"foo": "bar"}'),
+            'post-lines'             => array('POST', "\n\n{\"foo\": \"bar\"}"),
+            'post-lines-and-space'   => array('POST', "  \n  \n{\"foo\": \"bar\"}"),
+            'patch-space'             => array('PATCH', ' {"foo": "bar"}'),
+            'patch-lines'             => array('PATCH', "\n\n{\"foo\": \"bar\"}"),
+            'patch-lines-and-space'   => array('PATCH', "  \n  \n{\"foo\": \"bar\"}"),
+            'put-space'             => array('PUT', ' {"foo": "bar"}'),
+            'put-lines'             => array('PUT', "\n\n{\"foo\": \"bar\"}"),
+            'put-lines-and-space'   => array('PUT', "  \n  \n{\"foo\": \"bar\"}"),
+            'delete-space'             => array('DELETE', ' {"foo": "bar"}'),
+            'delete-lines'             => array('DELETE', "\n\n{\"foo\": \"bar\"}"),
+            'delete-lines-and-space'   => array('DELETE', "  \n  \n{\"foo\": \"bar\"}"),
+        );
+    }
+
+    /**
+     * @group 36
+     * @dataProvider methodsWithLeadingWhitespace
+     */
+    public function testWillHandleJsonContentWithLeadingWhitespace($method, $content)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent($content);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
+    }
+
+    public function methodsWithTrailingWhitespace()
+    {
+        return array(
+            'post-space'             => array('POST', '{"foo": "bar"} '),
+            'post-lines'             => array('POST', "{\"foo\": \"bar\"}\n\n"),
+            'post-lines-and-space'   => array('POST', "{\"foo\": \"bar\"}  \n  \n"),
+            'patch-space'             => array('PATCH', '{"foo": "bar"} '),
+            'patch-lines'             => array('PATCH', "{\"foo\": \"bar\"}\n\n"),
+            'patch-lines-and-space'   => array('PATCH', "{\"foo\": \"bar\"}  \n  \n"),
+            'put-space'             => array('PUT', '{"foo": "bar"} '),
+            'put-lines'             => array('PUT', "{\"foo\": \"bar\"}\n\n"),
+            'put-lines-and-space'   => array('PUT', "{\"foo\": \"bar\"}  \n  \n"),
+            'delete-space'             => array('DELETE', '{"foo": "bar"} '),
+            'delete-lines'             => array('DELETE', "{\"foo\": \"bar\"}\n\n"),
+            'delete-lines-and-space'   => array('DELETE', "{\"foo\": \"bar\"}  \n  \n"),
+        );
+    }
+
+    /**
+     * @group 36
+     * @dataProvider methodsWithTrailingWhitespace
+     */
+    public function testWillHandleJsonContentWithTrailingWhitespace($method, $content)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent($content);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
+    }
+
+    public function methodsWithLeadingAndTrailingWhitespace()
+    {
+        return array(
+            'post-space'             => array('POST', ' {"foo": "bar"} '),
+            'post-lines'             => array('POST', "\n\n{\"foo\": \"bar\"}\n\n"),
+            'post-lines-and-space'   => array('POST', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
+            'patch-space'             => array('PATCH', ' {"foo": "bar"} '),
+            'patch-lines'             => array('PATCH', "\n\n{\"foo\": \"bar\"}\n\n"),
+            'patch-lines-and-space'   => array('PATCH', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
+            'put-space'             => array('PUT', ' {"foo": "bar"} '),
+            'put-lines'             => array('PUT', "\n\n{\"foo\": \"bar\"}\n\n"),
+            'put-lines-and-space'   => array('PUT', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
+            'delete-space'             => array('DELETE', ' {"foo": "bar"} '),
+            'delete-lines'             => array('DELETE', "\n\n{\"foo\": \"bar\"}\n\n"),
+            'delete-lines-and-space'   => array('DELETE', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
+        );
+    }
+
+    /**
+     * @group 36
+     * @dataProvider methodsWithLeadingAndTrailingWhitespace
+     */
+    public function testWillHandleJsonContentWithLeadingAndTrailingWhitespace($method, $content)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent($content);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
+    }
 }
