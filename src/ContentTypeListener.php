@@ -153,8 +153,7 @@ class ContentTypeListener
     public function decodeJson($json)
     {
         // Trim whitespace from front and end of string to avoid parse errors
-        $json = preg_replace('/^\s*/m', '', $json);
-        $json = preg_replace('/\s*/m', '', $json);
+        $json = trim($json);
 
         $data = json_decode($json, true);
         if (null !== $data) {
