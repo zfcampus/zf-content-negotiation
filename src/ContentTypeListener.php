@@ -154,7 +154,7 @@ class ContentTypeListener
     {
         // Trim whitespace from front and end of string to avoid parse errors
         $json = preg_replace('/^\s*/m', '', $json);
-        $json = preg_replace('/\s*/m', '', $json);
+        $json = preg_replace('/\s*$/m', '', $json);
 
         $data = json_decode($json, true);
         if (null !== $data) {
