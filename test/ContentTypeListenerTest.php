@@ -444,4 +444,36 @@ class ContentTypeListenerTest extends TestCase
         $params = $event->getParam('ZFContentNegotiationParameterData');
         $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
     }
+
+    public function methodsWithWhitespaceInsideBody()
+    {
+        return array(
+            'post-space'             => array('POST', '{"foo": "bar foo"}'),
+            'patch-space'             => array('PATCH', '{"foo": "bar foo"}'),
+            'put-space'             => array('PUT', '{"foo": "bar foo"}'),
+            'delete-space'             => array('DELETE', '{"foo": "bar foo"}'),
+        );
+    }
+
+    /**
+     * @dataProvider methodsWithWhitespaceInsideBody
+     */
+    public function testWillNotRemoveWhitespaceInsideBody($method, $content)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent($content);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $this->assertEquals(array('foo' => 'bar foo'), $params->getBodyParams());
+    }
 }
