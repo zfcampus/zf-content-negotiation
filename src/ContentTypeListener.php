@@ -155,6 +155,11 @@ class ContentTypeListener
         // Trim whitespace from front and end of string to avoid parse errors
         $json = trim($json);
 
+        // If the data is empty, return an empty array to prevent JSON decode errors
+        if (empty($json)) {
+            return array();
+        }
+
         $data = json_decode($json, true);
         if (null !== $data) {
             return $data;
