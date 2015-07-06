@@ -476,4 +476,30 @@ class ContentTypeListenerTest extends TestCase
         $params = $event->getParam('ZFContentNegotiationParameterData');
         $this->assertEquals(array('foo' => 'bar foo'), $params->getBodyParams());
     }
+
+    /**
+     * @group 42
+     */
+    public function testReturns400ResponseWhenBodyPartIsMissingName()
+    {
+        $request = new Request();
+        $request->setMethod('PUT');
+        $request->getHeaders()->addHeaderLine(
+            'Content-Type',
+            'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20'
+        );
+        $request->setContent(file_get_contents(__DIR__ . '/TestAsset/multipart-form-data-missing-name.txt'));
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch(array()));
+
+        $listener = $this->listener;
+        $result = $listener($event);
+
+        $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
+        $this->assertEquals(400, $result->getStatusCode());
+        $details = $result->getApiProblem()->toArray();
+        $this->assertContains('does not contain a "name" field', $details['detail']);
+    }
 }
