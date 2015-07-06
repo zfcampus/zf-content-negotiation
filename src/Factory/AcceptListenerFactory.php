@@ -18,16 +18,8 @@ class AcceptListenerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = array();
-
-        if ($serviceLocator->has('Config')) {
-            $appConfig = $serviceLocator->get('Config');
-            if (isset($appConfig['zf-content-negotiation'])
-                && is_array($appConfig['zf-content-negotiation'])
-            ) {
-                $config = $appConfig['zf-content-negotiation'];
-            }
-        }
+        /* @var $options \ZF\ContentNegotiation\ContentNegotiationOptions */
+        $options = $serviceLocator->get('ZF\ContentNegotiation\ContentNegotiationOptions');
 
         $selector = null;
         if ($serviceLocator->has('ControllerPluginManager')) {
@@ -41,6 +33,6 @@ class AcceptListenerFactory implements FactoryInterface
             $selector = new AcceptableViewModelSelector();
         }
 
-        return new AcceptListener($selector, $config);
+        return new AcceptListener($selector, $options->toArray());
     }
 }

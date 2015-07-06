@@ -7,13 +7,13 @@
 namespace ZF\ContentNegotiation;
 
 use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
+use Zend\EventManager\AbstractListenerAggregate;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
-class ContentTypeFilterListener implements ListenerAggregateInterface
+class ContentTypeFilterListener extends AbstractListenerAggregate
 {
     /**
      * Whitelist configuration
@@ -23,30 +23,11 @@ class ContentTypeFilterListener implements ListenerAggregateInterface
     protected $config = array();
 
     /**
-     * @var array
-     */
-    protected $listeners = array();
-
-    /**
      * @param  EventManagerInterface $events
      */
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -625);
-    }
-
-    /**
-     * Detach listeners
-     *
-     * @param  EventManagerInterface $events
-     */
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 
     /**
