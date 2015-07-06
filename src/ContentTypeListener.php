@@ -80,7 +80,16 @@ class ContentTypeListener
 
                 if ($contentType && $contentType->match('multipart/form-data')) {
                     $parser = new MultipartContentParser($contentType, $request);
-                    $bodyParams = $parser->parse();
+                    try {
+                        $bodyParams = $parser->parse();
+                    } catch (Exception\ExceptionInterface $e) {
+                        $bodyParams = new ApiProblemResponse(new ApiProblem(
+                            400,
+                            $e
+                        ));
+                        break;
+                    }
+
                     if ($request->getFiles()->count()) {
                         $this->attachFileCleanupListener($e, $parser->getUploadTempDir());
                     }
