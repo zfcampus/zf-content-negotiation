@@ -32,6 +32,7 @@ return array(
             'ZF\ContentNegotiation\AcceptListener'            => 'ZF\ContentNegotiation\Factory\AcceptListenerFactory',
             'ZF\ContentNegotiation\AcceptFilterListener'      => 'ZF\ContentNegotiation\Factory\AcceptFilterListenerFactory',
             'ZF\ContentNegotiation\ContentTypeFilterListener' => 'ZF\ContentNegotiation\Factory\ContentTypeFilterListenerFactory',
+            'ZF\ContentNegotiation\ContentNegotiationOptions' => 'ZF\ContentNegotiation\Factory\ContentNegotiationOptionsFactory',
         )
     ),
 
