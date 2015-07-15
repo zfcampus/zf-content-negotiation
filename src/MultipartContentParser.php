@@ -91,11 +91,11 @@ class MultipartContentParser
         $files          = new Parameters();
         $partInProgress = false;
         $inHeader       = false;
-        $headers        = array();
+        $headers        = [];
         $header         = false;
         $name           = false;
         $content        = '';
-        $file           = array();
+        $file           = [];
         $filename       = false;
         $mimeType       = false;
         $tmpFile        = false;
@@ -153,7 +153,7 @@ class MultipartContentParser
                 // New part to parse!
                 $partInProgress = true;
                 $inHeader       = true;
-                $headers        = array();
+                $headers        = [];
                 $header         = '';
 
                 continue;
@@ -169,7 +169,7 @@ class MultipartContentParser
                     // Headers are done; cleanup
                     $inHeader = false;
                     $content  = '';
-                    $file     = array('error' => UPLOAD_ERR_OK);
+                    $file     = ['error' => UPLOAD_ERR_OK];
                     $tmpFile  = false;
                     $lastline = null;
 

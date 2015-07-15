@@ -19,10 +19,10 @@ class UploadFileTest extends TestCase
 
     public function uploadMethods()
     {
-        return array(
-            'put'   => array('PUT'),
-            'patch' => array('PATCH'),
-        );
+        return [
+            'put'   => ['PUT'],
+            'patch' => ['PATCH'],
+        ];
     }
 
     /**
@@ -34,13 +34,13 @@ class UploadFileTest extends TestCase
         $request->setMethod($method);
         $this->validator->setRequest($request);
 
-        $file = array(
+        $file = [
             'name'     => basename(__FILE__),
             'tmp_name' => realpath(__FILE__),
             'size'     => filesize(__FILE__),
             'type'     => 'application/x-php',
             'error'    => UPLOAD_ERR_OK,
-        );
+        ];
 
         $this->assertTrue($this->validator->isValid($file), var_export($this->validator->getMessages(), 1));
     }

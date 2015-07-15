@@ -13,22 +13,22 @@ class ContentNegotiationOptions extends AbstractOptions
     /**
      * @var array
      */
-    protected $controllers = array();
+    protected $controllers = [];
 
     /**
      * @var array
      */
-    protected $selectors = array();
+    protected $selectors = [];
 
     /**
      * @var array
      */
-    protected $acceptWhitelist = array();
+    protected $acceptWhitelist = [];
 
     /**
      * @var array
      */
-    protected $contentTypeWhitelist = array();
+    protected $contentTypeWhitelist = [];
 
     /**
      * @param array $controllers

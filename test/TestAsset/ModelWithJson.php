@@ -12,6 +12,6 @@ class ModelWithJson implements JsonSerializable
 {
     public function jsonSerialize()
     {
-        return array('foo' => 'bar');
+        return ['foo' => 'bar'];
     }
 }

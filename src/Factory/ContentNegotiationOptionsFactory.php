@@ -17,7 +17,7 @@ class ContentNegotiationOptionsFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = array();
+        $config = [];
 
         if ($serviceLocator->has('Config')) {
             $appConfig = $serviceLocator->get('Config');

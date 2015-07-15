@@ -25,12 +25,12 @@ class ContentTypeListenerTest extends TestCase
 
     public function methodsWithBodies()
     {
-        return array(
-            'post' => array('POST'),
-            'patch' => array('PATCH'),
-            'put' => array('PUT'),
-            'delete' => array('DELETE'),
-        );
+        return [
+            'post' => ['POST'],
+            'patch' => ['PATCH'],
+            'put' => ['PUT'],
+            'delete' => ['DELETE'],
+        ];
     }
 
     /**
@@ -48,7 +48,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
@@ -59,11 +59,11 @@ class ContentTypeListenerTest extends TestCase
 
     public function multipartFormDataMethods()
     {
-        return array(
-            'patch'  => array('patch'),
-            'put'    => array('put'),
-            'delete' => array('delete'),
-        );
+        return [
+            'patch'  => ['patch'],
+            'put'    => ['put'],
+            'delete' => ['delete'],
+        ];
     }
 
     /**
@@ -81,16 +81,16 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
 
         $parameterData = $event->getParam('ZFContentNegotiationParameterData');
         $params = $parameterData->getBodyParams();
-        $this->assertEquals(array(
+        $this->assertEquals([
             'mime_type' => 'md',
-        ), $params);
+        ], $params);
 
         $files = $request->getFiles();
         $this->assertEquals(1, $files->count());
@@ -121,16 +121,16 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
 
         $parameterData = $event->getParam('ZFContentNegotiationParameterData');
         $params = $parameterData->getBodyParams();
-        $this->assertEquals(array(
+        $this->assertEquals([
             'mime_type' => 'md',
-        ), $params);
+        ], $params);
 
         $files = $request->getFiles();
         $this->assertEquals(1, $files->count());
@@ -162,7 +162,7 @@ class ContentTypeListenerTest extends TestCase
             ->method('attach')
             ->with(
                 $this->equalTo('finish'),
-                $this->equalTo(array($this->listener, 'onFinish')),
+                $this->equalTo([$this->listener, 'onFinish']),
                 $this->equalTo(1000)
             );
         $target->events = $events;
@@ -170,7 +170,7 @@ class ContentTypeListenerTest extends TestCase
         $event = new MvcEvent();
         $event->setTarget($target);
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
@@ -182,15 +182,15 @@ class ContentTypeListenerTest extends TestCase
         $tmpFile = tempnam($tmpDir, 'zfc');
         file_put_contents($tmpFile, 'File created by ' . __CLASS__);
 
-        $files = new Parameters(array(
-            'test' => array(
+        $files = new Parameters([
+            'test' => [
                 'error'    => UPLOAD_ERR_OK,
                 'name'     => 'test.txt',
                 'type'     => 'text/plain',
                 'tmp_name' => $tmpFile,
                 'size'     => filesize($tmpFile),
-            ),
-        ));
+            ],
+        ]);
         $request = new Request();
         $request->setFiles($files);
 
@@ -212,15 +212,15 @@ class ContentTypeListenerTest extends TestCase
         $tmpFile = tempnam($tmpDir, 'php');
         file_put_contents($tmpFile, 'File created by ' . __CLASS__);
 
-        $files = new Parameters(array(
-            'test' => array(
+        $files = new Parameters([
+            'test' => [
                 'error'    => UPLOAD_ERR_OK,
                 'name'     => 'test.txt',
                 'type'     => 'text/plain',
                 'tmp_name' => $tmpFile,
                 'size'     => filesize($tmpFile),
-            ),
-        ));
+            ],
+        ]);
         $request = new Request();
         $request->setFiles($files);
 
@@ -238,14 +238,14 @@ class ContentTypeListenerTest extends TestCase
         mkdir($tmpDir);
         $tmpFile = tempnam($tmpDir, 'zfc');
 
-        $files = new Parameters(array(
-            'test' => array(
+        $files = new Parameters([
+            'test' => [
                 'error'    => UPLOAD_ERR_OK,
                 'name'     => 'test.txt',
                 'type'     => 'text/plain',
                 'tmp_name' => $tmpFile,
-            ),
-        ));
+            ],
+        ]);
         $request = new Request();
         $request->setFiles($files);
 
@@ -273,30 +273,30 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
         $params = $event->getParam('ZFContentNegotiationParameterData');
-        $this->assertEquals(array(), $params->getBodyParams());
+        $this->assertEquals([], $params->getBodyParams());
     }
 
     public function methodsWithBlankBodies()
     {
-        return array(
-            'post-space'             => array('POST', ' '),
-            'post-lines'             => array('POST', "\n\n"),
-            'post-lines-and-space'   => array('POST', "  \n  \n"),
-            'patch-space'            => array('PATCH', ' '),
-            'patch-lines'            => array('PATCH', "\n\n"),
-            'patch-lines-and-space'  => array('PATCH', "  \n  \n"),
-            'put-space'              => array('PUT', ' '),
-            'put-lines'              => array('PUT', "\n\n"),
-            'put-lines-and-space'    => array('PUT', "  \n  \n"),
-            'delete-space'           => array('DELETE', ' '),
-            'delete-lines'           => array('DELETE', "\n\n"),
-            'delete-lines-and-space' => array('DELETE', "  \n  \n"),
-        );
+        return [
+            'post-space'             => ['POST', ' '],
+            'post-lines'             => ['POST', "\n\n"],
+            'post-lines-and-space'   => ['POST', "  \n  \n"],
+            'patch-space'            => ['PATCH', ' '],
+            'patch-lines'            => ['PATCH', "\n\n"],
+            'patch-lines-and-space'  => ['PATCH', "  \n  \n"],
+            'put-space'              => ['PUT', ' '],
+            'put-lines'              => ['PUT', "\n\n"],
+            'put-lines-and-space'    => ['PUT', "  \n  \n"],
+            'delete-space'           => ['DELETE', ' '],
+            'delete-lines'           => ['DELETE', "\n\n"],
+            'delete-lines-and-space' => ['DELETE', "  \n  \n"],
+        ];
     }
 
     /**
@@ -314,30 +314,30 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
         $params = $event->getParam('ZFContentNegotiationParameterData');
-        $this->assertEquals(array(), $params->getBodyParams());
+        $this->assertEquals([], $params->getBodyParams());
     }
 
     public function methodsWithLeadingWhitespace()
     {
-        return array(
-            'post-space'             => array('POST', ' {"foo": "bar"}'),
-            'post-lines'             => array('POST', "\n\n{\"foo\": \"bar\"}"),
-            'post-lines-and-space'   => array('POST', "  \n  \n{\"foo\": \"bar\"}"),
-            'patch-space'             => array('PATCH', ' {"foo": "bar"}'),
-            'patch-lines'             => array('PATCH', "\n\n{\"foo\": \"bar\"}"),
-            'patch-lines-and-space'   => array('PATCH', "  \n  \n{\"foo\": \"bar\"}"),
-            'put-space'             => array('PUT', ' {"foo": "bar"}'),
-            'put-lines'             => array('PUT', "\n\n{\"foo\": \"bar\"}"),
-            'put-lines-and-space'   => array('PUT', "  \n  \n{\"foo\": \"bar\"}"),
-            'delete-space'             => array('DELETE', ' {"foo": "bar"}'),
-            'delete-lines'             => array('DELETE', "\n\n{\"foo\": \"bar\"}"),
-            'delete-lines-and-space'   => array('DELETE', "  \n  \n{\"foo\": \"bar\"}"),
-        );
+        return [
+            'post-space'             => ['POST', ' {"foo": "bar"}'],
+            'post-lines'             => ['POST', "\n\n{\"foo\": \"bar\"}"],
+            'post-lines-and-space'   => ['POST', "  \n  \n{\"foo\": \"bar\"}"],
+            'patch-space'             => ['PATCH', ' {"foo": "bar"}'],
+            'patch-lines'             => ['PATCH', "\n\n{\"foo\": \"bar\"}"],
+            'patch-lines-and-space'   => ['PATCH', "  \n  \n{\"foo\": \"bar\"}"],
+            'put-space'             => ['PUT', ' {"foo": "bar"}'],
+            'put-lines'             => ['PUT', "\n\n{\"foo\": \"bar\"}"],
+            'put-lines-and-space'   => ['PUT', "  \n  \n{\"foo\": \"bar\"}"],
+            'delete-space'             => ['DELETE', ' {"foo": "bar"}'],
+            'delete-lines'             => ['DELETE', "\n\n{\"foo\": \"bar\"}"],
+            'delete-lines-and-space'   => ['DELETE', "  \n  \n{\"foo\": \"bar\"}"],
+        ];
     }
 
     /**
@@ -355,30 +355,30 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
         $params = $event->getParam('ZFContentNegotiationParameterData');
-        $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
+        $this->assertEquals(['foo' => 'bar'], $params->getBodyParams());
     }
 
     public function methodsWithTrailingWhitespace()
     {
-        return array(
-            'post-space'             => array('POST', '{"foo": "bar"} '),
-            'post-lines'             => array('POST', "{\"foo\": \"bar\"}\n\n"),
-            'post-lines-and-space'   => array('POST', "{\"foo\": \"bar\"}  \n  \n"),
-            'patch-space'             => array('PATCH', '{"foo": "bar"} '),
-            'patch-lines'             => array('PATCH', "{\"foo\": \"bar\"}\n\n"),
-            'patch-lines-and-space'   => array('PATCH', "{\"foo\": \"bar\"}  \n  \n"),
-            'put-space'             => array('PUT', '{"foo": "bar"} '),
-            'put-lines'             => array('PUT', "{\"foo\": \"bar\"}\n\n"),
-            'put-lines-and-space'   => array('PUT', "{\"foo\": \"bar\"}  \n  \n"),
-            'delete-space'             => array('DELETE', '{"foo": "bar"} '),
-            'delete-lines'             => array('DELETE', "{\"foo\": \"bar\"}\n\n"),
-            'delete-lines-and-space'   => array('DELETE', "{\"foo\": \"bar\"}  \n  \n"),
-        );
+        return [
+            'post-space'             => ['POST', '{"foo": "bar"} '],
+            'post-lines'             => ['POST', "{\"foo\": \"bar\"}\n\n"],
+            'post-lines-and-space'   => ['POST', "{\"foo\": \"bar\"}  \n  \n"],
+            'patch-space'             => ['PATCH', '{"foo": "bar"} '],
+            'patch-lines'             => ['PATCH', "{\"foo\": \"bar\"}\n\n"],
+            'patch-lines-and-space'   => ['PATCH', "{\"foo\": \"bar\"}  \n  \n"],
+            'put-space'             => ['PUT', '{"foo": "bar"} '],
+            'put-lines'             => ['PUT', "{\"foo\": \"bar\"}\n\n"],
+            'put-lines-and-space'   => ['PUT', "{\"foo\": \"bar\"}  \n  \n"],
+            'delete-space'             => ['DELETE', '{"foo": "bar"} '],
+            'delete-lines'             => ['DELETE', "{\"foo\": \"bar\"}\n\n"],
+            'delete-lines-and-space'   => ['DELETE', "{\"foo\": \"bar\"}  \n  \n"],
+        ];
     }
 
     /**
@@ -396,30 +396,30 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
         $params = $event->getParam('ZFContentNegotiationParameterData');
-        $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
+        $this->assertEquals(['foo' => 'bar'], $params->getBodyParams());
     }
 
     public function methodsWithLeadingAndTrailingWhitespace()
     {
-        return array(
-            'post-space'             => array('POST', ' {"foo": "bar"} '),
-            'post-lines'             => array('POST', "\n\n{\"foo\": \"bar\"}\n\n"),
-            'post-lines-and-space'   => array('POST', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
-            'patch-space'             => array('PATCH', ' {"foo": "bar"} '),
-            'patch-lines'             => array('PATCH', "\n\n{\"foo\": \"bar\"}\n\n"),
-            'patch-lines-and-space'   => array('PATCH', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
-            'put-space'             => array('PUT', ' {"foo": "bar"} '),
-            'put-lines'             => array('PUT', "\n\n{\"foo\": \"bar\"}\n\n"),
-            'put-lines-and-space'   => array('PUT', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
-            'delete-space'             => array('DELETE', ' {"foo": "bar"} '),
-            'delete-lines'             => array('DELETE', "\n\n{\"foo\": \"bar\"}\n\n"),
-            'delete-lines-and-space'   => array('DELETE', "  \n  \n{\"foo\": \"bar\"}  \n  \n"),
-        );
+        return [
+            'post-space'             => ['POST', ' {"foo": "bar"} '],
+            'post-lines'             => ['POST', "\n\n{\"foo\": \"bar\"}\n\n"],
+            'post-lines-and-space'   => ['POST', "  \n  \n{\"foo\": \"bar\"}  \n  \n"],
+            'patch-space'             => ['PATCH', ' {"foo": "bar"} '],
+            'patch-lines'             => ['PATCH', "\n\n{\"foo\": \"bar\"}\n\n"],
+            'patch-lines-and-space'   => ['PATCH', "  \n  \n{\"foo\": \"bar\"}  \n  \n"],
+            'put-space'             => ['PUT', ' {"foo": "bar"} '],
+            'put-lines'             => ['PUT', "\n\n{\"foo\": \"bar\"}\n\n"],
+            'put-lines-and-space'   => ['PUT', "  \n  \n{\"foo\": \"bar\"}  \n  \n"],
+            'delete-space'             => ['DELETE', ' {"foo": "bar"} '],
+            'delete-lines'             => ['DELETE', "\n\n{\"foo\": \"bar\"}\n\n"],
+            'delete-lines-and-space'   => ['DELETE', "  \n  \n{\"foo\": \"bar\"}  \n  \n"],
+        ];
     }
 
     /**
@@ -437,22 +437,22 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
         $params = $event->getParam('ZFContentNegotiationParameterData');
-        $this->assertEquals(array('foo' => 'bar'), $params->getBodyParams());
+        $this->assertEquals(['foo' => 'bar'], $params->getBodyParams());
     }
 
     public function methodsWithWhitespaceInsideBody()
     {
-        return array(
-            'post-space'             => array('POST', '{"foo": "bar foo"}'),
-            'patch-space'             => array('PATCH', '{"foo": "bar foo"}'),
-            'put-space'             => array('PUT', '{"foo": "bar foo"}'),
-            'delete-space'             => array('DELETE', '{"foo": "bar foo"}'),
-        );
+        return [
+            'post-space'             => ['POST', '{"foo": "bar foo"}'],
+            'patch-space'             => ['PATCH', '{"foo": "bar foo"}'],
+            'put-space'             => ['PUT', '{"foo": "bar foo"}'],
+            'delete-space'             => ['DELETE', '{"foo": "bar foo"}'],
+        ];
     }
 
     /**
@@ -469,12 +469,12 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
         $params = $event->getParam('ZFContentNegotiationParameterData');
-        $this->assertEquals(array('foo' => 'bar foo'), $params->getBodyParams());
+        $this->assertEquals(['foo' => 'bar foo'], $params->getBodyParams());
     }
 
     /**
@@ -492,7 +492,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch(array()));
+        $event->setRouteMatch(new RouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
