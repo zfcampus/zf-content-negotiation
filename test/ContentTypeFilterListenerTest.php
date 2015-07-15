@@ -21,9 +21,9 @@ class ContentTypeFilterListenerTest extends TestCase
         $this->event      = new MvcEvent();
         $this->event->setTarget(new TestAsset\ContentTypeController());
         $this->event->setRequest(new Request());
-        $this->event->setRouteMatch(new RouteMatch(array(
+        $this->event->setRouteMatch(new RouteMatch([
             'controller' => __NAMESPACE__ . '\TestAsset\ContentTypeController',
-        )));
+        ]));
     }
 
     public function testListenerDoesNothingIfNoConfigurationExistsForController()
@@ -34,11 +34,11 @@ class ContentTypeFilterListenerTest extends TestCase
     public function testListenerDoesNothingIfRequestContentTypeIsInControllerWhitelist()
     {
         $contentType = 'application/vnd.zf.v1.foo+json';
-        $this->listener->setConfig(array(
-            'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => array(
+        $this->listener->setConfig([
+            'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => [
                 $contentType,
-            ),
-        ));
+            ],
+        ]);
         $this->event->getRequest()->getHeaders()->addHeaderLine('content-type', $contentType);
         $this->assertNull($this->listener->onRoute($this->event));
     }
@@ -46,11 +46,11 @@ class ContentTypeFilterListenerTest extends TestCase
     public function testListenerReturnsApiProblemResponseIfRequestContentTypeIsNotInControllerWhitelist()
     {
         $contentType = 'application/vnd.zf.v1.foo+json';
-        $this->listener->setConfig(array(
-            'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => array(
+        $this->listener->setConfig([
+            'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => [
                 'application/xml',
-            ),
-        ));
+            ],
+        ]);
         $request = $this->event->getRequest();
         $request->getHeaders()->addHeaderLine('content-type', $contentType);
         $request->setContent('<?xml version="1.0"?><foo><bar>baz</bar></foo>');
@@ -68,6 +68,6 @@ class ContentTypeFilterListenerTest extends TestCase
         $this->assertEquals(1, count($listeners));
         $this->assertTrue($listeners->hasPriority(-625));
         $callback = $listeners->getIterator()->current()->getCallback();
-        $this->assertEquals(array($this->listener, 'onRoute'), $callback);
+        $this->assertEquals([$this->listener, 'onRoute'], $callback);
     }
 }

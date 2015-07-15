@@ -46,13 +46,13 @@ class RenameUploadTest extends TestCase
         $filename = tempnam($this->uploadDir, 'zfc');
         file_put_contents($filename, sprintf('File created by %s', __CLASS__));
 
-        $file = array(
+        $file = [
             'name'     => 'test.txt',
             'type'     => 'text/plain',
             'tmp_name' => $filename,
             'size'     => filesize($filename),
             'error'    => UPLOAD_ERR_OK,
-        );
+        ];
 
         return $file;
     }
@@ -76,10 +76,10 @@ class RenameUploadTest extends TestCase
 
     public function uploadMethods()
     {
-        return array(
-            'put'   => array('PUT'),
-            'patch' => array('PATCH'),
-        );
+        return [
+            'put'   => ['PUT'],
+            'patch' => ['PATCH'],
+        ];
     }
 
     /**

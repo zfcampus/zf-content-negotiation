@@ -20,14 +20,14 @@ class ContentTypeFilterListener extends AbstractListenerAggregate
      *
      * @var array
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * @param  EventManagerInterface $events
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -625);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -625);
     }
 
     /**

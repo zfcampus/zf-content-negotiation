@@ -23,16 +23,16 @@ class JsonModelTest extends TestCase
 
     public function testJsonModelIsAlwaysTerminal()
     {
-        $jsonModel = new JsonModel(array());
+        $jsonModel = new JsonModel([]);
         $jsonModel->setTerminal(false);
         $this->assertTrue($jsonModel->terminate());
     }
 
     public function testWillPullHalEntityFromPayloadToSerialize()
     {
-        $jsonModel = new JsonModel(array(
-            'payload' => new HalEntity(array('id' => 2, 'title' => 'Hello world'), 1),
-        ));
+        $jsonModel = new JsonModel([
+            'payload' => new HalEntity(['id' => 2, 'title' => 'Hello world'], 1),
+        ]);
         $json = $jsonModel->serialize();
         $data = json_decode($json, true);
         $this->assertInternalType('array', $data);
@@ -44,15 +44,15 @@ class JsonModelTest extends TestCase
 
     public function testWillPullHalCollectionFromPayloadToSerialize()
     {
-        $collection = array(
-            array('foo' => 'bar'),
-            array('bar' => 'baz'),
-            array('baz' => 'bat'),
-        );
+        $collection = [
+            ['foo' => 'bar'],
+            ['bar' => 'baz'],
+            ['baz' => 'bat'],
+        ];
 
-        $jsonModel = new JsonModel(array(
+        $jsonModel = new JsonModel([
             'payload' => new HalCollection($collection),
-        ));
+        ]);
         $json = $jsonModel->serialize();
         $data = json_decode($json, true);
         $this->assertEquals($collection, $data);
@@ -65,7 +65,7 @@ class JsonModelTest extends TestCase
         }
 
         // Provide data that cannot be serialized to JSON
-        $data = array('foo' => pack('H*', 'c32e'));
+        $data = ['foo' => pack('H*', 'c32e')];
         $jsonModel = new JsonModel($data);
         $this->setExpectedException('ZF\ContentNegotiation\Exception\InvalidJsonException');
         $jsonModel->serialize();
@@ -76,30 +76,30 @@ class JsonModelTest extends TestCase
      */
     public function testCanSerializeTraversables()
     {
-        $variables = array(
+        $variables = [
             'some' => 'content',
-            'nested' => new ArrayObject(array(
+            'nested' => new ArrayObject([
                 'objects' => 'should also be serialized',
-                'arbitrarily' => new ArrayIterator(array(
+                'arbitrarily' => new ArrayIterator([
                     'as' => 'deep as you like',
-                )),
-            )),
-        );
+                ]),
+            ]),
+        ];
         $iterator  = new ArrayIterator($variables);
         $jsonModel = new JsonModel($iterator);
         $json = $jsonModel->serialize();
         $data = json_decode($json, true);
 
 
-        $expected = array(
+        $expected = [
             'some' => 'content',
-            'nested' => array(
+            'nested' => [
                 'objects' => 'should also be serialized',
-                'arbitrarily' => array(
+                'arbitrarily' => [
                     'as' => 'deep as you like',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->assertEquals($expected, $data);
     }
