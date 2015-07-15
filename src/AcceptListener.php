@@ -23,12 +23,12 @@ class AcceptListener
     /**
      * @var array
      */
-    protected $controllerConfig = array();
+    protected $controllerConfig = [];
 
     /**
      * @var array
      */
-    protected $selectorsConfig = array();
+    protected $selectorsConfig = [];
 
     /**
      * @param AcceptableViewModelSelector $selector

@@ -14,11 +14,11 @@ class RenameUploadFilterFactoryTest extends TestCase
     protected function setUp()
     {
         $config = new Config(
-            array(
-                'factories' => array(
+            [
+                'factories' => [
                     'filerenameupload' => 'ZF\ContentNegotiation\Factory\RenameUploadFilterFactory',
-                ),
-            )
+                ],
+            ]
         );
         $this->filters = new FilterPluginManager($config);
         $this->filters->setServiceLocator(new ServiceManager());
@@ -26,13 +26,13 @@ class RenameUploadFilterFactoryTest extends TestCase
 
     public function testMultipleFilters()
     {
-        $optionsFilterOne = array(
+        $optionsFilterOne = [
             'target' => 'SomeDir',
-        );
+        ];
 
-        $optionsFilterTwo = array(
+        $optionsFilterTwo = [
             'target' => 'OtherDir',
-        );
+        ];
 
         $filter = $this->filters->get('filerenameupload', $optionsFilterOne);
         $this->assertEquals('SomeDir', $filter->getTarget());

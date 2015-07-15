@@ -14,11 +14,11 @@ class ContentNegotiationOptionsFactoryTest extends TestCase
 {
     public function testCreateServiceShouldReturnContentNegotiationOptionsInstance()
     {
-        $config = array(
-            'zf-content-negotiation' => array(
-                'accept_whitelist' => array(),
-            ),
-        );
+        $config = [
+            'zf-content-negotiation' => [
+                'accept_whitelist' => [],
+            ],
+        ];
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('Config', $config);

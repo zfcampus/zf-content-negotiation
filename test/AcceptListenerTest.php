@@ -20,26 +20,26 @@ class AcceptListenerTest extends TestCase
         $plugins  = new ControllerPluginManager();
         $selector = $plugins->get('AcceptableViewModelSelector');
 
-        $this->listener   = new AcceptListener($selector, array(
-            'controllers' => array(
+        $this->listener   = new AcceptListener($selector, [
+            'controllers' => [
                 'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => 'Json',
-            ),
-            'selectors' => array(
-                'Json' => array(
-                    'Zend\View\Model\JsonModel' => array(
+            ],
+            'selectors' => [
+                'Json' => [
+                    'Zend\View\Model\JsonModel' => [
                         'application/json',
                         'application/*+json',
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
         $this->event      = new MvcEvent();
         $this->controller = new TestAsset\ContentTypeController();
         $this->event->setTarget($this->controller);
         $this->event->setRequest(new Request);
-        $this->event->setRouteMatch(new RouteMatch(array(
+        $this->event->setRouteMatch(new RouteMatch([
             'controller' => __NAMESPACE__ . '\TestAsset\ContentTypeController',
-        )));
+        ]));
 
         $this->controller->setEvent($this->event);
         $this->controller->setRequest($this->event->getRequest());
@@ -49,7 +49,7 @@ class AcceptListenerTest extends TestCase
     public function testInabilityToResolveViewModelReturnsApiProblemResponse()
     {
         $listener = $this->listener;
-        $this->event->setResult(array('foo' => 'bar'));
+        $this->event->setResult(['foo' => 'bar']);
 
         $response = $listener($this->event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $response);
@@ -60,8 +60,8 @@ class AcceptListenerTest extends TestCase
     public function testReturnADefaultViewModelIfNoCriteriaSpecifiedForAController()
     {
         $selector = $this->controller->plugin('AcceptableViewModelSelector');
-        $listener = new AcceptListener($selector, array());
-        $this->event->setResult(array('foo' => 'bar'));
+        $listener = new AcceptListener($selector, []);
+        $this->event->setResult(['foo' => 'bar']);
 
         $listener($this->event);
         $result = $this->event->getResult();
@@ -77,7 +77,7 @@ class AcceptListenerTest extends TestCase
         $this->event->setRequest($request);
 
         $listener = $this->listener;
-        $this->event->setResult(array('foo' => 'bar'));
+        $this->event->setResult(['foo' => 'bar']);
 
         $this->assertNull($listener($this->event));
     }

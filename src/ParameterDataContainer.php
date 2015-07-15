@@ -11,17 +11,17 @@ class ParameterDataContainer
     /**
      * @var array
      */
-    protected $routeParams = array();
+    protected $routeParams = [];
 
     /**
      * @var array
      */
-    protected $queryParams = array();
+    protected $queryParams = [];
 
     /**
      * @var array
      */
-    protected $bodyParams = array();
+    protected $bodyParams = [];
 
     /**
      * @return array
