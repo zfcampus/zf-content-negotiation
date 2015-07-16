@@ -13,10 +13,10 @@ class ContentNegotiationOptionsTest extends TestCase
 {
     public function dashSeparatedOptions()
     {
-        return [
-            'accept-whitelist' => ['accept-whitelist', 'accept_whitelist'],
-            'content-type-whitelist' => ['content-type-whitelist', 'content_type_whitelist'],
-        ];
+        return array(
+            'accept-whitelist' => array('accept-whitelist', 'accept_whitelist'),
+            'content-type-whitelist' => array('content-type-whitelist', 'content_type_whitelist'),
+        );
     }
 
     /**
@@ -25,9 +25,9 @@ class ContentNegotiationOptionsTest extends TestCase
     public function testSetNormalizesDashSeparatedKeysToUnderscoreSeparated($key, $normalized)
     {
         $options = new ContentNegotiationOptions();
-        $options->{$key} = ['value'];
-        $this->assertEquals(['value'], $options->{$key});
-        $this->assertEquals(['value'], $options->{$normalized});
+        $options->{$key} = array('value');
+        $this->assertEquals(array('value'), $options->{$key});
+        $this->assertEquals(array('value'), $options->{$normalized});
     }
 
     /**
@@ -35,8 +35,8 @@ class ContentNegotiationOptionsTest extends TestCase
      */
     public function testConstructorAllowsDashSeparatedKeys($key, $normalized)
     {
-        $options = new ContentNegotiationOptions([$key => ['value']]);
-        $this->assertEquals(['value'], $options->{$key});
-        $this->assertEquals(['value'], $options->{$normalized});
+        $options = new ContentNegotiationOptions(array($key => array('value')));
+        $this->assertEquals(array('value'), $options->{$key});
+        $this->assertEquals(array('value'), $options->{$normalized});
     }
 }
