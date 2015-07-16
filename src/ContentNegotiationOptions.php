@@ -31,6 +31,41 @@ class ContentNegotiationOptions extends AbstractOptions
     protected $contentTypeWhitelist = [];
 
     /**
+     * {@inheritDoc}
+     *
+     * Normalizes dash-separated keys to underscore-separated to ensure
+     * backwards compatibility with old options (even though dash-separated
+     * were previously ignored!).
+     *
+     * @see \Zend\Stdlib\ParameterObject::__set()
+     * @param string $key
+     * @param mixed $value
+     * @throws \Zend\Stdlib\Exception\BadMethodCallException
+     * @return void
+     */
+    public function __set($key, $value)
+    {
+        parent::__set(str_replace('-', '_', $key), $value);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Normalizes dash-separated keys to underscore-separated to ensure
+     * backwards compatibility with old options (even though dash-separated
+     * were previously ignored!).
+     *
+     * @see \Zend\Stdlib\ParameterObject::__get()
+     * @param string $key
+     * @throws \Zend\Stdlib\Exception\BadMethodCallException
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return parent::__get(str_replace('-', '_', $key));
+    }
+
+    /**
      * @param array $controllers
      */
     public function setControllers(array $controllers)
