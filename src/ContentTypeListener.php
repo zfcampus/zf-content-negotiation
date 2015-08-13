@@ -170,12 +170,13 @@ class ContentTypeListener
         }
 
         $data = json_decode($json, true);
-        if (null !== $data) {
+        $isArray = is_array($data);
+        if ($isArray) {
             return $data;
         }
 
         $error = json_last_error();
-        if ($error === JSON_ERROR_NONE) {
+        if ($error === JSON_ERROR_NONE && $isArray) {
             return $data;
         }
 
