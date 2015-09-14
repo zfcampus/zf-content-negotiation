@@ -289,7 +289,7 @@ class MultipartContentParser
             }
 
             $parameters->set($name, $data);
-        } elseif ($isArray)  {
+        } elseif ($isArray) {
             $parameters->set($name, (array) $content);
         } else {
             $parameters->set($name, $content);
