@@ -502,4 +502,38 @@ class ContentTypeListenerTest extends TestCase
         $details = $result->getApiProblem()->toArray();
         $this->assertContains('does not contain a "name" field', $details['detail']);
     }
+
+    public function testReturnsArrayWhenFieldNamesSimilairToPost()
+    {
+        $request = new Request();
+        $request->setMethod('PUT');
+        $request->getHeaders()->addHeaderLine(
+            'Content-Type',
+            'multipart/form-data; boundary=6603ddd555b044dc9a022f3ad9281c20'
+        );
+        $request->setContent(file_get_contents(__DIR__ . '/TestAsset/multipart-form-data-array.txt'));
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch([]));
+
+        $listener = $this->listener;
+        $result = $listener($event);
+
+        $parameterData = $event->getParam('ZFContentNegotiationParameterData');
+        $params = $parameterData->getBodyParams();
+
+        $this->assertEquals([
+            'string_value' => 'string_value',
+            'array_name' => [
+                'array_name[0]',
+                'array_name[1]',
+                'a' => 'array_name[a]',
+                'b' => [
+                    0 => 'array_name[b][0]',
+                    'b' => 'array_name[b][b]',
+                ],
+            ],
+        ], $params);
+    }
 }
