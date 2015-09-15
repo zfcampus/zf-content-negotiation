@@ -522,10 +522,17 @@ class ContentTypeListenerTest extends TestCase
 
         $parameterData = $event->getParam('ZFContentNegotiationParameterData');
         $params = $parameterData->getBodyParams();
+
         $this->assertEquals([
+            'string_value' => 'string_value',
             'array_name' => [
-                'array_value_a',
-                'array_value_b'
+                'array_name[0]',
+                'array_name[1]',
+                'a' => 'array_name[a]',
+                'b' => [
+                    0 => 'array_name[b][0]',
+                    'b' => 'array_name[b][b]',
+                ],
             ],
         ], $params);
     }
