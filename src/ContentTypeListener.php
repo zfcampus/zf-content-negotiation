@@ -79,8 +79,8 @@ class ContentTypeListener
                 $content = $request->getContent();
 
                 if ($contentType && $contentType->match('multipart/form-data')) {
-                    $parser = new MultipartContentParser($contentType, $request);
                     try {
+                        $parser = new MultipartContentParser($contentType, $request);
                         $bodyParams = $parser->parse();
                     } catch (Exception\ExceptionInterface $e) {
                         $bodyParams = new ApiProblemResponse(new ApiProblem(
