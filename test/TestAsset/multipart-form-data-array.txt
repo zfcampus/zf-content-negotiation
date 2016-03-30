@@ -2,7 +2,7 @@
 Content-Disposition: form-data; name="string_value"
 Content-Type: text/plain
 
-string_value
+string_value_with&amp;ersand
 --6603ddd555b044dc9a022f3ad9281c20
 Content-Disposition: form-data; name="array_name[]"
 Content-Type: text/plain

@@ -113,7 +113,7 @@ class MultipartContentParser
                     // Data
                     if (! $filename) {
                         $content = rtrim($content, "\r\n");
-                        $buffer .= "$name=$content&";
+                        $buffer .= "$name=".rawurlencode($content)."&";
                     }
 
                     // File (successful upload so far)
