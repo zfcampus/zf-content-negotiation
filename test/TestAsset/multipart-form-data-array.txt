@@ -1,0 +1,37 @@
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="string_value"
+Content-Type: text/plain
+
+string_value_with&amp;ersand
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[]"
+Content-Type: text/plain
+
+array_name[0]
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[]"
+Content-Type: text/plain
+
+array_name[1]
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[a]"
+Content-Type: text/plain
+
+array_name[a]
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[b]"
+Content-Type: text/plain
+
+array_name[b]
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[b][]"
+Content-Type: text/plain
+
+array_name[b][0]
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[b][b]"
+Content-Type: text/plain
+
+array_name[b][b]
+
+--6603ddd555b044dc9a022f3ad9281c20--
