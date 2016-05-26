@@ -113,7 +113,7 @@ class MultipartContentParser
                     // Data
                     if (! $filename) {
                         $content = rtrim($content, "\r\n");
-                        $buffer .= "$name=".rawurlencode($content)."&";
+                        $buffer .= sprintf('%s=%s&', $name, rawurlencode($content));
                     }
 
                     // File (successful upload so far)
