@@ -171,7 +171,7 @@ class ContentTypeListener
 
         $data = json_decode($json, true);
         $isArray = is_array($data);
-        
+
         // Decode 'application/hal+json' to 'application/json' by merging _embedded into the array
         if ($isArray && isset($data['_embedded'])) {
             foreach ($data['_embedded'] as $key => $value) {
@@ -179,7 +179,7 @@ class ContentTypeListener
             }
             unset($data['_embedded']);
         }
-        
+
         if ($isArray) {
             return $data;
         }
