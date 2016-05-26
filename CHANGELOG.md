@@ -26,3 +26,6 @@ All notable changes to this project will be documented in this file, in reverse 
   `ContentTypeListener` to raise an error for non-object/non-array JSON payloads.
 - [#58](https://github.com/zfcampus/zf-content-negotiation/pull/58) updates the
   `AcceptFilterListener` to validate payloads without an `Accept` header.
+- [#63](https://github.com/zfcampus/zf-content-negotiation/pull/63) fixes the
+  `ContentTypeListener` behavior when the request body does not contain a MIME
+  boundary; the method now catches the exception and returns a 400 response.
