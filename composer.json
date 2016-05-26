@@ -29,6 +29,7 @@
         "php": ">=5.5",
         "zendframework/zend-eventmanager": "~2.3",
         "zendframework/zend-filter": "~2.3",
+        "zendframework/zend-http": "~2.3",
         "zendframework/zend-json": "~2.3",
         "zendframework/zend-mvc": "~2.3",
         "zendframework/zend-servicemanager": "~2.3",
@@ -40,7 +41,6 @@
     "require-dev": {
         "phpunit/PHPUnit": "~4.7",
         "squizlabs/php_codesniffer": "^2.3.1",
-        "zendframework/zend-http": "~2.3",
         "zendframework/zend-loader": "~2.3",
         "zfcampus/zf-hal": "~1.0"
     },
