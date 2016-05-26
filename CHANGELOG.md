@@ -22,3 +22,5 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#68](https://github.com/zfcampus/zf-content-negotiation/pull/68) fixes
   parsing of urlencoded data within PUT requests.
+- [#52](https://github.com/zfcampus/zf-content-negotiation/pull/52) updates the
+  `ContentTypeListener` to raise an error for non-object/non-array JSON payloads.
