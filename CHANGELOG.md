@@ -9,6 +9,11 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#50](https://github.com/zfcampus/zf-content-negotiation/pull/50) adds support
   for parsing `application/hal+json` bodies; `_embedded` properties are now
   merged with the top-level object following parsing.
+- [#66](https://github.com/zfcampus/zf-content-negotiation/pull/66) adds suport
+  in the `ContentTypeFilterListener` to allow for request bodies to be objects
+  that are castable to strings, such as occurs when using zend-psr7bridge to
+  convert from PSR-7 to zend-http request instances (the message body is then a
+  `StreamInterface` implementation, which may be cast to a string).
 
 ### Deprecated
 
