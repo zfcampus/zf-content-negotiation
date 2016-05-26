@@ -66,8 +66,8 @@ class AcceptFilterListener extends ContentTypeFilterListener
      */
     protected function validateMediaType($match, HttpHeaders $headers)
     {
-        if (!$headers->has('accept')) {
-            return false;
+        if (! $headers->has('accept')) {
+            return true;
         }
 
         $accept = $headers->get('accept');
