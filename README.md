@@ -97,7 +97,7 @@ Example:
 
 The `selectors` key is utilized to create named selector definitions for reuse between many different
 controllers.  The key part of the selectors array will be a name used to correlate the selector
-definition (which uses the format described in the [controllers](#controllers) key).
+definition (which uses the format described in the [controllers](#key-controllers) key).
 
 Example:
 
