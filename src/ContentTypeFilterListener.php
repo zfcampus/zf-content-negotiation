@@ -68,6 +68,12 @@ class ContentTypeFilterListener extends AbstractListenerAggregate
         }
 
         $requestBody = $request->getContent();
+
+        // If the $requestBody happens to be an object, unwrap its actual contents
+        if (is_object($requestBody) && method_exists($requestBody, 'getContents')) {
+            $requestBody = $requestBody->getContents();
+        }
+
         if (empty($requestBody)) {
             return;
         }
