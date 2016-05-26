@@ -57,6 +57,30 @@ class ContentTypeListenerTest extends TestCase
         $this->assertContains('JSON decoding', $problem->detail);
     }
 
+    /**
+     * @group 3
+     * @dataProvider methodsWithBodies
+     */
+    public function testJsonDecodeStringErrorsReturnsProblemResponse($method)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent('"1"');
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch([]));
+
+        $result = $listener($event);
+        $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
+        $problem = $result->getApiProblem();
+        $this->assertEquals(400, $problem->status);
+        $this->assertContains('JSON decoding', $problem->detail);
+    }
+
     public function multipartFormDataMethods()
     {
         return [
