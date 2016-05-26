@@ -67,7 +67,8 @@ class ContentTypeFilterListener extends AbstractListenerAggregate
             return;
         }
 
-        $requestBody = $request->getContent();
+        $requestBody = (string) $request->getContent();
+
         if (empty($requestBody)) {
             return;
         }
