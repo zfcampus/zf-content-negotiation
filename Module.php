@@ -6,7 +6,13 @@
 
 namespace ZF\ContentNegotiation;
 
+use Zend\Loader\StandardAutoloader;
 use Zend\Mvc\MvcEvent;
+use Zend\Stdlib\DispatchableInterface;
+use ZF\ContentNegotiation\AcceptListener;
+use ZF\ContentNegotiation\AcceptFilterListener;
+use ZF\ContentNegotiation\ContentTypeFilterListener;
+use ZF\ContentNegotiation\ContentTypeListener;
 
 class Module
 {
@@ -15,13 +21,13 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            StandardAutoloader::class => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -35,21 +41,21 @@ class Module
     /**
      * {@inheritDoc}
      */
-    public function onBootstrap($e)
+    public function onBootstrap(MvcEvent $e)
     {
         $app      = $e->getApplication();
         $services = $app->getServiceManager();
         $em       = $app->getEventManager();
 
-        $em->attach(MvcEvent::EVENT_ROUTE, $services->get('ZF\ContentNegotiation\ContentTypeListener'), -625);
-        $em->attachAggregate($services->get('ZF\ContentNegotiation\AcceptFilterListener'));
-        $em->attachAggregate($services->get('ZF\ContentNegotiation\ContentTypeFilterListener'));
+        $em->attach(MvcEvent::EVENT_ROUTE, $services->get(ContentTypeListener::class), -625);
+        $em->attachAggregate($services->get(AcceptFilterListener::class));
+        $em->attachAggregate($services->get(ContentTypeFilterListener::class));
 
         $sem = $em->getSharedManager();
         $sem->attach(
-            'Zend\Stdlib\DispatchableInterface',
+            DispatchableInterface::class,
             MvcEvent::EVENT_DISPATCH,
-            $services->get('ZF\ContentNegotiation\AcceptListener'),
+            $services->get(AcceptListener::class),
             -10
         );
     }
