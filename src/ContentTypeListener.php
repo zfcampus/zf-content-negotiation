@@ -63,7 +63,7 @@ class ContentTypeListener
 
         // body parameters:
         $bodyParams  = [];
-        $contentType = $request->getHeader('Content-type');
+        $contentType = $request->getHeader('Content-Type');
         switch ($request->getMethod()) {
             case $request::METHOD_POST:
                 if ($contentType && $contentType->match('application/json')) {
@@ -170,6 +170,15 @@ class ContentTypeListener
         }
 
         $data = json_decode($json, true);
+        
+        // Decode 'application/hal+json' to 'application/json' by merging _embedded into the array
+        if (is_array($data) && isset($data['_embedded'])) {
+            foreach ($data['_embedded'] as $key => $value) {
+                $data[$key] = $value;
+            }
+            unset($data['_embedded']);
+        }
+        
         if (null !== $data) {
             return $data;
         }

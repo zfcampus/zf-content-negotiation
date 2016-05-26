@@ -532,4 +532,45 @@ class ContentTypeListenerTest extends TestCase
             ],
         ], $params);
     }
+
+    /**
+     * @group 50
+     * @dataProvider methodsWithBodies
+     */
+    public function testMergesHalEmbeddedPropertiesIntoTopLevelObjectWhenDecodingHalJson($method)
+    {
+        $data = [
+            'foo' => 'bar',
+            '_embedded' => [
+                'bar' => [
+                    'baz' => 'bat',
+                ],
+            ],
+        ];
+        $json = json_encode($data);
+
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/hal+json');
+        $request->setContent($json);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch([]));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+
+        $expected = [
+            'foo' => 'bar',
+            'bar' => [
+                'baz' => 'bat',
+            ],
+        ];
+
+        $this->assertEquals($expected, $params->getBodyParams());
+    }
 }
