@@ -9,7 +9,6 @@ namespace ZF\ContentNegotiation;
 use Zend\Mvc\MvcEvent;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
-use Zend\Http\Header;
 
 class ContentTypeListener
 {
@@ -46,7 +45,6 @@ class ContentTypeListener
      */
     public function __invoke(MvcEvent $e)
     {
-        /** @var Request $request */
         $request       = $e->getRequest();
         if (!method_exists($request, 'getHeaders')) {
             // Not an HTTP request; nothing to do
@@ -65,8 +63,7 @@ class ContentTypeListener
 
         // body parameters:
         $bodyParams  = [];
-        /** @var Header\ContentType $contentType */
-        $contentType = $request->getHeader('Content-type');
+        $contentType = $request->getHeader('Content-Type');
         switch ($request->getMethod()) {
             case $request::METHOD_POST:
                 if ($contentType && $contentType->match('application/json')) {
@@ -175,8 +172,8 @@ class ContentTypeListener
         $data = json_decode($json, true);
         
         // Decode 'application/hal+json' to 'application/json' by merging _embedded into the array
-        if(is_array($data) && isset($data['_embedded'])){
-            foreach($data['_embedded'] as $key => $value){
+        if (is_array($data) && isset($data['_embedded'])) {
+            foreach ($data['_embedded'] as $key => $value) {
                 $data[$key] = $value;
             }
             unset($data['_embedded']);
