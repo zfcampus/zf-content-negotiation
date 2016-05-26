@@ -24,3 +24,5 @@ All notable changes to this project will be documented in this file, in reverse 
   parsing of urlencoded data within PUT requests.
 - [#52](https://github.com/zfcampus/zf-content-negotiation/pull/52) updates the
   `ContentTypeListener` to raise an error for non-object/non-array JSON payloads.
+- [#58](https://github.com/zfcampus/zf-content-negotiation/pull/58) updates the
+  `AcceptFilterListener` to validate payloads without an `Accept` header.
