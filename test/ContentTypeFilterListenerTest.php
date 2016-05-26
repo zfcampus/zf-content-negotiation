@@ -70,4 +70,23 @@ class ContentTypeFilterListenerTest extends TestCase
         $callback = $listeners->getIterator()->current()->getCallback();
         $this->assertEquals([$this->listener, 'onRoute'], $callback);
     }
+
+    /**
+     * @group 66
+     */
+    public function testCastsObjectBodyContentToStringBeforeWorkingWithIt()
+    {
+        $contentType = 'application/vnd.zf.v1.foo+json';
+        $this->listener->setConfig([
+            'ZFTest\ContentNegotiation\TestAsset\ContentTypeController' => [
+                $contentType,
+            ],
+        ]);
+        $request = $this->event->getRequest();
+
+        $request->getHeaders()->addHeaderLine('content-type', $contentType);
+        $request->setContent(new TestAsset\BodyContent());
+
+        $this->assertNull($this->listener->onRoute($this->event));
+    }
 }
