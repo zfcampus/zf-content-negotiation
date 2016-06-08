@@ -10,7 +10,7 @@ use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionObject;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Router\RouteMatch;
 use Zend\Stdlib\Parameters;
 use ZF\ContentNegotiation\ContentTypeListener;
 use ZF\ContentNegotiation\MultipartContentParser;

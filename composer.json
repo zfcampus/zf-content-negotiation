@@ -1,63 +1,75 @@
 {
-    "name": "zfcampus/zf-content-negotiation",
-    "description": "ZF2 Module providing content-negotiation features",
-    "type": "library",
-    "license": "BSD-3-Clause",
-    "keywords": [
-        "zf2",
-        "zend",
-        "module",
-        "content-negotiation"
-    ],
-    "homepage": "http://apigility.org/",
-    "support": {
-        "email": "apigility-users@zend.com",
-        "irc": "irc://irc.freenode.net/apigility",
-        "source": "https://github.com/zfcampus/zf-content-negotiation",
-        "issues": "https://github.com/zfcampus/zf-content-negotiation/issues"
+  "name": "zfcampus/zf-content-negotiation",
+  "description": "ZF2 Module providing content-negotiation features",
+  "type": "library",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "zf2",
+    "zend",
+    "module",
+    "content-negotiation"
+  ],
+  "minimum-stability": "dev",
+  "homepage": "http://apigility.org/",
+  "support": {
+    "email": "apigility-users@zend.com",
+    "irc": "irc://irc.freenode.net/apigility",
+    "source": "https://github.com/zfcampus/zf-content-negotiation",
+    "issues": "https://github.com/zfcampus/zf-content-negotiation/issues"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.zendframework.com"
     },
-    "repositories": [
-        { "type": "composer", "url": "https://packages.zendframework.com" }
-    ],
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.1-dev",
-            "dev-develop": "1.2-dev"
-        }
+    {
+      "type": "vcs",
+      "url": "https://github.com/AGmakonts/zf-api-problem.git"
     },
-    "require": {
-        "php": "^5.5",
-        "zendframework/zend-eventmanager": "^2.3",
-        "zendframework/zend-filter": "^2.3",
-        "zendframework/zend-http": "^2.3",
-        "zendframework/zend-json": "^2.3",
-        "zendframework/zend-mvc": "^2.3",
-        "zendframework/zend-servicemanager": "^2.3",
-        "zendframework/zend-stdlib": "^2.3",
-        "zendframework/zend-validator": "^2.3",
-        "zendframework/zend-view": "^2.3",
-        "zfcampus/zf-api-problem": "^1.0"
-    },
-    "require-dev": {
-        "phpunit/PHPUnit": "^4.8",
-        "squizlabs/php_codesniffer": "^2.3.1",
-        "zendframework/zend-loader": "^2.3",
-        "zfcampus/zf-hal": "^1.0"
-    },
-    "suggest": {
-        "zendframework/zend-console": "^2.3, if you intend to use the RequestFactory"
-    },
-    "autoload": {
-        "psr-4": {
-            "ZF\\ContentNegotiation\\": "src/"
-        },
-        "classmap": [
-            "Module.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ZFTest\\ContentNegotiation\\": "test/"
-        }
+    {
+      "type": "vcs",
+      "url": "https://github.com/AGmakonts/zf-hal.git"
     }
+  ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.1-dev",
+      "dev-develop": "1.2-dev"
+    }
+  },
+  "require": {
+    "zendframework/zend-eventmanager": "3.0.*",
+    "zendframework/zend-filter": "^2.7.1",
+    "zendframework/zend-http": "2.5.*",
+    "zendframework/zend-json": "2.6.*",
+    "zendframework/zend-mvc": "3.0.*",
+    "zendframework/zend-servicemanager": "3.1.*",
+    "zendframework/zend-stdlib": "3.0.*",
+    "zendframework/zend-validator": "2.8.*",
+    "zendframework/zend-view": "2.7.*",
+    "zendframework/zend-console": "2.6.*",
+    "zfcampus/zf-api-problem": "dev-feature/zf3-support"
+  },
+  "require-dev": {
+    "phpunit/PHPUnit": "^4.8",
+    "squizlabs/php_codesniffer": "^2.3.1",
+    "zendframework/zend-loader": "2.5.*",
+    "zfcampus/zf-hal": "dev-feature/zf3"
+  },
+  "suggest": {
+    "zendframework/zend-console": "^2.3, if you intend to use the RequestFactory"
+  },
+  "autoload": {
+    "psr-4": {
+      "ZF\\ContentNegotiation\\": "src/"
+    },
+    "classmap": [
+      "Module.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ZFTest\\ContentNegotiation\\": "test/"
+    }
+  }
 }

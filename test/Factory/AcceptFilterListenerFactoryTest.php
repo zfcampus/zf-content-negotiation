@@ -23,7 +23,7 @@ class AcceptFilterListenerFactoryTest extends TestCase
 
         $factory = new AcceptFilterListenerFactory();
 
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, 'AcceptFilterListener');
 
         $this->assertInstanceOf('ZF\ContentNegotiation\AcceptFilterListener', $service);
     }
