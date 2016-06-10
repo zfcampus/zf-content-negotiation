@@ -6,21 +6,34 @@
 
 namespace ZF\ContentNegotiation\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
 
 class ContentNegotiationOptionsFactory implements FactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     *
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = NULL)
     {
         $config = [];
 
-        if ($serviceLocator->has('Config')) {
-            $appConfig = $serviceLocator->get('Config');
+        if ($container->has('Config')) {
+            $appConfig = $container->get('Config');
             if (isset($appConfig['zf-content-negotiation'])
                 && is_array($appConfig['zf-content-negotiation'])
             ) {
@@ -30,4 +43,5 @@ class ContentNegotiationOptionsFactory implements FactoryInterface
 
         return new ContentNegotiationOptions($config);
     }
+
 }

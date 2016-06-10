@@ -23,7 +23,7 @@ class ContentTypeFilterListenerFactoryTest extends TestCase
 
         $factory = new ContentTypeFilterListenerFactory();
 
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, 'ContentTypeFilterListener');
 
         $this->assertInstanceOf('ZF\ContentNegotiation\ContentTypeFilterListener', $service);
     }

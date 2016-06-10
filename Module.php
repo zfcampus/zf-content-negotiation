@@ -43,16 +43,24 @@ class Module
      */
     public function onBootstrap(MvcEvent $e)
     {
-        $app      = $e->getApplication();
+        $app = $e->getApplication();
         $services = $app->getServiceManager();
-        $em       = $app->getEventManager();
+        $eventManager = $app->getEventManager();
 
-        $em->attach(MvcEvent::EVENT_ROUTE, $services->get(ContentTypeListener::class), -625);
-        $em->attachAggregate($services->get(AcceptFilterListener::class));
-        $em->attachAggregate($services->get(ContentTypeFilterListener::class));
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, $services->get(ContentTypeListener::class), -625);
 
-        $sem = $em->getSharedManager();
-        $sem->attach(
+        /** @var AcceptFilterListener $acceptFilterListener */
+        $acceptFilterListener = $services->get(AcceptFilterListener::class);
+        /** @var ContentTypeFilterListener $contentTypeFilterListener */
+        $contentTypeFilterListener = $services->get(ContentTypeFilterListener::class);
+        
+        
+        $acceptFilterListener->attach($eventManager);
+        $contentTypeFilterListener->attach($eventManager);
+
+        
+        $sharedEventManager = $eventManager->getSharedManager();
+        $sharedEventManager->attach(
             DispatchableInterface::class,
             MvcEvent::EVENT_DISPATCH,
             $services->get(AcceptListener::class),
