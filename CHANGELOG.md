@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#70](https://github.com/zfcampus/zf-content-negotiation/pull/70) adds support
+  for PHP 7.
 
 ### Deprecated
 
@@ -14,7 +15,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#70](https://github.com/zfcampus/zf-content-negotiation/pull/70) removes
+  support for PHP 5.5.
 
 ### Fixed
 
