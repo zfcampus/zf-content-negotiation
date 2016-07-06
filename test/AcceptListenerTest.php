@@ -10,14 +10,15 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\PluginManager as ControllerPluginManager;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Router\RouteMatch;
+use Zend\ServiceManager\ServiceManager;
 use ZF\ContentNegotiation\AcceptListener;
 
 class AcceptListenerTest extends TestCase
 {
     public function setUp()
     {
-        $plugins  = new ControllerPluginManager();
+        $plugins  = new ControllerPluginManager(new ServiceManager());
         $selector = $plugins->get('AcceptableViewModelSelector');
 
         $this->listener   = new AcceptListener($selector, [

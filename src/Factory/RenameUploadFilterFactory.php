@@ -6,48 +6,40 @@
 
 namespace ZF\ContentNegotiation\Factory;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Traversable;
-use Zend\Filter\FilterPluginManager;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZF\ContentNegotiation\Filter\RenameUpload;
-use Zend\ServiceManager\MutableCreationOptionsInterface;
 
-class RenameUploadFilterFactory implements MutableCreationOptionsInterface
+class RenameUploadFilterFactory implements FactoryInterface
 {
+    
     /**
-     * @var null|array|Traversable
-     */
-    protected $creationOptions;
-
-    /**
-     * @param null|array|Traversable $options
-     */
-    public function __construct($options = null)
-    {
-        $this->creationOptions = $options;
-    }
-
-    /**
-     * @param array $options
-     */
-    public function setCreationOptions(array $options)
-    {
-        $this->creationOptions = $options;
-    }
-
-    /**
-     * Create a RenameUpload instance
+     * Create an object
      *
-     * @param  FilterPluginManager $filters
-     * @return RenameUpload
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     *
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
      */
-    public function __invoke(FilterPluginManager $filters)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = NULL)
     {
-        $services = $filters->getServiceLocator();
         $filter   = new RenameUpload($this->creationOptions);
-        if ($services->has('Request')) {
-            $filter->setRequest($services->get('Request'));
+        if ($container->has('Request')) {
+            $filter->setRequest($container->get('Request'));
         }
 
         return $filter;
     }
+
+
+
 }

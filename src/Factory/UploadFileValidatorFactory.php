@@ -6,36 +6,37 @@
 
 namespace ZF\ContentNegotiation\Factory;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZF\ContentNegotiation\Validator\UploadFile;
 
-class UploadFileValidatorFactory
+class UploadFileValidatorFactory implements FactoryInterface
 {
     /**
-     * @var null|array|\Traversable
-     */
-    protected $creationOptions;
-
-    /**
-     * @param null|array|\Traversable $options
-     */
-    public function __construct($options = null)
-    {
-        $this->creationOptions = $options;
-    }
-
-    /**
-     * Create an UploadFile instance
+     * Create an object
      *
-     * @param \Zend\Validator\ValidatorPluginManager $validators
-     * @return UploadFile
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     *
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
      */
-    public function __invoke($validators)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = NULL)
     {
-        $services  = $validators->getServiceLocator();
-        $validator = new UploadFile($this->creationOptions);
-        if ($services->has('Request')) {
-            $validator->setRequest($services->get('Request'));
+        $validator = new UploadFile($options);
+        if ($container->has('Request')) {
+            $validator->setRequest($container->get('Request'));
         }
         return $validator;
     }
+
+
+
 }
