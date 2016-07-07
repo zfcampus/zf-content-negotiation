@@ -59,7 +59,7 @@ class ContentTypeFilterListenerTest extends TestCase
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $response);
         $this->assertContains('Invalid content-type', $response->getApiProblem()->detail);
     }
-    
+
 
     /**
      * @group 66

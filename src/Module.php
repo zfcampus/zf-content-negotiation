@@ -47,7 +47,7 @@ class Module
 
         $services->get(AcceptFilterListener::class)->attach($eventManager);
         $services->get(ContentTypeFilterListener::class)->attach($eventManager);
-        
+
         $sharedEventManager = $eventManager->getSharedManager();
         $sharedEventManager->attach(
             DispatchableInterface::class,
