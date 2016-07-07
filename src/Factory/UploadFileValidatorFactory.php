@@ -58,7 +58,7 @@ class UploadFileValidatorFactory implements FactoryInterface
             $container = $container->getServiceLocator() ?: $container;
         }
 
-        $this($container, $requestedName, $this->options);
+        return $this($container, $requestedName, $this->options);
     }
 
     /**

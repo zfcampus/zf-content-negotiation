@@ -10,18 +10,19 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\EventManager\EventManager;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
-use Zend\Router\RouteMatch;
 use ZF\ContentNegotiation\ContentTypeFilterListener;
 
 class ContentTypeFilterListenerTest extends TestCase
 {
+    use RouteMatchFactoryTrait;
+
     public function setUp()
     {
         $this->listener   = new ContentTypeFilterListener();
         $this->event      = new MvcEvent();
         $this->event->setTarget(new TestAsset\ContentTypeController());
         $this->event->setRequest(new Request());
-        $this->event->setRouteMatch(new RouteMatch([
+        $this->event->setRouteMatch($this->createRouteMatch([
             'controller' => __NAMESPACE__ . '\TestAsset\ContentTypeController',
         ]));
     }

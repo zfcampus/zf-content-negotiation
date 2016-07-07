@@ -10,12 +10,13 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\PluginManager as ControllerPluginManager;
 use Zend\Mvc\MvcEvent;
-use Zend\Router\RouteMatch;
 use Zend\ServiceManager\ServiceManager;
 use ZF\ContentNegotiation\AcceptListener;
 
 class AcceptListenerTest extends TestCase
 {
+    use RouteMatchFactoryTrait;
+
     public function setUp()
     {
         $plugins  = new ControllerPluginManager(new ServiceManager());
@@ -38,7 +39,7 @@ class AcceptListenerTest extends TestCase
         $this->controller = new TestAsset\ContentTypeController();
         $this->event->setTarget($this->controller);
         $this->event->setRequest(new Request);
-        $this->event->setRouteMatch(new RouteMatch([
+        $this->event->setRouteMatch($this->createRouteMatch([
             'controller' => __NAMESPACE__ . '\TestAsset\ContentTypeController',
         ]));
 
