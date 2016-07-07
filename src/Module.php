@@ -6,7 +6,6 @@
 
 namespace ZF\ContentNegotiation;
 
-use Zend\Loader\StandardAutoloader;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\DispatchableInterface;
 use ZF\ContentNegotiation\AcceptListener;
@@ -17,29 +16,26 @@ use ZF\ContentNegotiation\ContentTypeListener;
 class Module
 {
     /**
-     * {@inheritDoc}
-     */
-    public function getAutoloaderConfig()
-    {
-        return [
-            StandardAutoloader::class => [
-                'namespaces' => [
-                    __NAMESPACE__ => __DIR__ . '/src/',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
+     * Return module-specific configuration.
+     *
+     * @return array
      */
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        return include __DIR__ . '/../config/module.config.php';
     }
 
     /**
-     * {@inheritDoc}
+     * Listen to bootstrap event.
+     *
+     * Attaches the ContentTypeListener, AcceptFilterListener, and
+     * ContentTypeFilterListener to the application event manager.
+     *
+     * Attaches the AcceptListener as a shared listener for controller dispatch
+     * events.
+     *
+     * @param MvcEvent $e
+     * @return void
      */
     public function onBootstrap(MvcEvent $e)
     {
@@ -49,15 +45,8 @@ class Module
 
         $eventManager->attach(MvcEvent::EVENT_ROUTE, $services->get(ContentTypeListener::class), -625);
 
-        /** @var AcceptFilterListener $acceptFilterListener */
-        $acceptFilterListener = $services->get(AcceptFilterListener::class);
-        /** @var ContentTypeFilterListener $contentTypeFilterListener */
-        $contentTypeFilterListener = $services->get(ContentTypeFilterListener::class);
-        
-        
-        $acceptFilterListener->attach($eventManager);
-        $contentTypeFilterListener->attach($eventManager);
-
+        $services->get(AcceptFilterListener::class)->attach($eventManager);
+        $services->get(ContentTypeFilterListener::class)->attach($eventManager);
         
         $sharedEventManager = $eventManager->getSharedManager();
         $sharedEventManager->attach(

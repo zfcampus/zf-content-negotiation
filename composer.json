@@ -16,14 +16,13 @@
         "source": "https://github.com/zfcampus/zf-content-negotiation",
         "issues": "https://github.com/zfcampus/zf-content-negotiation/issues"
     },
-    "repositories": [
-        { "type": "composer", "url": "https://packages.zendframework.com" },
-        { "type": "vcs", "url": "https://github.com/AGmakonts/zf-hal.git" }
-    ],
     "extra": {
         "branch-alias": {
             "dev-master": "1.1-dev",
             "dev-develop": "1.2-dev"
+        },
+        "zf": {
+            "module": "ZF\\ContentNegotiation"
         }
     },
     "require": {
@@ -37,12 +36,12 @@
         "zendframework/zend-stdlib": "^2.7.7 || ^3.0.1",
         "zendframework/zend-validator": "^2.8.1",
         "zendframework/zend-view": "^2.8.1",
-        "zfcampus/zf-api-problem": "^1.2"
+        "zfcampus/zf-api-problem": "^1.2.1"
     },
     "require-dev": {
         "phpunit/PHPUnit": "^4.8",
         "squizlabs/php_codesniffer": "^2.3.1",
-        "zfcampus/zf-hal": "^1.0"
+        "zfcampus/zf-hal": "^1.4"
     },
     "suggest": {
         "zendframework/zend-console": "^2.3, if you intend to use the RequestFactory"
@@ -50,15 +49,11 @@
     "autoload": {
         "psr-4": {
             "ZF\\ContentNegotiation\\": "src/"
-        },
-        "classmap": [
-            "Module.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "ZFTest\\ContentNegotiation\\": "test/"
         }
     }
-  }
 }
