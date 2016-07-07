@@ -1,7 +1,7 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -75,13 +75,21 @@ return [
     ],
 
     'controller_plugins' => [
-        'invokables' => [
+        'aliases' => [
             'routeParam'  => ControllerPlugin\RouteParam::class,
             'queryParam'  => ControllerPlugin\QueryParam::class,
             'bodyParam'   => ControllerPlugin\BodyParam::class,
             'routeParams' => ControllerPlugin\RouteParams::class,
             'queryParams' => ControllerPlugin\QueryParams::class,
             'bodyParams'  => ControllerPlugin\BodyParams::class,
+        ],
+        'factories' => [
+            ControllerPlugin\RouteParam::class  => InvokableFactory::class,
+            ControllerPlugin\QueryParam::class  => InvokableFactory::class,
+            ControllerPlugin\BodyParam::class   => InvokableFactory::class,
+            ControllerPlugin\RouteParams::class => InvokableFactory::class,
+            ControllerPlugin\QueryParams::class => InvokableFactory::class,
+            ControllerPlugin\BodyParams::class  => InvokableFactory::class,
         ],
     ],
 ];
