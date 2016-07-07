@@ -26,7 +26,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#72](https://github.com/zfcampus/zf-content-negotiation/pull/72) fixes a
+  situation with the `RenameUpload` filter and `UploadFile` validator overrides
+  whereby they triggered cyclic alias detection in zend-servicemanager.
 
 ## 1.1.3 - TBD
 

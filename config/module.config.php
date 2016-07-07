@@ -4,6 +4,8 @@
  * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
+use Zend\Filter\File\RenameUpload;
+use Zend\Validator\File\UploadFile;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use ZF\ContentNegotiation\AcceptFilterListener;
 use ZF\ContentNegotiation\AcceptListener;
@@ -16,20 +18,22 @@ use ZF\ContentNegotiation\JsonModel;
 
 return [
     'filters' => [
-        'aliases'   => [
-            'Zend\Filter\File\RenameUpload' => 'filerenameupload',
-        ],
         'factories' => [
-            'filerenameupload' => Factory\RenameUploadFilterFactory::class,
+            // Overwrite RenameUpload filter's factory
+            RenameUpload::class => Factory\RenameUploadFilterFactory::class,
+
+            // v2 support
+            'zendfilterfilerenameupload' => Factory\RenameUploadFilterFactory::class,
         ],
     ],
 
     'validators' => [
-        'aliases'   => [
-            'Zend\Validator\File\UploadFile' => 'fileuploadfile',
-        ],
-        'factories' => [
-            'fileuploadfile' => Factory\UploadFileValidatorFactory::class,
+        'factories'   => [
+            // Overwrite UploadFile validator's factory
+            UploadFile::class => Factory\UploadFileValidatorFactory::class,
+
+            // v2 support
+            'zendvalidatorfileuploadfile' => Factory\UploadFileValidatorFactory::class,
         ],
     ],
 
