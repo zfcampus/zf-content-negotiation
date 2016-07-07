@@ -11,7 +11,7 @@ use Zend\Console\Console;
 use Zend\Console\Request as ConsoleRequest;
 use ZF\ContentNegotiation\Request as HttpRequest;
 
-class RequestFactory implements FactoryInterface
+class RequestFactory
 {
     /**
      * @param  ContainerInterface $container
