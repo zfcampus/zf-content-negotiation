@@ -1,36 +1,23 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\ContentNegotiation\Factory;
 
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Zend\Console\Console;
 use Zend\Console\Request as ConsoleRequest;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
 use ZF\ContentNegotiation\Request as HttpRequest;
 
 class RequestFactory implements FactoryInterface
 {
     /**
-     * Create an object
-     *
      * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     *
-     * @return object
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs
+     * @return ConsoleRequest|HttpRequest
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = NULL)
+    public function __invoke(ContainerInterface $container)
     {
         if (Console::isConsole()) {
             return new ConsoleRequest();
@@ -38,6 +25,4 @@ class RequestFactory implements FactoryInterface
 
         return new HttpRequest();
     }
-    
-
 }

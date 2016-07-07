@@ -1,47 +1,50 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\ContentNegotiation\Factory;
 
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
 
-class ContentNegotiationOptionsFactory implements FactoryInterface
+class ContentNegotiationOptionsFactory
 {
     /**
-     * Create an object
-     *
      * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     *
-     * @return object
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs
+     * @return ContentNegotiationOptions
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = NULL)
+    public function __invoke(ContainerInterface $container)
     {
-        $config = [];
-
-        if ($container->has('Config')) {
-            $appConfig = $container->get('Config');
-            if (isset($appConfig['zf-content-negotiation'])
-                && is_array($appConfig['zf-content-negotiation'])
-            ) {
-                $config = $appConfig['zf-content-negotiation'];
-            }
-        }
-
-        return new ContentNegotiationOptions($config);
+        return new ContentNegotiationOptions($this->getConfig($container));
     }
 
+    /**
+     * Attempt to retrieve the zf-content-negotiation configuration.
+     *
+     * - Consults the container's 'config' service, returning an empty array
+     *   if not found.
+     * - Validates that the zf-content-negotiation key exists, and evaluates
+     *   to an array; if not,returns an empty array.
+     *
+     * @param ContainerInterface $container
+     * @return array
+     */
+    private function getConfig(ContainerInterface $container)
+    {
+        if (! $container->has('config')) {
+            return [];
+        }
+
+        $config = $container->get('config');
+
+        if (! isset($config['zf-content-negotiation'])
+            || ! is_array($config['zf-content-negotiation'])
+        ) {
+            return [];
+        }
+
+        return $config['zf-content-negotiation'];
+    }
 }
