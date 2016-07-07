@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.2.0 - TBD
+
+### Added
+
+- [#71](https://github.com/zfcampus/zf-content-negotiation/pull/71) and
+  [#73](https://github.com/zfcampus/zf-content-negotiation/pull/73) provide
+  support for v3 releases of the various Zend Framework components on which it
+  depends, including zend-eventmanager, zend-json, zend-mvc,
+  zend-servicemanager, and zend-stdlib; all code continues to work with v2
+  releases as well.
+- [#70](https://github.com/zfcampus/zf-content-negotiation/pull/70) adds support
+  for PHP 7.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#70](https://github.com/zfcampus/zf-content-negotiation/pull/70) removes
+  support for PHP 5.5.
+
+### Fixed
+
+- [#72](https://github.com/zfcampus/zf-content-negotiation/pull/72) fixes a
+  situation with the `RenameUpload` filter and `UploadFile` validator overrides
+  whereby they triggered cyclic alias detection in zend-servicemanager.
+
 ## 1.1.3 - TBD
 
 ### Added
