@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 1.2.1 - TBD
+## 1.2.1 - 2016-07-07
 
 ### Added
 
@@ -36,7 +36,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- Updates the `RequestFactory` to remove the `implements FactoryInterface`
+  declaration (as it does not, and this was unable to resolve to a valid
+  interface).
 
 ## 1.2.0 - 2016-07-07
 
