@@ -4,7 +4,6 @@ namespace ZF\ContentNegotiation\Factory;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Filter\FilterPluginManager;
-use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 class RenameUploadFilterFactoryTest extends TestCase
@@ -13,15 +12,12 @@ class RenameUploadFilterFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $config = new Config(
-            [
-                'factories' => [
-                    'filerenameupload' => 'ZF\ContentNegotiation\Factory\RenameUploadFilterFactory',
-                ],
-            ]
-        );
-        $this->filters = new FilterPluginManager($config);
-        $this->filters->setServiceLocator(new ServiceManager());
+        $config = [
+            'factories' => [
+                'filerenameupload' => 'ZF\ContentNegotiation\Factory\RenameUploadFilterFactory',
+            ],
+        ];
+        $this->filters = new FilterPluginManager(new ServiceManager(), $config);
     }
 
     public function testMultipleFilters()

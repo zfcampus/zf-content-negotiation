@@ -10,7 +10,6 @@ use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionObject;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
 use Zend\Stdlib\Parameters;
 use ZF\ContentNegotiation\ContentTypeListener;
 use ZF\ContentNegotiation\MultipartContentParser;
@@ -18,6 +17,8 @@ use ZF\ContentNegotiation\Request as ContentNegotiationRequest;
 
 class ContentTypeListenerTest extends TestCase
 {
+    use RouteMatchFactoryTrait;
+
     public function setUp()
     {
         $this->listener = new ContentTypeListener();
@@ -48,7 +49,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
@@ -72,7 +73,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
@@ -105,7 +106,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
@@ -145,7 +146,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
@@ -194,7 +195,7 @@ class ContentTypeListenerTest extends TestCase
         $event = new MvcEvent();
         $event->setTarget($target);
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
@@ -297,7 +298,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
@@ -338,7 +339,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
@@ -379,7 +380,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
@@ -420,7 +421,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
@@ -461,7 +462,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
@@ -493,7 +494,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);
@@ -516,7 +517,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $listener = $this->listener;
         $result = $listener($event);
@@ -538,7 +539,7 @@ class ContentTypeListenerTest extends TestCase
         $request->setContent(file_get_contents(__DIR__ . '/TestAsset/multipart-form-data-array.txt'));
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
         $listener = $this->listener;
         $result = $listener($event);
         $parameterData = $event->getParam('ZFContentNegotiationParameterData');
@@ -582,7 +583,7 @@ class ContentTypeListenerTest extends TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch([]));
+        $event->setRouteMatch($this->createRouteMatch([]));
 
         $result = $listener($event);
         $this->assertNull($result);

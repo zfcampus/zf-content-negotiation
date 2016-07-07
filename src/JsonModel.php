@@ -79,7 +79,7 @@ class JsonModel extends BaseJsonModel
 
         // Use ZF\Hal\Entity's composed entity
         if ($variables instanceof HalEntity) {
-            $variables = $variables->entity;
+            $variables = $variables->getEntity();
         }
 
         // Use ZF\Hal\Collection's composed collection

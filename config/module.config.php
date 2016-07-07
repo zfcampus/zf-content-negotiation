@@ -1,9 +1,10 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
+use Zend\ServiceManager\Factory\InvokableFactory;
 use ZF\ContentNegotiation\AcceptFilterListener;
 use ZF\ContentNegotiation\AcceptListener;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
@@ -33,10 +34,8 @@ return [
     ],
 
     'service_manager' => [
-        'invokables' => [
-            ContentTypeListener::class => ContentTypeListener::class,
-        ],
         'factories' => [
+            ContentTypeListener::class       => InvokableFactory::class,
             'Request'                        => Factory\RequestFactory::class,
             AcceptListener::class            => Factory\AcceptListenerFactory::class,
             AcceptFilterListener::class      => Factory\AcceptFilterListenerFactory::class,
@@ -50,14 +49,14 @@ return [
         // - a named selector (see below)
         // - an array of specific selectors, in the same format as for the
         //   selectors key
-        'controllers' => [],
+        'controllers'            => [],
 
         // This is an array of named selectors. Each selector consists of a
         // view model type pointing to the Accept mediatypes that will trigger
         // selection of that view model; see the documentation on the
         // AcceptableViewModelSelector plugin for details on the format:
         // http://zendframework.github.io/zend-mvc/plugins/#acceptableviewmodelselector-plugin
-        'selectors'   => [
+        'selectors'              => [
             'Json' => [
                 JsonModel::class => [
                     'application/json',
@@ -68,7 +67,7 @@ return [
 
         // Array of controller service name => allowed accept header pairs.
         // The allowed content type may be a string, or an array of strings.
-        'accept_whitelist' => [],
+        'accept_whitelist'       => [],
 
         // Array of controller service name => allowed content type pairs.
         // The allowed content type may be a string, or an array of strings.
@@ -76,13 +75,21 @@ return [
     ],
 
     'controller_plugins' => [
-        'invokables' => [
+        'aliases' => [
             'routeParam'  => ControllerPlugin\RouteParam::class,
             'queryParam'  => ControllerPlugin\QueryParam::class,
             'bodyParam'   => ControllerPlugin\BodyParam::class,
             'routeParams' => ControllerPlugin\RouteParams::class,
             'queryParams' => ControllerPlugin\QueryParams::class,
             'bodyParams'  => ControllerPlugin\BodyParams::class,
+        ],
+        'factories' => [
+            ControllerPlugin\RouteParam::class  => InvokableFactory::class,
+            ControllerPlugin\QueryParam::class  => InvokableFactory::class,
+            ControllerPlugin\BodyParam::class   => InvokableFactory::class,
+            ControllerPlugin\RouteParams::class => InvokableFactory::class,
+            ControllerPlugin\QueryParams::class => InvokableFactory::class,
+            ControllerPlugin\BodyParams::class  => InvokableFactory::class,
         ],
     ],
 ];
