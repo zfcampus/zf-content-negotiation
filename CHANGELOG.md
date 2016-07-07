@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.0 - TBD
+## 1.2.0 - 2016-07-07
 
 ### Added
 
@@ -29,24 +29,6 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#72](https://github.com/zfcampus/zf-content-negotiation/pull/72) fixes a
   situation with the `RenameUpload` filter and `UploadFile` validator overrides
   whereby they triggered cyclic alias detection in zend-servicemanager.
-
-## 1.1.3 - TBD
-
-### Added
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
 
 ## 1.1.2 - 2016-05-26
 
