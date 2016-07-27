@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 1.2.2 - TBD
+## 1.2.2 - 2016-07-27
 
 ### Added
 
@@ -36,7 +36,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#75](https://github.com/zfcampus/zf-content-negotiation/pull/75) updates the
+  `JsonModel` to test discovered `ZF\Hal\Entity` instances for a `getEntity()`
+  method; if found, that method will be used to pull the entity data, but if
+  not, property overloading to its `$entity` property will be used instead. This
+  change ensures the component works with versions of zf-hal prior to 1.4.
 
 ## 1.2.1 - 2016-07-07
 
