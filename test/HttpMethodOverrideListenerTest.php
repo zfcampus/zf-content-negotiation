@@ -9,6 +9,7 @@ namespace ZFTest\ContentNegotiation;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Http\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\ContentNegotiation\HttpMethodOverrideListener;
 
 class HttpMethodOverrideListenerTest extends TestCase
@@ -76,7 +77,7 @@ class HttpMethodOverrideListenerTest extends TestCase
         $event->setRequest($request);
 
         $result = $listener($event);
-        $this->assertInstanceOf('ZF\ApiProblem\ApiProblemResponse', $result);
+        $this->assertInstanceOf(ApiProblemResponse::class, $result);
         $problem = $result->getApiProblem();
         $this->assertEquals(400, $problem->status);
         $this->assertContains('unrecognized method in X-HTTP-Method-Ovverride header', $problem->detail);
