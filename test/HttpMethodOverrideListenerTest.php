@@ -59,7 +59,6 @@ class HttpMethodOverrideListenerTest extends TestCase
 
         $result = $listener($event);
         $this->assertEquals($method, $request->getMethod());
-
     }
 
     /**
