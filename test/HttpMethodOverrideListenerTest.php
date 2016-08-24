@@ -95,7 +95,10 @@ class HttpMethodOverrideListenerTest extends TestCase
         $this->assertInstanceOf(ApiProblemResponse::class, $result);
         $problem = $result->getApiProblem();
         $this->assertEquals(400, $problem->status);
-        $this->assertContains('Overriding PATCH method with X-HTTP-Method-Override header is not allowed', $problem->detail);
+        $this->assertContains(
+            'Overriding PATCH method with X-HTTP-Method-Override header is not allowed',
+            $problem->detail
+        );
     }
 
     /**
@@ -116,6 +119,9 @@ class HttpMethodOverrideListenerTest extends TestCase
         $this->assertInstanceOf(ApiProblemResponse::class, $result);
         $problem = $result->getApiProblem();
         $this->assertEquals(400, $problem->status);
-        $this->assertContains(sprintf('Illegal override method %s in X-HTTP-Method-Override header', $method), $problem->detail);
+        $this->assertContains(
+            sprintf('Illegal override method %s in X-HTTP-Method-Override header', $method),
+            $problem->detail
+        );
     }
 }
