@@ -11,6 +11,7 @@ use ZF\ContentNegotiation\AcceptFilterListener;
 use ZF\ContentNegotiation\AcceptListener;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
 use ZF\ContentNegotiation\ContentTypeFilterListener;
+use ZF\ContentNegotiation\HttpMethodOverrideListener;
 use ZF\ContentNegotiation\ContentTypeListener;
 use ZF\ContentNegotiation\ControllerPlugin;
 use ZF\ContentNegotiation\Factory;
@@ -38,6 +39,9 @@ return [
     ],
 
     'service_manager' => [
+        'invokables' => [
+            HttpMethodOverrideListener::class => HttpMethodOverrideListener::class,
+        ],
         'factories' => [
             ContentTypeListener::class       => InvokableFactory::class,
             'Request'                        => Factory\RequestFactory::class,
@@ -76,6 +80,11 @@ return [
         // Array of controller service name => allowed content type pairs.
         // The allowed content type may be a string, or an array of strings.
         'content_type_whitelist' => [],
+
+        // Enable x-http method override feature
+        // When set to 'true' the  http method in the request will be overridden
+        // by the method inside the 'X-HTTP-Method-Override' header (if present)
+        'x_http_method_override_enabled' => false,
     ],
 
     'controller_plugins' => [

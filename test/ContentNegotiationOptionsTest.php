@@ -16,6 +16,7 @@ class ContentNegotiationOptionsTest extends TestCase
         return [
             'accept-whitelist' => ['accept-whitelist', 'accept_whitelist'],
             'content-type-whitelist' => ['content-type-whitelist', 'content_type_whitelist'],
+            'x-http-method-override-enabled' => ['x-http-method-override-enabled', 'x_http_method_override_enabled'],
         ];
     }
 

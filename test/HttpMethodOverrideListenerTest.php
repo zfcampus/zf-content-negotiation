@@ -58,7 +58,7 @@ class HttpMethodOverrideListenerTest extends TestCase
         $event->setRequest($request);
         $event->setRouteMatch($this->createRouteMatch([]));
 
-        $result = $listener($event);
+        $result = $listener->onRoute($event);
         $this->assertEquals($method, $request->getMethod());
     }
 
@@ -76,7 +76,7 @@ class HttpMethodOverrideListenerTest extends TestCase
         $event = new MvcEvent();
         $event->setRequest($request);
 
-        $result = $listener($event);
+        $result = $listener->onRoute($event);
         $this->assertInstanceOf(ApiProblemResponse::class, $result);
         $problem = $result->getApiProblem();
         $this->assertEquals(400, $problem->status);

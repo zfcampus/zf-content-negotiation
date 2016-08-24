@@ -31,6 +31,11 @@ class ContentNegotiationOptions extends AbstractOptions
     protected $contentTypeWhitelist = [];
 
     /**
+     * @var boolean
+     */
+    protected $xHttpMethodOverrideEnabled = false;
+
+    /**
      * {@inheritDoc}
      *
      * Normalizes dash-separated keys to underscore-separated to ensure
@@ -127,5 +132,21 @@ class ContentNegotiationOptions extends AbstractOptions
     public function getContentTypeWhitelist()
     {
         return $this->contentTypeWhitelist;
+    }
+
+    /**
+     * @param boolean $xHttpMethodOverrideEnabled
+     */
+    public function setXHttpMethodOverrideEnabled($xHttpMethodOverrideEnabled)
+    {
+        $this->xHttpMethodOverrideEnabled = $xHttpMethodOverrideEnabled;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getXHttpMethodOverrideEnabled()
+    {
+        return $this->xHttpMethodOverrideEnabled;
     }
 }

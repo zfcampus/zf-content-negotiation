@@ -6,12 +6,14 @@
 
 namespace ZF\ContentNegotiation;
 
+use Zend\EventManager\AbstractListenerAggregate;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 use Zend\Http\Request as HttpRequest;
 
-class HttpMethodOverrideListener
+class HttpMethodOverrideListener extends AbstractListenerAggregate
 {
     /**
      * @var array
@@ -25,12 +27,24 @@ class HttpMethodOverrideListener
     ];
 
     /**
+     * Priority is set very high (should be executed before all other listeners that rely on the request method value).
+     * TODO: Check priority value, maybe value should be even higher??
+     *
+     * @param  EventManagerInterface $events
+     * @param int                    $priority
+     */
+    public function attach(EventManagerInterface $events, $priority = 1)
+    {
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -40);
+    }
+
+    /**
      * Checks for X-HTTP-Method-Override header and sets header inside request object.
      *
      * @param  MvcEvent $event
      * @return void|ApiProblemResponse
      */
-    public function __invoke(MvcEvent $event)
+    public function onRoute(MvcEvent $event)
     {
         $request = $event->getRequest();
 
