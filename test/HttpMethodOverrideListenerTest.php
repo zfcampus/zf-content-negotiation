@@ -30,7 +30,7 @@ class HttpMethodOverrideListenerTest extends TestCase
             HttpRequest::METHOD_POST,
             HttpRequest::METHOD_PUT,
             HttpRequest::METHOD_DELETE,
-            HttpRequest::METHOD_PATCH,
+            HttpRequest::METHOD_PATCH
         ],
         HttpRequest::METHOD_POST => [
         ]

@@ -34,8 +34,8 @@ class HttpMethodOverrideListener extends AbstractListenerAggregate
      * Priority is set very high (should be executed before all other listeners that rely on the request method value).
      * TODO: Check priority value, maybe value should be even higher??
      *
-     * @param  EventManagerInterface $events
-     * @param int                    $priority
+     * @param EventManagerInterface $events
+     * @param int                   $priority
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {

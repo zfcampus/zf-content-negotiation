@@ -1,12 +1,13 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZFTest\ContentNegotiation\Factory;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
 use ZF\ContentNegotiation\Factory\HttpMethodOverrideListenerFactory;
@@ -16,15 +17,15 @@ class HttpMethodOverrideListenerFactoryTest extends TestCase
 {
     public function testCreateServiceShouldReturnContentTypeFilterListenerInstance()
     {
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            ContentNegotiationOptions::class,
-            new ContentNegotiationOptions()
-        );
+        $options = $this->prophesize(ContentNegotiationOptions::class);
+        $options->getHttpOverrideMethods()->willReturn([]);
+
+        $container = $this->prophesize(ServiceManager::class);
+        $container->willImplement(ServiceLocatorInterface::class);
+        $container->get(ContentNegotiationOptions::class)->willReturn($options);
 
         $factory = new HttpMethodOverrideListenerFactory();
-
-        $service = $factory($serviceManager, 'HttpMethodOverrideListener');
+        $service = $factory($container->reveal(), HttpMethodOverrideListener::class);
 
         $this->assertInstanceOf(HttpMethodOverrideListener::class, $service);
     }
