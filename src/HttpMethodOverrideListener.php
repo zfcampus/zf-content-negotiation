@@ -34,11 +34,11 @@ class HttpMethodOverrideListener
     {
         $request = $event->getRequest();
 
-        if (!$request instanceof HttpRequest) {
+        if (! $request instanceof HttpRequest) {
             return;
         }
 
-        if (!$request->getHeaders()->has('X-HTTP-Method-Override')) {
+        if (! $request->getHeaders()->has('X-HTTP-Method-Override')) {
             return;
         }
 
@@ -49,7 +49,7 @@ class HttpMethodOverrideListener
         if (! in_array($method, $this->methods)) {
             return new ApiProblemResponse(new ApiProblem(
                 400,
-                'unrecognized method in X-HTTP-Method-Ovverride header'
+                'Unrecognized method in X-HTTP-Method-Override header'
             ));
         }
 

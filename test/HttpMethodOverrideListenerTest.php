@@ -80,6 +80,6 @@ class HttpMethodOverrideListenerTest extends TestCase
         $this->assertInstanceOf(ApiProblemResponse::class, $result);
         $problem = $result->getApiProblem();
         $this->assertEquals(400, $problem->status);
-        $this->assertContains('unrecognized method in X-HTTP-Method-Ovverride header', $problem->detail);
+        $this->assertContains('Unrecognized method in X-HTTP-Method-Override header', $problem->detail);
     }
 }
