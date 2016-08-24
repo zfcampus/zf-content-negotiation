@@ -39,9 +39,6 @@ return [
     ],
 
     'service_manager' => [
-        'invokables' => [
-            HttpMethodOverrideListener::class => HttpMethodOverrideListener::class,
-        ],
         'factories' => [
             ContentTypeListener::class       => InvokableFactory::class,
             'Request'                        => Factory\RequestFactory::class,
@@ -49,6 +46,7 @@ return [
             AcceptFilterListener::class      => Factory\AcceptFilterListenerFactory::class,
             ContentTypeFilterListener::class => Factory\ContentTypeFilterListenerFactory::class,
             ContentNegotiationOptions::class => Factory\ContentNegotiationOptionsFactory::class,
+            HttpMethodOverrideListener::class => Factory\HttpMethodOverrideListenerFactory::class,
         ],
     ],
 
