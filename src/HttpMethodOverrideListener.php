@@ -18,13 +18,17 @@ class HttpMethodOverrideListener extends AbstractListenerAggregate
     /**
      * @var array
      */
-    protected $methods = [
-        HttpRequest::METHOD_HEAD,
-        HttpRequest::METHOD_POST,
-        HttpRequest::METHOD_PUT,
-        HttpRequest::METHOD_DELETE,
-        HttpRequest::METHOD_PATCH,
-    ];
+    protected $httpMethodOverride = [];
+
+    /**
+     * HttpMethodOverrideListener constructor.
+     *
+     * @param array $httpMethodOverride
+     */
+    public function __construct(array $httpMethodOverride)
+    {
+        $this->httpMethodOverride = $httpMethodOverride;
+    }
 
     /**
      * Priority is set very high (should be executed before all other listeners that rely on the request method value).
@@ -56,17 +60,26 @@ class HttpMethodOverrideListener extends AbstractListenerAggregate
             return;
         }
 
-        $header = $request->getHeader('X-HTTP-Method-Override');
+        $method = $request->getMethod();
 
-        $method = $header->getFieldValue();
-
-        if (! in_array($method, $this->methods)) {
+        if (! array_key_exists($method, $this->httpMethodOverride)) {
             return new ApiProblemResponse(new ApiProblem(
                 400,
-                'Unrecognized method in X-HTTP-Method-Override header'
+                sprintf('Overriding %s method with X-HTTP-Method-Override header is not allowed', $method)
             ));
         }
 
-        $request->setMethod($method);
+        $header = $request->getHeader('X-HTTP-Method-Override');
+        $overrideMethod = $header->getFieldValue();
+        $allowedMethods = $this->httpMethodOverride[$method];
+
+        if (! in_array($overrideMethod, $allowedMethods)) {
+            return new ApiProblemResponse(new ApiProblem(
+                400,
+                sprintf('Illegal override method %s in X-HTTP-Method-Override header', $overrideMethod)
+            ));
+        }
+
+        $request->setMethod($overrideMethod);
     }
 }

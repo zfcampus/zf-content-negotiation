@@ -22,11 +22,26 @@ class HttpMethodOverrideListenerTest extends TestCase
     protected $listener;
 
     /**
+     * @var array
+     */
+    protected $httpMethodOverride = [
+        HttpRequest::METHOD_GET => [
+            HttpRequest::METHOD_HEAD,
+            HttpRequest::METHOD_POST,
+            HttpRequest::METHOD_PUT,
+            HttpRequest::METHOD_DELETE,
+            HttpRequest::METHOD_PATCH,
+        ],
+        HttpRequest::METHOD_POST => [
+        ]
+    ];
+
+    /**
      * Set up test
      */
     public function setUp()
     {
-        $this->listener = new HttpMethodOverrideListener();
+        $this->listener = new HttpMethodOverrideListener($this->httpMethodOverride);
     }
 
     /**
@@ -62,13 +77,16 @@ class HttpMethodOverrideListenerTest extends TestCase
         $this->assertEquals($method, $request->getMethod());
     }
 
-    public function testHttpMethodOverrideListenerReturnsProblemResponse()
+    /**
+     * @dataProvider httpMethods
+     */
+    public function testHttpMethodOverrideListenerReturnsProblemResponseForMethodNotInConfig($method)
     {
         $listener = $this->listener;
 
         $request = new HttpRequest();
-        $request->setMethod('GET');
-        $request->getHeaders()->addHeaderLine('X-HTTP-Method-Override', 'TEST');
+        $request->setMethod('PATCH');
+        $request->getHeaders()->addHeaderLine('X-HTTP-Method-Override', $method);
 
         $event = new MvcEvent();
         $event->setRequest($request);
@@ -77,6 +95,27 @@ class HttpMethodOverrideListenerTest extends TestCase
         $this->assertInstanceOf(ApiProblemResponse::class, $result);
         $problem = $result->getApiProblem();
         $this->assertEquals(400, $problem->status);
-        $this->assertContains('Unrecognized method in X-HTTP-Method-Override header', $problem->detail);
+        $this->assertContains('Overriding PATCH method with X-HTTP-Method-Override header is not allowed', $problem->detail);
+    }
+
+    /**
+     * @dataProvider httpMethods
+     */
+    public function testHttpMethodOverrideListenerReturnsProblemResponseForIllegalOverrideValue($method)
+    {
+        $listener = $this->listener;
+
+        $request = new HttpRequest();
+        $request->setMethod('POST');
+        $request->getHeaders()->addHeaderLine('X-HTTP-Method-Override', $method);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+
+        $result = $listener->onRoute($event);
+        $this->assertInstanceOf(ApiProblemResponse::class, $result);
+        $problem = $result->getApiProblem();
+        $this->assertEquals(400, $problem->status);
+        $this->assertContains(sprintf('Illegal override method %s in X-HTTP-Method-Override header', $method), $problem->detail);
     }
 }

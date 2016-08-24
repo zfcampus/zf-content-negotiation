@@ -36,6 +36,11 @@ class ContentNegotiationOptions extends AbstractOptions
     protected $xHttpMethodOverrideEnabled = false;
 
     /**
+     * @var array
+     */
+    protected $httpOverrideMethods = [];
+
+    /**
      * {@inheritDoc}
      *
      * Normalizes dash-separated keys to underscore-separated to ensure
@@ -148,5 +153,21 @@ class ContentNegotiationOptions extends AbstractOptions
     public function getXHttpMethodOverrideEnabled()
     {
         return $this->xHttpMethodOverrideEnabled;
+    }
+
+    /**
+     * @param array $httpOverrideMethods
+     */
+    public function setHttpOverrideMethods(array $httpOverrideMethods)
+    {
+        $this->httpOverrideMethods = $httpOverrideMethods;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHttpOverrideMethods()
+    {
+        return $this->httpOverrideMethods;
     }
 }
