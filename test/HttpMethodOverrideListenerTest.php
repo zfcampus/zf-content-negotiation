@@ -62,9 +62,6 @@ class HttpMethodOverrideListenerTest extends TestCase
         $this->assertEquals($method, $request->getMethod());
     }
 
-    /**
-     *
-     */
     public function testHttpMethodOverrideListenerReturnsProblemResponse()
     {
         $listener = $this->listener;
