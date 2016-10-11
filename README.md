@@ -178,6 +178,59 @@ Example:
 ],
 ```
 
+#### Key: `x_http_method_override_enabled`
+
+- Since 1.3.0
+
+This boolean flag determines whether or not the `HttpMethodOverrideListener`
+will be enabled by default.
+
+#### Key: `http_override_methods`
+
+- Since 1.3.0
+
+The `http_override_methods` key is utilized to provide the
+`HttpMethodOverrideListener` with a map of allowed override methods for a given
+HTTP method, as specified via the `X-HTTP-Method-Override` header. Essentially,
+the values are:
+
+```php
+'Incoming HTTP request method' => $arrayOfAllowedOverrideMethods,
+```
+
+As an example, if you want to allow the `X-HTTP-Method-Override` header to allow
+overriding HTTP `GET` requests with an alternate method, you might define this
+as follows:
+
+```php
+'x_http_method_override_enabled' => true,
+'http_override_methods' => [
+    'GET' => [
+        'HEAD',
+        'POST',
+        'PUT',
+        'DELETE',
+        'PATCH',
+    ],
+];
+```
+
+Then, to make a request, you could do the following:
+
+```http
+GET /foo HTTP/1.1
+Host: example.com
+X-HTTP-Method-Override: PATCH
+
+some=content&more=content
+```
+
+The above would then be interpreted as a `PATCH` request. If the same request
+were made via HTTP `POST`, or if a `GET` request were made with an override
+value of `OPTIONS`, the listener would raise a problem, as, in the former case,
+no maps are defined for `POST`, and, in the latter, `OPTIONS` is not in the map
+for `GET`.
+
 ### System Configuration
 
 The following configuration is provided in `config/module.config.php` to enable the module to
@@ -210,6 +263,7 @@ function:
         AcceptFilterListener::class      => Factory\AcceptFilterListenerFactory::class,
         ContentTypeFilterListener::class => Factory\ContentTypeFilterListenerFactory::class,
         ContentNegotiationOptions::class => Factory\ContentNegotiationOptionsFactory::class,
+        HttpMethodOverrideListener::class => Factory\HttpMethodOverrideListenerFactory::class,
     ],
 ],
 
@@ -265,6 +319,16 @@ responsible for ensuring the route matched controller can accept content in the 
 specified by the media type in the current request's `Content-Type` header. If it cannot, it will
 short-circuit the MVC dispatch process by returning a `415 Invalid content-type specified` response.
 
+#### ZF\ContentNegotiation\HttpMethodOverrideListener
+
+- Since 1.3.0
+
+This listener is attached to the `MvcEvent::EVENT_ROUTE` event with a priority
+of `-40`, but only if the `x_http_method_override_enabled` configuration flag
+was toggle on. It is responsible for checking if an `X-HTTP-Method-Override`
+header is present, and, if so, if it contains a value in the set allowed for the
+current HTTP request method invoked. If so, it resets the HTTP request method to
+the header value.
 
 ZF2 Services
 ------------

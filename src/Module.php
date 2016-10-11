@@ -48,6 +48,11 @@ class Module
         $services->get(AcceptFilterListener::class)->attach($eventManager);
         $services->get(ContentTypeFilterListener::class)->attach($eventManager);
 
+        $contentNegotiationOptions = $services->get(ContentNegotiationOptions::class);
+        if ($contentNegotiationOptions->getXHttpMethodOverrideEnabled()) {
+            $services->get(HttpMethodOverrideListener::class)->attach($eventManager);
+        }
+
         $sharedEventManager = $eventManager->getSharedManager();
         $sharedEventManager->attach(
             DispatchableInterface::class,
