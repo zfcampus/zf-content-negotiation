@@ -6,7 +6,26 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#81](https://github.com/zfcampus/zf-content-negotiation/pull/81) adds a new
+  listener, `HttpMethodListener`. The listener is enabled by toggling the
+  `zf-content-negotiation.x_http_method_override_enabled` flag, and providing a
+  map of request method/list of override request methods in the
+  `zf-content-negotiation.http_override_methods` configuration:
+
+  ```php
+  'zf-content-negotiation' => [
+      'x_http_method_override_enabled' => true,
+      'http_override_methods' => [
+          'GET' => [
+              'HEAD',
+              'PATCH',
+              'POST',
+              'PUT',
+              'DELETE',
+          ],
+      ],
+  ],
+  ```
 
 ### Deprecated
 
