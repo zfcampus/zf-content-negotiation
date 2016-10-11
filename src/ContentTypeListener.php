@@ -101,13 +101,7 @@ class ContentTypeListener
                     break;
                 }
 
-                // Stolen from AbstractRestfulController
                 parse_str($content, $bodyParams);
-                if (!is_array($bodyParams)
-                    || (1 == count($bodyParams) && isset($bodyParams[0]))
-                ) {
-                    $bodyParams = $content;
-                }
                 break;
             default:
                 break;
@@ -117,7 +111,6 @@ class ContentTypeListener
             return $bodyParams;
         }
 
-        $bodyParams = $bodyParams ?: [];
         $parameterData->setBodyParams($bodyParams);
         $e->setParam('ZFContentNegotiationParameterData', $parameterData);
     }
