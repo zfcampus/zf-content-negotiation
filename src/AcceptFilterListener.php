@@ -26,12 +26,12 @@ class AcceptFilterListener extends ContentTypeFilterListener
         }
 
         $controllerName = $e->getRouteMatch()->getParam('controller');
-        if (!isset($this->config[$controllerName])) {
+        if (! isset($this->config[$controllerName])) {
             return;
         }
 
         $request = $e->getRequest();
-        if (!method_exists($request, 'getHeaders')) {
+        if (! method_exists($request, 'getHeaders')) {
             // Not an HTTP request; nothing to do
             return;
         }
@@ -50,7 +50,7 @@ class AcceptFilterListener extends ContentTypeFilterListener
             }
         }
 
-        if (!$matched) {
+        if (! $matched) {
             return new ApiProblemResponse(
                 new ApiProblem(406, 'Cannot honor Accept type specified')
             );

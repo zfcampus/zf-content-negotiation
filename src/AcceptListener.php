@@ -64,7 +64,7 @@ class AcceptListener
         }
 
         $result = $e->getResult();
-        if (!is_array($result) && (!$result instanceof ViewModel)) {
+        if (! is_array($result) && (! $result instanceof ViewModel)) {
             // We will only attempt to re-cast ContentNegotiation\ViewModel
             // results or arrays to what the AcceptableViewModelSelector gives
             // us. Anything else, we cannot handle.
@@ -72,7 +72,7 @@ class AcceptListener
         }
 
         $controller = $e->getTarget();
-        if (!$controller instanceof InjectApplicationEventInterface) {
+        if (! $controller instanceof InjectApplicationEventInterface) {
             // The AcceptableViewModelSelector needs a controller that is
             // event-aware in order to work; if it's not, we cannot do
             // anything more.
@@ -90,7 +90,7 @@ class AcceptListener
         }
 
         // If we have no criteria, derive it from configuration and/or any set fallbacks
-        if (!$criteria) {
+        if (! $criteria) {
             $fallbackConfig = $e->getParam('ZFContentNegotiationFallback');
             $controllerName = $e->getRouteMatch()->getParam('controller');
 
@@ -99,12 +99,12 @@ class AcceptListener
 
         // Retrieve a view model based on the criteria
         $useDefault = false;
-        if (!$criteria || empty($criteria)) {
+        if (! $criteria || empty($criteria)) {
             $useDefault = true;
         }
         $viewModel = $selector($criteria, $useDefault);
 
-        if (!$viewModel instanceof ViewModelInterface) {
+        if (! $viewModel instanceof ViewModelInterface) {
             return new ApiProblemResponse(new ApiProblem(406, 'Unable to resolve Accept header to a representation'));
         }
 
@@ -132,7 +132,7 @@ class AcceptListener
         $controllers = $this->controllerConfig;
 
         // if there is no config for this controller, move on
-        if (!$controllerName || !isset($controllers[$controllerName])) {
+        if (! $controllerName || ! isset($controllers[$controllerName])) {
             return $this->getCriteria($fallbackConfig);
         }
 
@@ -205,7 +205,7 @@ class AcceptListener
         // if it's a string, we should try to resolve that key to a reusable selector set
         if (is_string($criteria) && isset($this->selectorsConfig[$criteria])) {
             $criteria = $this->selectorsConfig[$criteria];
-            if (!empty($criteria)) {
+            if (! empty($criteria)) {
                 return $criteria;
             }
         }
