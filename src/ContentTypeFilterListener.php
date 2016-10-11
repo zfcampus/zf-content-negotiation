@@ -56,14 +56,14 @@ class ContentTypeFilterListener extends AbstractListenerAggregate
         }
 
         $controllerName = $e->getRouteMatch()->getParam('controller');
-        if (!isset($this->config[$controllerName])) {
+        if (! isset($this->config[$controllerName])) {
             return;
         }
 
         // Only worry about content types on HTTP methods that submit content
         // via the request body.
         $request = $e->getRequest();
-        if (!method_exists($request, 'getHeaders')) {
+        if (! method_exists($request, 'getHeaders')) {
             // Not an HTTP request; nothing to do
             return;
         }
@@ -75,7 +75,7 @@ class ContentTypeFilterListener extends AbstractListenerAggregate
         }
 
         $headers = $request->getHeaders();
-        if (!$headers->has('content-type')) {
+        if (! $headers->has('content-type')) {
             return new ApiProblemResponse(
                 new ApiProblem(415, 'Invalid content-type specified')
             );
