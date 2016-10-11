@@ -60,10 +60,6 @@ class JsonModelTest extends TestCase
 
     public function testWillRaiseExceptionIfErrorOccursEncodingJson()
     {
-        if (version_compare(PHP_VERSION, '5.5.0', 'lt')) {
-            $this->markTestSkipped('This test only runs on 5.5 and up');
-        }
-
         // Provide data that cannot be serialized to JSON
         $data = ['foo' => pack('H*', 'c32e')];
         $jsonModel = new JsonModel($data);
