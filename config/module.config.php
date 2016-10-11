@@ -83,6 +83,16 @@ return [
         // When set to 'true' the  http method in the request will be overridden
         // by the method inside the 'X-HTTP-Method-Override' header (if present)
         'x_http_method_override_enabled' => false,
+
+        // Map incoming HTTP request methods to acceptable X-HTTP-Method-Override
+        // values; when matched, the override value will be used for the incoming
+        // request.
+        'http_override_methods' => [
+            // Example:
+            // The following allows the X-HTTP-Method-Override header to override
+            // a GET request using one of the values in the supplied array:
+            // 'GET' => ['HEAD', 'POST', 'PUT', 'DELETE', 'PATCH']
+        ],
     ],
 
     'controller_plugins' => [
