@@ -598,4 +598,49 @@ class ContentTypeListenerTest extends TestCase
 
         $this->assertEquals($expected, $params->getBodyParams());
     }
+
+    public function methodsWithStringContent()
+    {
+        return [
+            'delete-string'      => ['DELETE', 'String Content', 'String_Content'],
+            'delete-zero-key'    => ['DELETE', '0=', 0],
+            'delete-empty-value' => ['DELETE', 'ids=', 'ids'],
+            'patch-string'       => ['PATCH', '@String-Content', '@String-Content'],
+            'patch-zero-key'     => ['PATCH', '0=', 0],
+            'patch-empty-value'  => ['PATCH', 'name=', 'name'],
+            'put-string'         => ['PUT', 'string.content', 'string_content'],
+            'put-zero-key'       => ['PUT', '0=', 0],
+            'put-empty-value'    => ['PUT', 'key=', 'key'],
+        ];
+    }
+
+    /**
+     * @dataProvider methodsWithStringContent
+     *
+     * @param string $method
+     * @param string $data
+     * @param string $key
+     */
+    public function testStringContentIsParsedCorrectlyToAnArray($method, $data, $key)
+    {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->setContent($data);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch($this->createRouteMatch([]));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+
+        /** @var \ZF\ContentNegotiation\ParameterDataContainer $params */
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $array = $params->getBodyParams();
+
+        $this->assertArrayHasKey($key, $array);
+        $this->assertSame('', $array[$key]);
+    }
 }
