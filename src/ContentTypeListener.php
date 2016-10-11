@@ -46,7 +46,7 @@ class ContentTypeListener
     public function __invoke(MvcEvent $e)
     {
         $request       = $e->getRequest();
-        if (!method_exists($request, 'getHeaders')) {
+        if (! method_exists($request, 'getHeaders')) {
             // Not an HTTP request; nothing to do
             return;
         }
@@ -103,7 +103,7 @@ class ContentTypeListener
 
                 // Stolen from AbstractRestfulController
                 parse_str($content, $bodyParams);
-                if (!is_array($bodyParams)
+                if (! is_array($bodyParams)
                     || (1 == count($bodyParams) && isset($bodyParams[0]))
                 ) {
                     $bodyParams = $content;
