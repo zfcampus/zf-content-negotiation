@@ -8,7 +8,7 @@ Introduction
 ------------
 
 `zf-content-negotiation` is a module for automating content negotiation tasks within a Zend
-Framework 2 application.
+Framework application.
 
 The following features are provided
 
@@ -108,7 +108,7 @@ definition (which uses the format described in the [controllers](#key-controller
 Example:
 
 ```php
-'selectors'   => [
+'selectors' => [
     'Json' => [
         'ZF\ContentNegotiation\JsonModel' => [
             'application/json',
@@ -123,7 +123,7 @@ you to provide multiple representations. As an example, the following selector w
 controller to return either JSON or HTML output:
 
 ```php
-'selectors'   => [
+'selectors' => [
     'HTML-Json' => [
         'ZF\ContentNegotiation\JsonModel' => [
             'application/json',
@@ -258,12 +258,12 @@ function:
 
 'service_manager' => [
     'factories' => [
-        ContentTypeListener::class       => InvokableFactory::class,
-        'Request'                        => Factory\RequestFactory::class,
-        AcceptListener::class            => Factory\AcceptListenerFactory::class,
-        AcceptFilterListener::class      => Factory\AcceptFilterListenerFactory::class,
-        ContentTypeFilterListener::class => Factory\ContentTypeFilterListenerFactory::class,
-        ContentNegotiationOptions::class => Factory\ContentNegotiationOptionsFactory::class,
+        ContentTypeListener::class        => InvokableFactory::class,
+        'Request'                         => Factory\RequestFactory::class,
+        AcceptListener::class             => Factory\AcceptListenerFactory::class,
+        AcceptFilterListener::class       => Factory\AcceptFilterListenerFactory::class,
+        ContentTypeFilterListener::class  => Factory\ContentTypeFilterListenerFactory::class,
+        ContentNegotiationOptions::class  => Factory\ContentNegotiationOptionsFactory::class,
         HttpMethodOverrideListener::class => Factory\HttpMethodOverrideListenerFactory::class,
     ],
 ],
@@ -438,4 +438,3 @@ class IndexController extends AbstractActionController
     }
 }
 ```
-
