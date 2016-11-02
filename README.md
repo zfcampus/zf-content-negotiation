@@ -2,6 +2,7 @@ ZF Content Negotiation
 ======================
 
 [![Build Status](https://travis-ci.org/zfcampus/zf-content-negotiation.png?branch=master)](https://travis-ci.org/zfcampus/zf-content-negotiation)
+[![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-content-negotiation/badge.svg)](https://coveralls.io/github/zfcampus/zf-content-negotiation)
 
 Introduction
 ------------
