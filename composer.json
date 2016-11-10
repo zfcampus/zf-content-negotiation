@@ -11,7 +11,6 @@
     ],
     "homepage": "http://apigility.org/",
     "support": {
-        "email": "apigility-users@zend.com",
         "irc": "irc://irc.freenode.net/apigility",
         "source": "https://github.com/zfcampus/zf-content-negotiation",
         "issues": "https://github.com/zfcampus/zf-content-negotiation/issues"
@@ -40,7 +39,7 @@
     },
     "require-dev": {
         "phpunit/PHPUnit": "^4.8",
-        "squizlabs/php_codesniffer": "^2.7",
+        "zendframework/zend-coding-standard": "~1.0.0",
         "zfcampus/zf-hal": "^1.4"
     },
     "suggest": {
@@ -61,8 +60,10 @@
             "@cs-check",
             "@test"
         ],
+        "upload-coverage": "coveralls -v",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "test": "phpunit"
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-clover clover.xml"
     }
 }
