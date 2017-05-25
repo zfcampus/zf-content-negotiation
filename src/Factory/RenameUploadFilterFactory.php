@@ -7,6 +7,7 @@
 namespace ZF\ContentNegotiation\Factory;
 
 use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZF\ContentNegotiation\Filter\RenameUpload;
