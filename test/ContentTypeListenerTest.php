@@ -544,6 +544,20 @@ class ContentTypeListenerTest extends TestCase
         $result = $listener($event);
         $parameterData = $event->getParam('ZFContentNegotiationParameterData');
         $params = $parameterData->getBodyParams();
+        $files = array_values($request->getFiles()->toArray());
+        $this->assertEquals(1, count($files));
+        $file = $files[0];
+
+
+        $this->assertInternalType('array', $file);
+        $this->assertArrayHasKey('error', $file);
+        $this->assertArrayHasKey('name', $file);
+        $this->assertArrayHasKey('tmp_name', $file);
+        $this->assertArrayHasKey('size', $file);
+        $this->assertArrayHasKey('type', $file);
+        $this->assertEquals('README.md', $file['name']);
+        $this->assertRegexp('/^zfc/', basename($file['tmp_name']));
+        $this->assertTrue(file_exists($file['tmp_name']));
         $this->assertEquals([
             'string_value' => 'string_value_with&amp;ersand',
             'array_name' => [
@@ -554,6 +568,16 @@ class ContentTypeListenerTest extends TestCase
                     0 => 'array_name[b][0]',
                     'b' => 'array_name[b][b]',
                 ],
+                [
+                    'file_name' => [
+                        'error' => $file['error'],
+                        'name' => $file['name'],
+                        'tmp_name' => $file['tmp_name'],
+                        'size' => $file['size'],
+                        'type' => $file['type']
+                    ]
+                ]
+
             ],
         ], $params);
     }

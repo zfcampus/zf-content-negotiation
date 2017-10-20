@@ -34,4 +34,13 @@ Content-Type: text/plain
 
 array_name[b][b]
 
+--6603ddd555b044dc9a022f3ad9281c20
+Content-Disposition: form-data; name="array_name[][file_name]"; filename="README.md"
+Content-Type: application/octet-stream
+
+ZF Content Negotiation
+======================
+
+[![Build Status](https://travis-ci.org/zfcampus/zf-api-problem.png)](https://travis-ci.org/zfcampus/zf-api-problem)
+
 --6603ddd555b044dc9a022f3ad9281c20--
