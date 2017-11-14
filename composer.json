@@ -39,11 +39,13 @@
     },
     "require-dev": {
         "phpunit/PHPUnit": "^4.8",
+        "squizlabs/php_codesniffer": "^2.7",
         "zendframework/zend-coding-standard": "~1.0.0",
+        "zendframework/zend-console": "^2.0",
         "zfcampus/zf-hal": "^1.4"
     },
     "suggest": {
-        "zendframework/zend-console": "^2.3, if you intend to use the RequestFactory"
+        "zendframework/zend-console": "^2.0, if you intend to use the console request of RequestFactory"
     },
     "autoload": {
         "psr-4": {

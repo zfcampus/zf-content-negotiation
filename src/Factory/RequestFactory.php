@@ -7,7 +7,6 @@
 namespace ZF\ContentNegotiation\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\Console\Console;
 use Zend\Console\Request as ConsoleRequest;
 use ZF\ContentNegotiation\Request as HttpRequest;
 
@@ -19,7 +18,7 @@ class RequestFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        if (Console::isConsole()) {
+        if (PHP_SAPI === 'cli') {
             return new ConsoleRequest();
         }
 
