@@ -101,7 +101,14 @@ class ContentTypeListener
                     break;
                 }
 
-                parse_str($content, $bodyParams);
+                // Try to assume JSON if content starts like JSON and no explicit Content-Type was provided
+                if (! $bodyParams && in_array($content[0], ['{', '['], true)) {
+                    $bodyParams = $this->decodeJson($content);
+                }
+
+                if (! $bodyParams || $bodyParams instanceof ApiProblemResponse) {
+                    parse_str($content, $bodyParams);
+                }
                 break;
             default:
                 break;
