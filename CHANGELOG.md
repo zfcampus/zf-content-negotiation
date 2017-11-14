@@ -26,6 +26,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
+### Changed
+
+- [#86](https://github.com/zfcampus/zf-content-negotiation/pull/86) makes
+  zend-console a suggested dependency.
+
 ### Deprecated
 
 - Nothing.
