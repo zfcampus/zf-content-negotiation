@@ -41,7 +41,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#88](https://github.com/zfcampus/zf-content-negotiation/pull/88) adds a
+  missing import statement to the `RenameUploadFilterFactory` class definition.
 
 ## 1.3.0 - 2016-10-11
 
