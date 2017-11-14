@@ -31,6 +31,11 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#86](https://github.com/zfcampus/zf-content-negotiation/pull/86) makes
   zend-console a suggested dependency.
 
+- [#88](https://github.com/zfcampus/zf-content-negotiation/pull/88) updates how
+  the `ContentTypeListener` decides how to parse incoming content when no
+  `Content-Type` header is present. If the content begins with a `{` or `[`
+  character, it will now parse it as JSON instead of as form data.
+
 ### Deprecated
 
 - Nothing.

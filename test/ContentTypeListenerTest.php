@@ -227,8 +227,12 @@ class ContentTypeListenerTest extends TestCase
         $p->setAccessible(true);
         $p->setValue($this->listener, $tmpDir);
 
+        if (strpos(PHP_OS, 'Darwin') !== false) {
+            $tmpFile = '/private/var/' . $tmpFile;
+        }
+
         $this->listener->onFinish($event);
-        $this->assertFalse(file_exists($tmpFile));
+        $this->assertFileNotExists($tmpFile);
     }
 
     public function testOnFinishDoesNotRemoveUploadFilesTheListenerDidNotCreate()
