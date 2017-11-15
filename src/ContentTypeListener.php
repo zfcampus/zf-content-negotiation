@@ -102,7 +102,7 @@ class ContentTypeListener
                 }
 
                 // Try to assume JSON if content starts like JSON and no explicit Content-Type was provided
-                if (! $bodyParams && in_array($content[0], ['{', '['], true)) {
+                if (! $bodyParams && strlen($content) > 0 && in_array($content[0], ['{', '['], true)) {
                     $bodyParams = $this->decodeJson($content);
                 }
 
