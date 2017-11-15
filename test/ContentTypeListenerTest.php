@@ -647,4 +647,64 @@ class ContentTypeListenerTest extends TestCase
         $this->assertArrayHasKey($key, $array);
         $this->assertSame('', $array[$key]);
     }
+
+    public function nonPostMethodsContent()
+    {
+        $dataSets = [
+            'object' => [
+                'data' => '{"key": "value"}',
+                'expected' => ['key' => 'value'],
+            ],
+            'array' => [
+                'data' => '["first", "second"]',
+                'expected' => ['first', 'second'],
+            ],
+            /** @see https://github.com/zfcampus/zf-content-negotiation/pull/96 */
+            'empty' => [
+                'data' => '',
+                'expected' => [],
+            ],
+        ];
+
+        foreach (['PUT', 'PATCH', 'DELETE'] as $method) {
+            foreach ($dataSets as $type => $set) {
+                $name = sprintf('%s-%s', $type, $method);
+                yield $name => [$method, $set['data'], $set['expected']];
+            }
+        }
+    }
+
+    /**
+     * @dataProvider nonPostMethodsContent
+     *
+     * @see https://github.com/zfcampus/zf-content-negotiation/pull/94
+     * @see https://github.com/zfcampus/zf-content-negotiation/pull/96
+     * @param string $method HTTP method
+     * @param string $data HTTP body content
+     * @param mixed $expected Expected body params
+     */
+    public function testMissingContentTypeHeaderResultsInParsingAsJsonIfInitialCharacterIndicatesObjectOrArray(
+        $method,
+        $data,
+        $expected
+    ) {
+        $listener = $this->listener;
+
+        $request = new Request();
+        $request->setMethod($method);
+        $request->setContent($data);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch($this->createRouteMatch([]));
+
+        $result = $listener($event);
+        $this->assertNull($result);
+
+        /** @var \ZF\ContentNegotiation\ParameterDataContainer $params */
+        $params = $event->getParam('ZFContentNegotiationParameterData');
+        $test = $params->getBodyParams();
+
+        $this->assertSame($expected, $test);
+    }
 }
