@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.3.2 - TBD
+## 1.3.2 - 2017-11-15
 
 ### Added
 
@@ -22,7 +22,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#97](https://github.com/zfcampus/zf-content-negotiation/pull/97) fixes an
+  issue in the `ContentTypeListener` whereby empty content was leading to an
+  uninitialized string offset notice .
 
 ## 1.3.1 - 2017-11-14
 
