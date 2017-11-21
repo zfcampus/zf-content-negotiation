@@ -21,7 +21,7 @@ class ContentNegotiationOptionsFactoryTest extends TestCase
         ];
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', $config);
+        $serviceManager->setService('config', $config);
 
         $factory = new ContentNegotiationOptionsFactory();
 
