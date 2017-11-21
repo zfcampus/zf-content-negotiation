@@ -29,4 +29,22 @@ class ContentNegotiationOptionsFactoryTest extends TestCase
 
         $this->assertInstanceOf('ZF\ContentNegotiation\ContentNegotiationOptions', $service);
     }
+
+    public function testCreateServiceShouldReturnContentNegotiationOptionsInstanceWithOptions()
+    {
+        $config = [
+            'zf-content-negotiation' => [
+                'accept_whitelist' => [],
+            ],
+        ];
+
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService('config', $config);
+
+        $factory = new ContentNegotiationOptionsFactory();
+
+        $service = $factory($serviceManager, 'ContentNegotiationOptions');
+
+        $this->assertNotEmpty($service->toArray());
+    }
 }
