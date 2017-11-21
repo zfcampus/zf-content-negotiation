@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.3.3 - TBD
+## 1.3.3 - 2017-11-21
 
 ### Added
 
@@ -22,7 +22,13 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#100](https://github.com/zfcampus/zf-content-negotiation/pull/100) fixes an
+  issue introduced in 1.3.2 whereby the `RequestFactory` was updated to no
+  longer depend on zend-console. Unfortunately, many testing strategies relied
+  on zend-console's ability to override the SAPI detection in order to test HTTP
+  request lifecycles. This release now does detection for the presence of the
+  zend-console library, and, if present, uses that for determining whether or
+  not the request is console-based.
 
 ## 1.3.2 - 2017-11-15
 
