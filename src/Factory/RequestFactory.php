@@ -7,6 +7,7 @@
 namespace ZF\ContentNegotiation\Factory;
 
 use Interop\Container\ContainerInterface;
+use Zend\Console\Console;
 use Zend\Console\Request as ConsoleRequest;
 use ZF\ContentNegotiation\Request as HttpRequest;
 
@@ -18,10 +19,14 @@ class RequestFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        if (PHP_SAPI === 'cli') {
-            return new ConsoleRequest();
+        // If console tooling is present, use that to determine whether or not
+        // we are in a console environment. This approach allows overriding the
+        // environment for purposes of testing HTTP requests from the CLI.
+        if (class_exists(Console::class)) {
+            return Console::isConsole() ? new ConsoleRequest() : new HttpRequest();
         }
 
-        return new HttpRequest();
+        // If console tooling is not present, we use the PHP_SAPI value to decide.
+        return PHP_SAPI === 'cli' ? new ConsoleRequest() : new HttpRequest();
     }
 }
