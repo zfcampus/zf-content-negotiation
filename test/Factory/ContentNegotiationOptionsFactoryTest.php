@@ -47,4 +47,15 @@ class ContentNegotiationOptionsFactoryTest extends TestCase
 
         $this->assertNotEmpty($service->toArray());
     }
+
+    public function testCreateServiceWithoutConfigShouldReturnContentNegotiationOptionsInstance()
+    {
+        $serviceManager = new ServiceManager();
+
+        $factory = new ContentNegotiationOptionsFactory();
+
+        $service = $factory($serviceManager, 'ContentNegotiationOptions');
+
+        $this->assertNotEmpty($service->toArray());
+    }
 }
