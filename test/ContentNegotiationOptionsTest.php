@@ -56,7 +56,8 @@ class ContentNegotiationOptionsTest extends TestCase
             $normalizedValue,
         ];
 
-        $options = new ContentNegotiationOptions(
+        $options = new ContentNegotiationOptions();
+        $options->setFromArray(
             [
                 $key => [
                     $keyValue,
