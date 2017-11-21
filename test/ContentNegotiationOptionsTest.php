@@ -41,4 +41,41 @@ class ContentNegotiationOptionsTest extends TestCase
         $this->assertEquals(['value'], $options->{$key});
         $this->assertEquals(['value'], $options->{$normalized});
     }
+
+    /**
+     * @dataProvider dashSeparatedOptions
+     */
+    public function testDashAndUnderscoreSeparatedValuesGetMerged(
+        $key,
+        $normalized
+    ) {
+        $keyValue = 'valueKey';
+        $normalizedValue = 'valueNormalized';
+        $expectedResult = [
+            $keyValue,
+            $normalizedValue,
+        ];
+
+        $options = new ContentNegotiationOptions(
+            [
+                $key => [
+                    $keyValue,
+                ],
+                $normalized => [
+                    $normalizedValue,
+                ],
+            ]
+        );
+
+        $this->assertEquals(
+            $expectedResult,
+            $options->{$key},
+            'The value for the hyphen separated key was not as expected.'
+        );
+        $this->assertEquals(
+            $expectedResult,
+            $options->{$normalized},
+            'The value for the normalized key was not as expected.'
+        );
+    }
 }
