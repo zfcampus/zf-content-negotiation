@@ -86,11 +86,11 @@ class ContentNegotiationOptions extends AbstractOptions
                     $config[$normalizedKey]
                 );
 
-                unset($config[$key]);
+                unset($mergedConfig[$key]);
             } elseif (isset($config[$key])) {
                 $mergedConfig[$normalizedKey] = $config[$key];
 
-                unset($config[$key]);
+                unset($mergedConfig[$key]);
             } elseif (isset($config[$normalizedKey])) {
                 $mergedConfig[$normalizedKey] = $config[$normalizedKey];
             }
@@ -103,6 +103,8 @@ class ContentNegotiationOptions extends AbstractOptions
      * @param string $key
      *
      * @return string
+     * @deprecated Should be removed in next major version and only one
+     *             configuration key should be supported.
      */
     private function normalizeKey($key)
     {
