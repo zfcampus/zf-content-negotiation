@@ -41,6 +41,77 @@ class ContentNegotiationOptions extends AbstractOptions
     protected $httpOverrideMethods = [];
 
     /**
+     * @var array
+     */
+    private $keysToNormalize = [
+        'accept-whitelist',
+        'content-type-whitelist',
+        'x-http-method-override-enabled',
+        'http-override-methods',
+    ];
+
+    /**
+     * {@inheritDoc}
+     *
+     * Normalizes and merges the configuration for specific configuration keys
+     * @see self::normalizeOptions
+     */
+    public function setFromArray($options)
+    {
+        return parent::setFromArray(
+            $this->normalizeOptions($options)
+        );
+    }
+
+    /**
+     * This method uses the config keys given in $keyToNormalize to merge
+     * the config.
+     * It uses Zend's default approach of merging configs, by merging them with
+     * `array_merge_recursive()`.
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    private function normalizeOptions(array $config)
+    {
+        $mergedConfig = $config;
+
+        foreach ($this->keysToNormalize as $key) {
+            $normalizedKey = $this->normalizeKey($key);
+
+            if (isset($config[$key]) && isset($config[$normalizedKey])) {
+                $mergedConfig[$normalizedKey] = array_merge_recursive(
+                    $config[$key],
+                    $config[$normalizedKey]
+                );
+
+                unset($mergedConfig[$key]);
+            } elseif (isset($config[$key])) {
+                $mergedConfig[$normalizedKey] = $config[$key];
+
+                unset($mergedConfig[$key]);
+            } elseif (isset($config[$normalizedKey])) {
+                $mergedConfig[$normalizedKey] = $config[$normalizedKey];
+            }
+        }
+
+        return $mergedConfig;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return string
+     * @deprecated Should be removed in next major version and only one
+     *             configuration key should be supported.
+     */
+    private function normalizeKey($key)
+    {
+        return str_replace('-', '_', $key);
+    }
+
+    /**
      * {@inheritDoc}
      *
      * Normalizes dash-separated keys to underscore-separated to ensure
@@ -55,7 +126,7 @@ class ContentNegotiationOptions extends AbstractOptions
      */
     public function __set($key, $value)
     {
-        parent::__set(str_replace('-', '_', $key), $value);
+        parent::__set($this->normalizeKey($key), $value);
     }
 
     /**
@@ -72,7 +143,7 @@ class ContentNegotiationOptions extends AbstractOptions
      */
     public function __get($key)
     {
-        return parent::__get(str_replace('-', '_', $key));
+        return parent::__get($this->normalizeKey($key));
     }
 
     /**

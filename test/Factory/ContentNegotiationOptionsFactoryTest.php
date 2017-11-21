@@ -21,12 +21,41 @@ class ContentNegotiationOptionsFactoryTest extends TestCase
         ];
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', $config);
+        $serviceManager->setService('config', $config);
 
         $factory = new ContentNegotiationOptionsFactory();
 
         $service = $factory($serviceManager, 'ContentNegotiationOptions');
 
         $this->assertInstanceOf('ZF\ContentNegotiation\ContentNegotiationOptions', $service);
+    }
+
+    public function testCreateServiceShouldReturnContentNegotiationOptionsInstanceWithOptions()
+    {
+        $config = [
+            'zf-content-negotiation' => [
+                'accept_whitelist' => [],
+            ],
+        ];
+
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService('config', $config);
+
+        $factory = new ContentNegotiationOptionsFactory();
+
+        $service = $factory($serviceManager, 'ContentNegotiationOptions');
+
+        $this->assertNotEmpty($service->toArray());
+    }
+
+    public function testCreateServiceWithoutConfigShouldReturnContentNegotiationOptionsInstance()
+    {
+        $serviceManager = new ServiceManager();
+
+        $factory = new ContentNegotiationOptionsFactory();
+
+        $service = $factory($serviceManager, 'ContentNegotiationOptions');
+
+        $this->assertNotEmpty($service->toArray());
     }
 }
