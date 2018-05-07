@@ -6,7 +6,7 @@
 
 namespace ZFTest\ContentNegotiation;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
 
 class ContentNegotiationOptionsTest extends TestCase

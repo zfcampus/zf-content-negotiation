@@ -6,7 +6,7 @@
 
 namespace ZFTest\ContentNegotiation;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
@@ -19,7 +19,7 @@ class ContentTypeListenerTest extends TestCase
 {
     use RouteMatchFactoryTrait;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->listener = new ContentTypeListener();
     }
@@ -182,7 +182,7 @@ class ContentTypeListenerTest extends TestCase
         $request->setContent(file_get_contents(__DIR__ . '/TestAsset/multipart-form-data.txt'));
 
         $target = new TestAsset\EventTarget();
-        $events = $this->getMock('Zend\EventManager\EventManagerInterface');
+        $events = $this->getMockBuilder('Zend\EventManager\EventManagerInterface')->getMock();
         $events->expects($this->once())
             ->method('attach')
             ->with(
