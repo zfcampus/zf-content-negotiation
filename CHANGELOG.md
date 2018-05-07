@@ -22,29 +22,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
-
-## 1.3.4 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
+- [#101](https://github.com/zfcampus/zf-content-negotiation/pull/101) fixes how `ContentNegotiationsOptions` handles dash-separated keys,
+  ensuring they are always translated to underscore_separated; this fixes issues whereby such
+  keys were ignored during execution.
 
 ## 1.3.3 - 2017-11-21
 
