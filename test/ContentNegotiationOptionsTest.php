@@ -1,7 +1,7 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZFTest\ContentNegotiation;
@@ -14,10 +14,10 @@ class ContentNegotiationOptionsTest extends TestCase
     public function dashSeparatedOptions()
     {
         return [
-            'accept-whitelist' => ['accept-whitelist', 'accept_whitelist'],
-            'content-type-whitelist' => ['content-type-whitelist', 'content_type_whitelist'],
+            'accept-whitelist'               => ['accept-whitelist', 'accept_whitelist'],
+            'content-type-whitelist'         => ['content-type-whitelist', 'content_type_whitelist'],
             'x-http-method-override-enabled' => ['x-http-method-override-enabled', 'x_http_method_override_enabled'],
-            'http-override-methods' => ['http-override-methods', 'http_override_methods'],
+            'http-override-methods'          => ['http-override-methods', 'http_override_methods'],
         ];
     }
 

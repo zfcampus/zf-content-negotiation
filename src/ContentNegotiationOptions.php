@@ -1,7 +1,7 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\ContentNegotiation;
@@ -70,7 +70,6 @@ class ContentNegotiationOptions extends AbstractOptions
      * `array_merge_recursive()`.
      *
      * @param array $config
-     *
      * @return array
      */
     private function normalizeOptions(array $config)
@@ -85,14 +84,19 @@ class ContentNegotiationOptions extends AbstractOptions
                     $config[$key],
                     $config[$normalizedKey]
                 );
-
                 unset($mergedConfig[$key]);
-            } elseif (isset($config[$key])) {
+                continue;
+            }
+
+            if (isset($config[$key])) {
                 $mergedConfig[$normalizedKey] = $config[$key];
-
                 unset($mergedConfig[$key]);
-            } elseif (isset($config[$normalizedKey])) {
+                continue;
+            }
+
+            if (isset($config[$normalizedKey])) {
                 $mergedConfig[$normalizedKey] = $config[$normalizedKey];
+                continue;
             }
         }
 
@@ -100,11 +104,10 @@ class ContentNegotiationOptions extends AbstractOptions
     }
 
     /**
+     * @deprecated since 1.4.0; hhould be removed in next major version, and only one
+     *     configuration key style should be supported.
      * @param string $key
-     *
      * @return string
-     * @deprecated Should be removed in next major version and only one
-     *             configuration key should be supported.
      */
     private function normalizeKey($key)
     {
