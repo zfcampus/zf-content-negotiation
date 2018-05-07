@@ -7,13 +7,12 @@
 namespace ZF\ContentNegotiation\Filter;
 
 use DirectoryIterator;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Request as HttpRequest;
-use ZF\ContentNegotiation\Request;
 
 class RenameUploadTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->tmpDir    = sys_get_temp_dir() . '/zf-content-negotiation-filter';
         $this->uploadDir = $this->tmpDir . '/upload';
@@ -24,7 +23,7 @@ class RenameUploadTest extends TestCase
         mkdir($this->targetDir);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (! is_dir($this->tmpDir)) {
             return;

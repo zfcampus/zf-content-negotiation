@@ -6,7 +6,7 @@
 
 namespace ZFTest\ContentNegotiation\Factory;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 use ZF\ContentNegotiation\Factory\ContentNegotiationOptionsFactory;
 

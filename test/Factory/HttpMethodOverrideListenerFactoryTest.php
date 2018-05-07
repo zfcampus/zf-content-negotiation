@@ -6,10 +6,9 @@
 
 namespace ZFTest\ContentNegotiation\Factory;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
 use ZF\ContentNegotiation\ContentNegotiationOptions;
 use ZF\ContentNegotiation\Factory\HttpMethodOverrideListenerFactory;
 use ZF\ContentNegotiation\HttpMethodOverrideListener;
@@ -22,9 +21,8 @@ class HttpMethodOverrideListenerFactoryTest extends TestCase
         $options = $this->prophesize(ContentNegotiationOptions::class);
         $options->getHttpOverrideMethods()->willReturn([]);
 
-        /** @var ServiceManager|ObjectProphecy $container */
-        $container = $this->prophesize(ServiceManager::class);
-        $container->willImplement(ServiceLocatorInterface::class);
+        /** @var ContainerInterface|ObjectProphecy $container */
+        $container = $this->prophesize(ContainerInterface::class);
         $container->get(ContentNegotiationOptions::class)->willReturn($options);
 
         $factory = new HttpMethodOverrideListenerFactory();

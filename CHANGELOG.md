@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.4.0 - TBD
+## 1.4.0 - 2018-05-07
 
 ### Added
 
-- Nothing.
+- [#103](https://github.com/zfcampus/zf-content-negotiation/pull/103) adds support for PHP 7.2.
 
 ### Changed
 
@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#103](https://github.com/zfcampus/zf-content-negotiation/pull/103) removes support for HHVM.
 
 ### Fixed
 

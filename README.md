@@ -1,11 +1,9 @@
-ZF Content Negotiation
-======================
+# ZF Content Negotiation
 
-[![Build Status](https://travis-ci.org/zfcampus/zf-content-negotiation.svg?branch=master)](https://travis-ci.org/zfcampus/zf-content-negotiation)
+[![Build Status](https://secure.travis-ci.org/zfcampus/zf-content-negotiation.svg?branch=master)](https://secure.travis-ci.org/zfcampus/zf-content-negotiation)
 [![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-content-negotiation/badge.svg?branch=master)](https://coveralls.io/github/zfcampus/zf-content-negotiation?branch=master)
 
-Introduction
-------------
+## Introduction
 
 `zf-content-negotiation` is a module for automating content negotiation tasks within a Zend
 Framework application.
@@ -21,13 +19,11 @@ The following features are provided
   bodies with `Content-Type` media types that fall outside the whitelist will be
   immediately rejected with a `415 Unsupported Media Type` response.
 
-Requirements
-------------
+## Requirements
   
 Please see the [composer.json](composer.json) file.
  
-Installation
-------------
+## Installation
 
 Run the following `composer` command:
 
@@ -64,8 +60,7 @@ return [
 > If you use [zf-component-installer](https://github.com/zendframework/zf-component-installer),
 > that plugin will install zf-content-negotiation as a module for you.
 
-Configuration
--------------
+## Configuration
 
 ### User Configuration
 
@@ -288,8 +283,7 @@ function:
 ],
 ```
 
-ZF2 Events
-----------
+## ZF Events
 
 ### Listeners
 
@@ -331,8 +325,7 @@ header is present, and, if so, if it contains a value in the set allowed for the
 current HTTP request method invoked. If so, it resets the HTTP request method to
 the header value.
 
-ZF2 Services
-------------
+## ZF Services
 
 ### Controller Plugins
 
