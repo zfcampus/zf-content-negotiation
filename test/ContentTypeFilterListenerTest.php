@@ -6,8 +6,7 @@
 
 namespace ZFTest\ContentNegotiation;
 
-use PHPUnit_Framework_TestCase as TestCase;
-use Zend\EventManager\EventManager;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
 use ZF\ContentNegotiation\ContentTypeFilterListener;
@@ -16,7 +15,7 @@ class ContentTypeFilterListenerTest extends TestCase
 {
     use RouteMatchFactoryTrait;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->listener   = new ContentTypeFilterListener();
         $this->event      = new MvcEvent();

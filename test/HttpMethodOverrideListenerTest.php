@@ -6,7 +6,7 @@
 
 namespace ZFTest\ContentNegotiation;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
 use ZF\ApiProblem\ApiProblemResponse;
@@ -39,7 +39,7 @@ class HttpMethodOverrideListenerTest extends TestCase
     /**
      * Set up test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->listener = new HttpMethodOverrideListener($this->httpMethodOverride);
     }

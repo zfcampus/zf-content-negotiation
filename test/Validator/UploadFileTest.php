@@ -6,13 +6,13 @@
 
 namespace ZFTest\ContentNegotiation\Validator;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Request as HttpRequest;
 use ZF\ContentNegotiation\Validator\UploadFile;
 
 class UploadFileTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->validator = new UploadFile();
     }

@@ -6,13 +6,13 @@
 
 namespace ZFTest\ContentNegotiation;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use ZF\ContentNegotiation\Request;
 
 class RequestTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->request = new Request();
     }

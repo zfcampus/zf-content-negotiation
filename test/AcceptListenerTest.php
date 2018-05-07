@@ -6,7 +6,7 @@
 
 namespace ZFTest\ContentNegotiation;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\PluginManager as ControllerPluginManager;
 use Zend\Mvc\MvcEvent;
@@ -17,7 +17,7 @@ class AcceptListenerTest extends TestCase
 {
     use RouteMatchFactoryTrait;
 
-    public function setUp()
+    protected function setUp()
     {
         $plugins  = new ControllerPluginManager(new ServiceManager());
         $selector = $plugins->get('AcceptableViewModelSelector');
@@ -75,7 +75,7 @@ class AcceptListenerTest extends TestCase
      */
     public function testShouldExitEarlyIfNonHttpRequestPresentInEvent()
     {
-        $request = $this->getMock('Zend\Stdlib\RequestInterface');
+        $request = $this->getMockBuilder('Zend\Stdlib\RequestInterface')->getMock();
         $this->event->setRequest($request);
 
         $listener = $this->listener;

@@ -8,10 +8,10 @@ namespace ZFTest\ContentNegotiation;
 
 use ArrayIterator;
 use ArrayObject;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ZF\ContentNegotiation\JsonModel;
-use ZF\Hal\Entity as HalEntity;
 use ZF\Hal\Collection as HalCollection;
+use ZF\Hal\Entity as HalEntity;
 
 class JsonModelTest extends TestCase
 {
@@ -63,7 +63,7 @@ class JsonModelTest extends TestCase
         // Provide data that cannot be serialized to JSON
         $data = ['foo' => pack('H*', 'c32e')];
         $jsonModel = new JsonModel($data);
-        $this->setExpectedException('ZF\ContentNegotiation\Exception\InvalidJsonException');
+        $this->expectException('ZF\ContentNegotiation\Exception\InvalidJsonException');
         $jsonModel->serialize();
     }
 
