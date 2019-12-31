@@ -1,5 +1,9 @@
 # ZF Content Negotiation
 
+> ## Repository abandoned 2019-12-31
+>
+> This repository has moved to laminas-api-tools/api-tools-content-negotiation.
+
 [![Build Status](https://secure.travis-ci.org/zfcampus/zf-content-negotiation.svg?branch=master)](https://secure.travis-ci.org/zfcampus/zf-content-negotiation)
 [![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-content-negotiation/badge.svg?branch=master)](https://coveralls.io/github/zfcampus/zf-content-negotiation?branch=master)
 
